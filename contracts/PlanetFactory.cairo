@@ -1,12 +1,13 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.keccak import unsafe_keccak
+#from starkware.cairo.common.keccak import unsafe_keccak
+from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
+from contracts.utils.constants import TRUE, FALSE
 
-const MAXPLANETIDDIGITS = 16
-const IDMOD = 10**16
+
 
 struct Planet:
     member planet_name : felt
@@ -91,6 +92,9 @@ func generate_planet{
     let (last_id) = PlanetFactory_number_of_planets.read() 
     let new_planet_id = last_id + 1
     let (address) = get_caller_address()
+    assert_not_zero(address)
+    let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
+    assert has_already_planet = 0
     PlanetFactory_planet_to_owner.write(address, new_planet_id)
     PlanetFactory_number_of_planets.write(new_planet_id)
     PlanetFactory_planets.write(new_planet_id, planet)
