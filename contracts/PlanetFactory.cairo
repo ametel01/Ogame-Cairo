@@ -8,14 +8,27 @@ const MAXPLANETIDDIGITS = 16
 const IDMOD = 10**16
 
 struct Planet:
-    member planet_id : felt
+    member planet_name : felt
     member metal_mine : felt
     member crystal_mine : felt
     member deuterium_mine : felt
 end
 
 @storage_var
+func number_of_planets() -> (n : felt):
+end
+
+@storage_var
 func planets(id : felt) -> (planet : Planet):
+end
+
+@constructor
+func constructor{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }():
+    return()
 end
 
 @external
@@ -23,9 +36,9 @@ func generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(planet_name_len : felt, planet_name : felt*) -> (new_planet : Planet):
-    let (id_low, id_high) = unsafe_keccak(planet_name, planet_name_len)
-    let (_, id) = unsigned_div_rem(id_low, IDMOD)
-    let planet = Planet(planet_id=id, metal_mine=1, crystal_mine=1, deuterium_mine=1)
+        }(planet_name : felt) -> (new_planet : Planet):
+    let planet = Planet(planet_name=planet_name, metal_mine=1, crystal_mine=1, deuterium_mine=1)
+    let (id) = number_of_planets.read()
+    planets.write(id + 1, planet)
     return(new_planet=planet)
 end
