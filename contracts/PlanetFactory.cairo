@@ -15,11 +15,21 @@ struct Planet:
 end
 
 @storage_var
-func number_of_planets() -> (n : felt):
+func PlanetFactory_number_of_planets() -> (n : felt):
 end
 
 @storage_var
-func planets(id : felt) -> (planet : Planet):
+func PlanetFactory_planets(id : felt) -> (planet : Planet):
+end
+
+@view
+func number_of_planets{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (n_planets):
+    let (n) = PlanetFactory_number_of_planets.read()
+    return(n_planets=n)
 end
 
 @constructor
@@ -38,7 +48,8 @@ func generate_planet{
         range_check_ptr
         }(planet_name : felt) -> (new_planet : Planet):
     let planet = Planet(planet_name=planet_name, metal_mine=1, crystal_mine=1, deuterium_mine=1)
-    let (id) = number_of_planets.read()
-    planets.write(id + 1, planet)
+    let (id) = PlanetFactory_number_of_planets.read()
+    PlanetFactory_number_of_planets.write(id+1)
+    PlanetFactory_planets.write(id + 1, planet)
     return(new_planet=planet)
 end
