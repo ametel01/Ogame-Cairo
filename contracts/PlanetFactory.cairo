@@ -22,6 +22,10 @@ end
 func PlanetFactory_planets(id : felt) -> (planet : Planet):
 end
 
+@event
+func planet_genereted(id : felt):
+end
+
 @view
 func number_of_planets{
         syscall_ptr : felt*,
@@ -61,5 +65,6 @@ func generate_planet{
     let (id) = PlanetFactory_number_of_planets.read()
     PlanetFactory_number_of_planets.write(id+1)
     PlanetFactory_planets.write(id + 1, planet)
+    planet_genereted.emit(id=id+1)
     return(new_planet=planet)
 end
