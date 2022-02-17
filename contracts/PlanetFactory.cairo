@@ -27,9 +27,19 @@ func number_of_planets{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (n_planets):
+        }() -> (n_planets : felt):
     let (n) = PlanetFactory_number_of_planets.read()
     return(n_planets=n)
+end
+
+@view
+func get_planet{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }(planet_id : felt) -> (planet : Planet):
+    let (planet) = PlanetFactory_planets.read(planet_id)
+    return(planet)
 end
 
 @constructor

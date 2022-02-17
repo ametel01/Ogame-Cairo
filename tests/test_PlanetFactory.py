@@ -29,3 +29,8 @@ async def test_generate_planet():
     await contract.generate_planet(6465).invoke()
     data = await contract.number_of_planets().call()
     assert data.result.n_planets == 2
+
+    data = await contract.get_planet(1).call()
+    assert data.result.planet.metal_mine == 1
+    assert data.result.planet.crystal_mine == 1
+    assert data.result.planet.deuterium_mine == 1
