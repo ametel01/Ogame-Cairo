@@ -1,0 +1,108 @@
+[
+    {
+        "members": [
+            {
+                "name": "metal_mine",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "metal_timer",
+                "offset": 1,
+                "type": "felt"
+            },
+            {
+                "name": "crystal_mine",
+                "offset": 2,
+                "type": "felt"
+            },
+            {
+                "name": "crystal_timer",
+                "offset": 3,
+                "type": "felt"
+            },
+            {
+                "name": "deuterium_mine",
+                "offset": 4,
+                "type": "felt"
+            },
+            {
+                "name": "deuterium_timer",
+                "offset": 5,
+                "type": "felt"
+            }
+        ],
+        "name": "Planet",
+        "size": 6,
+        "type": "struct"
+    },
+    {
+        "data": [
+            {
+                "name": "id",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "planet_genereted",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "number_of_planets",
+        "outputs": [
+            {
+                "name": "n_planets",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "calculate_metal_production",
+        "outputs": [
+            {
+                "name": "production",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "planet_id",
+                "type": "felt"
+            }
+        ],
+        "name": "get_planet",
+        "outputs": [
+            {
+                "name": "planet",
+                "type": "Planet"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "generate_planet",
+        "outputs": [
+            {
+                "name": "new_planet",
+                "type": "Planet"
+            }
+        ],
+        "type": "function"
+    }
+]

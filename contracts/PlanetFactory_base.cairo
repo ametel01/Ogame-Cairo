@@ -39,3 +39,8 @@ end
 @event
 func planet_genereted(id : felt):
 end
+
+######################
+# Internal functions #
+######################
+

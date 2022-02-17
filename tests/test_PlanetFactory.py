@@ -24,8 +24,7 @@ async def test_generate_planet():
     )
 
     await contract.generate_planet().invoke()
-    assert (await contract.number_of_planets().call()) = 1
-    assert data.result.n_planets == 1
+    assert (await contract.number_of_planets().call()) == 1
 
     await contract.generate_planet().invoke()
     assert (await contract.number_of_planets().call()) == 2

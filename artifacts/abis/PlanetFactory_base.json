@@ -1,0 +1,13 @@
+[
+    {
+        "data": [
+            {
+                "name": "id",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "planet_genereted",
+        "type": "event"
+    }
+]
