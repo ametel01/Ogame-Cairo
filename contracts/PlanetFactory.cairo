@@ -5,6 +5,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
+from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
 from contracts.PlanetFactory_base import (
     Planet, 
@@ -63,8 +64,15 @@ func generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(planet_name : felt) -> (new_planet : Planet):
-    let planet = Planet(planet_name=planet_name, metal_mine=1, crystal_mine=1, deuterium_mine=1)
+        }() -> (new_planet : Planet):
+    let (time_now) = get_block_timestamp()
+    let planet = Planet(
+        metal_mine=1, 
+        metal_timer=time_now, 
+        crystal_mine=1, 
+        crystal_timer=time_now,
+        deuterium_mine=1,
+        deuterium_timer=time_now,)
     let (last_id) = PlanetFactory_number_of_planets.read() 
     let new_planet_id = last_id + 1
     let (address) = get_caller_address()
