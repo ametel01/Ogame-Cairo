@@ -7,6 +7,7 @@ from contracts.utils.Math64x61 import Math64x61_pow
 
 const Math64x61_FRACT_PART = 2 ** 61
 const Math64x61_ONE = 1 * Math64x61_FRACT_PART
+
 ##############
 # Production #
 ##############

@@ -7,6 +7,7 @@ from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
+from contracts.utils.formulas import formulas_metal_mine
 from contracts.PlanetFactory_base import (
     Planet, 
 
@@ -84,4 +85,19 @@ func generate_planet{
     PlanetFactory_planets.write(new_planet_id, planet)
     planet_genereted.emit(id=new_planet_id)
     return(new_planet=planet)
+end
+
+@external
+func calculate_metal_production{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }() -> (production : felt):
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(planet_id)
+    let time_start = planet.metal_timer
+    let mine_level = planet.metal_mine
+    let (production) = formulas_metal_mine(time_start, mine_level)
+    return(production)
 end
