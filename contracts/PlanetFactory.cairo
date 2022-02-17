@@ -6,40 +6,19 @@ from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from contracts.utils.constants import TRUE, FALSE
+from contracts.PlanetFactory_base import (
+    Planet, 
 
+    PlanetFactory_number_of_planets, 
+    PlanetFactory_planets,
+    PlanetFactory_planet_to_owner,
 
-
-struct Planet:
-    member planet_name : felt
-    member metal_mine : felt
-    member crystal_mine : felt
-    member deuterium_mine : felt
-end
+    planet_genereted
+)
 
 ###########
-# Storage #
+# Getters #
 ###########
-
-@storage_var
-func PlanetFactory_number_of_planets() -> (n : felt):
-end
-
-@storage_var
-func PlanetFactory_planets(id : felt) -> (planet : Planet):
-end
-
-@storage_var
-func PlanetFactory_planet_to_owner(address : felt) -> (planet_id : felt):
-end
-
-
-##########
-# Events #
-##########
-
-@event
-func planet_genereted(id : felt):
-end
 
 @view
 func number_of_planets{
@@ -51,9 +30,6 @@ func number_of_planets{
     return(n_planets=n)
 end
 
-###########
-# Getters #
-###########
 
 @view
 func get_planet{
