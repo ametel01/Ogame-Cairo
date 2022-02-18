@@ -1,3 +1,4 @@
+from numpy import source
 import pytest
 #from copyreg import constructor
 import os
@@ -13,9 +14,10 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 
 # The path to the contract source code.
 CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
-ACCOUNT_FILE = os.path.join("contracts", "utils", "ArgentAccount.cairo")
+ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
 
 signer = Signer(123456789987654321)
+guardian = Signer(456789987654321123)
 
 
 @pytest.fixture
@@ -28,8 +30,8 @@ async def get_starknet():
 async def account_factory(get_starknet):
     starknet = get_starknet
     account = await starknet.deploy(
-        source=ACCOUNT_FILE, constructor_calldata=[signer.public_key]
-    )
+        source=ACCOUNT_FILE,
+        constructor_calldata=[signer.public_key])
     return account
 
 
@@ -53,26 +55,11 @@ async def test_initializer(account_factory):
 async def test_generate_planet(contract_factory, account_factory):
     contract = contract_factory
     account = account_factory
-    sender = TransactionSender(account)
-    call = [(contract.contract_address, 'generate_planet', [])]
-    await sender.send_transaction(call, [signer], 3)
-#     """Test increase_balance method."""
-#     # Create a new Starknet class that simulates the StarkNet
-#     # system.
-#     starknet = await Starknet.empty()
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('generate_planet'),
+                          [], 0).invoke()
 
-#     # Deploy the account.
-#     account = await starknet.deploy(
-#         source=ACCOUNT_FILE,
-#     )
-
-#     # Deploy the contract.
-#     contract = await starknet.deploy(
-#         source=CONTRACT_FILE,
-#     )
-
-    # await contract.generate_planet().invoke()
-    assert (await contract.number_of_planets().call()) == 1
+    assert (await contract.number_of_planets().call()).result.n_planets == 1
 
 #     await contract.generate_planet().invoke()
 #     assert (await contract.number_of_planets().call()) == 2
