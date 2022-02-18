@@ -39,9 +39,9 @@ func query_metal_production{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }() -> (production : felt):
+        }(address : felt) -> (production : felt):
     alloc_locals
-    let (address) = get_caller_address()
+    #let (address) = get_caller_address()
     let (local planet_id) = PlanetFactory_planet_to_owner.read(address)
     PlanetFactory_calculate_metal(planet_id)
     let (planet) = PlanetFactory_planets.read(planet_id)

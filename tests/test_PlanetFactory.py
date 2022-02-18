@@ -71,9 +71,10 @@ async def test_generate_planet(get_starknet, contract_factory, account_factory):
     assert data.result.planet.deuterium_mine == 1
 
     update_starknet_block(starknet=starknet, block_timestamp=DEFAULT_TIMESTAMP)
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'calculate_metal_production'),
-                                 [], 1).invoke()
+    assert (await contract.query_metal_production(signer.public_key).call()).result.production == 6
+    # data = await account.execute(contract.contract_address,
+    #                              get_selector_from_name(
+    #                                  'query_metal_production'),
+    #                              [], 1).invoke()
 
-    assert data.result.response == 0
+    # assert data.result.response == 0
