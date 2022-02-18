@@ -1,19 +1,21 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-#from starkware.cairo.common.keccak import unsafe_keccak
 from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
-from contracts.utils.Formulas import formulas_metal_mine
+
 from contracts.PlanetFactory_base import (
     Planet, 
 
     PlanetFactory_number_of_planets, 
     PlanetFactory_planets,
     PlanetFactory_planet_to_owner,
+    PlanetFactory_calculate_metal,
+    PlanetFactory_calculate_crystal,
+    PlanetFactory_calculate_deuterium,
 
     planet_genereted
 )
@@ -33,18 +35,18 @@ func number_of_planets{
 end
 
 @view
-func calculate_metal_production{
+func query_metal_production{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }() -> (production : felt):
+    alloc_locals
     let (address) = get_caller_address()
-    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (local planet_id) = PlanetFactory_planet_to_owner.read(address)
+    PlanetFactory_calculate_metal(planet_id)
     let (planet) = PlanetFactory_planets.read(planet_id)
-    let time_start = planet.metal_timer
-    let mine_level = planet.metal_mine
-    let (production) = formulas_metal_mine(time_start, mine_level)
-    return(production)
+    let metal = planet.metal_storage
+    return(production=metal)
 end
 
 

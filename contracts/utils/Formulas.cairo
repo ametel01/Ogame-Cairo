@@ -28,7 +28,7 @@ func formulas_metal_mine{
     return(metal_produced=amount_produced)
 end 
 
-func formulas_cristal_mine{
+func formulas_crystal_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
