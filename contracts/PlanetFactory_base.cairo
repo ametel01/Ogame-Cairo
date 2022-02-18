@@ -8,10 +8,13 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 struct Planet:
     member metal_mine : felt
+    member metal_storage : felt
     member metal_timer : felt
     member crystal_mine : felt
+    member crystial_storage : felt
     member crystal_timer : felt
     member deuterium_mine : felt
+    member deuterium_storage : felt
     member deuterium_timer : felt
 end
 
