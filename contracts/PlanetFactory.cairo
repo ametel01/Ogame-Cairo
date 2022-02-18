@@ -86,10 +86,13 @@ func generate_planet{
     let (time_now) = get_block_timestamp()
     let planet = Planet(
         metal_mine=1, 
+        metal_storage=0,
         metal_timer=time_now, 
         crystal_mine=1, 
+        crystal_storage=0,
         crystal_timer=time_now,
         deuterium_mine=1,
+        deuterium_storage=0,
         deuterium_timer=time_now,)
     let (last_id) = PlanetFactory_number_of_planets.read() 
     let new_planet_id = last_id + 1
