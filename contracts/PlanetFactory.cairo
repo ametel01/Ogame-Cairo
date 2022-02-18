@@ -7,7 +7,7 @@ from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
-from contracts.utils.formulas import formulas_metal_mine
+from contracts.utils.Formulas import formulas_metal_mine
 from contracts.PlanetFactory_base import (
     Planet, 
 
