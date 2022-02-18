@@ -1,12 +1,7 @@
-from numpy import source
 import pytest
-#from copyreg import constructor
 import os
 from eth_account import Account
-#import py
 from utils.Signer import Signer
-from utils.TransactionSender import TransactionSender
-
 
 from starkware.starknet.testing.starknet import Starknet
 from starkware.starknet.business_logic.state import BlockInfo
@@ -17,7 +12,6 @@ CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
 
 signer = Signer(123456789987654321)
-guardian = Signer(456789987654321123)
 
 
 @pytest.fixture
