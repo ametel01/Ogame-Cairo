@@ -13,9 +13,9 @@ from contracts.PlanetFactory_base import (
     PlanetFactory_number_of_planets, 
     PlanetFactory_planets,
     PlanetFactory_planet_to_owner,
-    PlanetFactory_calculate_metal,
-    PlanetFactory_calculate_crystal,
-    PlanetFactory_calculate_deuterium,
+    PlanetFactory_collect_metal,
+    # PlanetFactory_calculate_crystal,
+    # PlanetFactory_calculate_deuterium,
 
     planet_genereted
 )
@@ -34,20 +34,20 @@ func number_of_planets{
     return(n_planets=n)
 end
 
-@view
-func query_metal_production{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*, 
-        range_check_ptr
-        }(address : felt) -> (production : felt):
-    alloc_locals
-    #let (address) = get_caller_address()
-    let (local planet_id) = PlanetFactory_planet_to_owner.read(address)
-    PlanetFactory_calculate_metal(planet_id)
-    let (planet) = PlanetFactory_planets.read(planet_id)
-    let metal = planet.metal_storage
-    return(production=metal)
-end
+# @view
+# func query_metal_production{
+#         syscall_ptr : felt*,
+#         pedersen_ptr : HashBuiltin*, 
+#         range_check_ptr
+#         }(address : felt) -> (production : felt):
+#     alloc_locals
+#     #let (address) = get_caller_address()
+#     let (local planet_id) = PlanetFactory_planet_to_owner.read(address)
+#     PlanetFactory_calculate_metal(planet_id)
+#     let (planet) = PlanetFactory_planets.read(planet_id)
+#     let metal = planet.metal_storage
+#     return(production=metal)
+# end
 
 
 @view
@@ -58,6 +58,30 @@ func get_planet{
         }(planet_id : felt) -> (planet : Planet):
     let (planet) = PlanetFactory_planets.read(planet_id)
     return(planet)
+end
+
+@view
+func get_my_planet{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (planet_id : felt):
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    return(planet_id=id)
+end
+
+@view
+func metal_stored{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (metal : felt):
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(id)
+    let stored = planet.metal_storage
+    return(metal=stored)
 end
 
 ###############
@@ -91,9 +115,7 @@ func generate_planet{
         metal_storage=0,
         crystal_storage=0,
         deuterium_storage=0,
-        metal_timer=time_now, 
-        crystal_timer=time_now,
-        deuterium_timer=time_now,)
+        timer=time_now,)
     let (last_id) = PlanetFactory_number_of_planets.read() 
     let new_planet_id = last_id + 1
     let (address) = get_caller_address()
@@ -107,3 +129,14 @@ func generate_planet{
     return(new_planet=planet)
 end
 
+@external
+func collect_resources{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }():
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    PlanetFactory_collect_metal(planet_id=id)
+    return()
+end
