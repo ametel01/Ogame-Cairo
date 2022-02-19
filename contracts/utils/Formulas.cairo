@@ -26,7 +26,7 @@ func formulas_metal_mine{
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
     let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 1000)
+    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
     return(metal_produced=prod_scaled)
 end 
 
@@ -42,7 +42,7 @@ func formulas_crystal_mine{
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
     let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 1000)
+    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
     return(metal_produced=prod_scaled)
 end 
 
@@ -58,6 +58,6 @@ func formulas_deuterium_mine{
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
     let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 1000)
+    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
     return(metal_produced=prod_scaled)
 end 

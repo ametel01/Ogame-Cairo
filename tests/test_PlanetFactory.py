@@ -75,14 +75,35 @@ async def test_generate_planet(get_starknet, contract_factory, account_factory):
                                  [], 1).invoke()
     assert data.result.response[0] == 1
 
+    # assert (await contract.query_metal_production(signer.public_key).call()).result.production == 6
+
+
+@pytest.mark.asyncio
+async def test_production(get_starknet, contract_factory, account_factory):
+    starknet = get_starknet
+    contract = contract_factory
+    account = account_factory
+
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('generate_planet'),
+                          [], 0).invoke()
+
     update_starknet_block(starknet=starknet, block_timestamp=DEFAULT_TIMESTAMP)
     await account.execute(contract.contract_address,
                           get_selector_from_name('collect_resources'),
-                          [], 2).invoke()
+                          [], 1).invoke()
 
-    # assert (await contract.query_metal_production(signer.public_key).call()).result.production == 6
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name('metal_stored'),
-                                 [], 3).invoke()
+                                 [], 2).invoke()
+    assert data.result.response[0] == 211
 
-    assert data.result.response[0] == 6
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name('crystal_stored'),
+                                 [], 3).invoke()
+    assert data.result.response[0] == 140
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name('deuterium_stored'),
+                                 [], 4).invoke()
+    assert data.result.response[0] == 70

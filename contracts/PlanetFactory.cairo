@@ -13,9 +13,7 @@ from contracts.PlanetFactory_base import (
     PlanetFactory_number_of_planets, 
     PlanetFactory_planets,
     PlanetFactory_planet_to_owner,
-    PlanetFactory_collect_metal,
-    # PlanetFactory_calculate_crystal,
-    # PlanetFactory_calculate_deuterium,
+    PlanetFactory_collect_resources,
 
     planet_genereted
 )
@@ -33,22 +31,6 @@ func number_of_planets{
     let (n) = PlanetFactory_number_of_planets.read()
     return(n_planets=n)
 end
-
-# @view
-# func query_metal_production{
-#         syscall_ptr : felt*,
-#         pedersen_ptr : HashBuiltin*, 
-#         range_check_ptr
-#         }(address : felt) -> (production : felt):
-#     alloc_locals
-#     #let (address) = get_caller_address()
-#     let (local planet_id) = PlanetFactory_planet_to_owner.read(address)
-#     PlanetFactory_calculate_metal(planet_id)
-#     let (planet) = PlanetFactory_planets.read(planet_id)
-#     let metal = planet.metal_storage
-#     return(production=metal)
-# end
-
 
 @view
 func get_planet{
@@ -82,6 +64,32 @@ func metal_stored{
     let (planet) = PlanetFactory_planets.read(id)
     let stored = planet.metal_storage
     return(metal=stored)
+end
+
+@view
+func crystal_stored{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (crystal : felt):
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(id)
+    let stored = planet.crystal_storage
+    return(crystal=stored)
+end
+
+@view
+func deuterium_stored{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (deuterium : felt):
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(id)
+    let stored = planet.deuterium_storage
+    return(deuterium=stored)
 end
 
 ###############
@@ -137,6 +145,6 @@ func collect_resources{
         }():
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
-    PlanetFactory_collect_metal(planet_id=id)
+    PlanetFactory_collect_resources(planet_id=id)
     return()
 end

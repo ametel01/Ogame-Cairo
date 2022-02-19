@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address
-from contracts.utils.Formulas import formulas_metal_mine#, formulas_crystal_mine, formulas_deuterium_mine
+from contracts.utils.Formulas import formulas_metal_mine, formulas_crystal_mine, formulas_deuterium_mine
 
 ###########
 # Structs #
@@ -50,7 +50,7 @@ end
 # Internal functions #
 ######################
 
-func PlanetFactory_collect_metal{
+func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -58,16 +58,20 @@ func PlanetFactory_collect_metal{
     alloc_locals
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
-    let mine_level = planet.metal_mine
-    let (production) = formulas_metal_mine(time_start, mine_level)
+    let metal_level = planet.metal_mine
+    let crystal_level = planet.crystal_mine
+    let deuterium_level = planet.deuterium_mine
+    let (metal_produced) = formulas_metal_mine(time_start, metal_level)
+    let (crystal_produced) = formulas_crystal_mine(time_start, crystal_level)
+    let (deuterium_produced) = formulas_deuterium_mine(time_start, deuterium_level)
     let updated_planet = Planet(
                                 metal_mine=1,
                                 crystal_mine=1,
                                 deuterium_mine=1,
-                                metal_storage=production,
-                                crystal_storage=0,
-                                deuterium_storage=0,
-                                timer=0
+                                metal_storage=metal_produced,
+                                crystal_storage=crystal_produced,
+                                deuterium_storage=deuterium_produced,
+                                timer=time_start
                             )
     PlanetFactory_planets.write(planet_id, updated_planet)
     return()
