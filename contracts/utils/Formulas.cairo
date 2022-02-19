@@ -18,10 +18,10 @@ func formulas_metal_mine{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(last_timestamp : felt, mine_level : felt) -> (metal_produced : felt):
-    alloc_locals
-    let (time_now) = get_block_timestamp()
-    local time_elapsed = time_now - last_timestamp
-    let (first_part) = Math64x61_mul(6, mine_level)
+    # alloc_locals
+    # let (time_now) = get_block_timestamp()
+    # local time_elapsed = time_now - last_timestamp
+    # let (first_part) = Math64x61_mul(6, mine_level)
     # let (second_part) = Math64x61_pow(11,mine_level)
     # let (prod_per_second) = Math64x61_mul(first_part, second_part)
     # let (amount_produced) = Math64x61_mul(prod_per_second,time_elapsed)

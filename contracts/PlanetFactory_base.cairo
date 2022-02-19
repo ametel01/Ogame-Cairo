@@ -9,14 +9,17 @@ from contracts.utils.Formulas import formulas_metal_mine, formulas_crystal_mine,
 ###########
 
 struct Planet:
+    # Mines level
     member metal_mine : felt
-    member metal_storage : felt
-    member metal_timer : felt
     member crystal_mine : felt
-    member crystal_storage : felt
-    member crystal_timer : felt
     member deuterium_mine : felt
+    # Mines storage
+    member metal_storage : felt
+    member crystal_storage : felt
     member deuterium_storage : felt
+    # Mines timer
+    member metal_timer : felt
+    member crystal_timer : felt
     member deuterium_timer : felt
 end
 
@@ -56,10 +59,10 @@ func PlanetFactory_calculate_metal{
         }(planet_id : felt) -> ():
     alloc_locals
     let (local planet) = PlanetFactory_planets.read(planet_id)
-    let time_start = planet.metal_timer
-    let mine_level = planet.metal_mine
-    let (production) = formulas_metal_mine(time_start, mine_level)
-    planet.metal_storage = production
+    # let time_start = planet.metal_timer
+    # let mine_level = planet.metal_mine
+    # let (production) = formulas_metal_mine(time_start, mine_level)
+    planet.metal_storage = 6
     return()
 end
 
