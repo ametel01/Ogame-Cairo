@@ -144,6 +144,7 @@ func collect_resources{
         range_check_ptr
         }():
     let (address) = get_caller_address()
+    assert_not_zero(address)
     let (id) = PlanetFactory_planet_to_owner.read(address)
     PlanetFactory_collect_resources(planet_id=id)
     return()
