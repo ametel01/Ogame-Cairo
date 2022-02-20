@@ -49,68 +49,6 @@ async def contract_factory(get_starknet):
 
 
 @pytest.mark.asyncio
-async def test_initializer(account_factory):
-    account = account_factory
-    assert (await account.get_public_key().call()).result.res == (signer.public_key)
-
-
-@pytest.mark.asyncio
-async def test_generate_planet(get_starknet, contract_factory, account_factory):
-    starknet = get_starknet
-    contract = contract_factory
-    account = account_factory
-    await account.execute(contract.contract_address,
-                          get_selector_from_name('generate_planet'),
-                          [], 0).invoke()
-
-    assert (await contract.number_of_planets().call()).result.n_planets == 1
-
-    data = await contract.get_planet(1).call()
-    assert data.result.planet.metal_mine == 1
-    assert data.result.planet.crystal_mine == 1
-    assert data.result.planet.deuterium_mine == 1
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('get_my_planet'),
-                                 [], 1).invoke()
-    assert data.result.response[0] == 1
-
-    # assert (await contract.query_metal_production(signer.public_key).call()).result.production == 6
-
-
-@pytest.mark.asyncio
-async def test_production(get_starknet, contract_factory, account_factory):
-    starknet = get_starknet
-    contract = contract_factory
-    account = account_factory
-
-    await account.execute(contract.contract_address,
-                          get_selector_from_name('generate_planet'),
-                          [], 0).invoke()
-
-    update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
-    await account.execute(contract.contract_address,
-                          get_selector_from_name('collect_resources'),
-                          [], 1).invoke()
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('metal_stored'),
-                                 [], 2).invoke()
-    assert data.result.response[0] == 211
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('crystal_stored'),
-                                 [], 3).invoke()
-    assert data.result.response[0] == 140
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('deuterium_stored'),
-                                 [], 4).invoke()
-    assert data.result.response[0] == 70
-
-
-@pytest.mark.asyncio
 async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
