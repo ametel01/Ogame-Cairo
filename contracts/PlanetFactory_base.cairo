@@ -1,7 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.starknet.common.syscalls import get_caller_address
+from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from contracts.utils.Formulas import formulas_metal_mine, formulas_crystal_mine, formulas_deuterium_mine
 
 ###########
@@ -64,14 +64,15 @@ func PlanetFactory_collect_resources{
     let (metal_produced) = formulas_metal_mine(time_start, metal_level)
     let (crystal_produced) = formulas_crystal_mine(time_start, crystal_level)
     let (deuterium_produced) = formulas_deuterium_mine(time_start, deuterium_level)
+    let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
-                                metal_mine=1,
-                                crystal_mine=1,
-                                deuterium_mine=1,
-                                metal_storage=metal_produced,
-                                crystal_storage=crystal_produced,
-                                deuterium_storage=deuterium_produced,
-                                timer=time_start
+                                metal_mine = 1,
+                                crystal_mine = 1,
+                                deuterium_mine = 1,
+                                metal_storage = planet.metal_storage + metal_produced,
+                                crystal_storage = planet.crystal_storage + crystal_produced,
+                                deuterium_storage = planet.deuterium_storage + deuterium_produced,
+                                timer = time_now,
                             )
     PlanetFactory_planets.write(planet_id, updated_planet)
     return()
