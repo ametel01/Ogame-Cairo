@@ -89,7 +89,8 @@ async def test_production(get_starknet, contract_factory, account_factory):
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
 
-    update_starknet_block(starknet=starknet, block_timestamp=DEFAULT_TIMESTAMP)
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
     await account.execute(contract.contract_address,
                           get_selector_from_name('collect_resources'),
                           [], 1).invoke()
@@ -120,7 +121,16 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
 
-    update_starknet_block(starknet=starknet, block_timestamp=DEFAULT_TIMESTAMP)
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS)
     await account.execute(contract.contract_address,
                           get_selector_from_name('collect_resources'),
                           [], 1).invoke()
+
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('upgrade_metal_mine'),
+                          [], 2).invoke()
+
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('get_structures_levels'),
+                          [], 3).invoke()
