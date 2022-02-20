@@ -6,7 +6,7 @@ from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
-from contracts.utils.Formulas import formulas_metal_building
+from contracts.utils.Formulas import formulas_metal_building, formulas_crystal_building, formulas_deuterium_building
 
 from contracts.PlanetFactory_base import (
     Planet, 
@@ -186,6 +186,64 @@ func upgrade_metal_mine{
                         metal_mine=current_mine_level + 1,
                         crystal_mine=planet.crystal_mine,
                         deuterium_mine=planet.deuterium_mine,
+                        metal_storage=metal_available - metal_required,
+                        crystal_storage=crystal_available - crystal_required,
+                        deuterium_storage = planet.deuterium_storage,
+                        timer = planet.timer,
+                    )             
+    PlanetFactory_planets.write(planet_id, new_planet)
+    return(metal_required, crystal_required)
+end
+
+@external
+func upgrade_crystal_mine{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }() -> (metal : felt, crystal : felt):
+    alloc_locals
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (local planet) = PlanetFactory_planets.read(planet_id)
+    let current_mine_level = planet.crystal_mine
+    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
+    let metal_available = planet.metal_storage
+    let crystal_available = planet.crystal_storage
+    assert_le(metal_required, metal_available)
+    assert_le(crystal_required, crystal_available)
+    let new_planet = Planet(
+                        metal_mine=planet.metal_mine,
+                        crystal_mine=planet.crystal_mine + 1,
+                        deuterium_mine=planet.deuterium_mine,
+                        metal_storage=metal_available - metal_required,
+                        crystal_storage=crystal_available - crystal_required,
+                        deuterium_storage = planet.deuterium_storage,
+                        timer = planet.timer,
+                    )             
+    PlanetFactory_planets.write(planet_id, new_planet)
+    return(metal_required, crystal_required)
+end
+
+@external
+func upgrade_deuterium_mine{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }() -> (metal : felt, crystal : felt):
+    alloc_locals
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (local planet) = PlanetFactory_planets.read(planet_id)
+    let current_mine_level = planet.deuterium_mine
+    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
+    let metal_available = planet.metal_storage
+    let crystal_available = planet.crystal_storage
+    assert_le(metal_required, metal_available)
+    assert_le(crystal_required, crystal_available)
+    let new_planet = Planet(
+                        metal_mine=planet.metal_mine,
+                        crystal_mine=planet.crystal_mine,
+                        deuterium_mine=planet.deuterium_mine + 1,
                         metal_storage=metal_available - metal_required,
                         crystal_storage=crystal_available - crystal_required,
                         deuterium_storage = planet.deuterium_storage,

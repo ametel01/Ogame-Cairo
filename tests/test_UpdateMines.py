@@ -59,13 +59,15 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                           [], 0).invoke()
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS)
+        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS*2)
     await account.execute(contract.contract_address,
-                          get_selector_from_name('collect_resources'),
+                          get_selector_from_name(
+                              'collect_resources'),
                           [], 1).invoke()
 
     data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('upgrade_metal_mine'),
+                                 get_selector_from_name(
+                                     'upgrade_metal_mine'),
                                  [], 2).invoke()
     assert data.result.response == [60, 15]
 
@@ -76,7 +78,8 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
     assert data.result.response == [2, 1, 1]
 
     data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('upgrade_metal_mine'),
+                                 get_selector_from_name(
+                                     'upgrade_metal_mine'),
                                  [], 4).invoke()
     assert data.result.response == [90, 22]
 
@@ -85,3 +88,51 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                      'get_structures_levels'),
                                  [], 5).invoke()
     assert data.result.response == [3, 1, 1]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'upgrade_crystal_mine'),
+                                 [], 6).invoke()
+    assert data.result.response == [48, 24]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'get_structures_levels'),
+                                 [], 7).invoke()
+    assert data.result.response == [3, 2, 1]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'upgrade_crystal_mine'),
+                                 [], 8).invoke()
+    assert data.result.response == [76, 38]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'get_structures_levels'),
+                                 [], 9).invoke()
+    assert data.result.response == [3, 3, 1]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'upgrade_deuterium_mine'),
+                                 [], 10).invoke()
+    assert data.result.response == [225, 75]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'get_structures_levels'),
+                                 [], 11).invoke()
+    assert data.result.response == [3, 3, 2]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'upgrade_deuterium_mine'),
+                                 [], 12).invoke()
+    assert data.result.response == [337, 112]
+
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'get_structures_levels'),
+                                 [], 13).invoke()
+    assert data.result.response == [3, 3, 3]

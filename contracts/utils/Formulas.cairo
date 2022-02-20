@@ -86,3 +86,43 @@ func formulas_metal_building{
         return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
     end
 end
+
+func formulas_crystal_building{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(crystal_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    let base_metal = 48
+    let base_crystal = 24
+    let exponent = crystal_mine_level - 1
+    if exponent == 0:
+        return(metal_cost=base_metal, crystal_cost=base_crystal)
+    else: 
+        let (second_fact) = Math64x61_pow(16, exponent)
+        let metal_cost = base_metal * second_fact
+        let crystal_cost = base_crystal * second_fact
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+    end
+end
+
+func formulas_deuterium_building{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(deuterium_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    let base_metal = 225
+    let base_crystal = 75
+    let exponent = deuterium_mine_level - 1
+    if exponent == 0:
+        return(metal_cost=base_metal, crystal_cost=base_crystal)
+    else: 
+        let (second_fact) = Math64x61_pow(15, exponent)
+        let metal_cost = base_metal * second_fact
+        let crystal_cost = base_crystal * second_fact
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+    end
+end
