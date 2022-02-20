@@ -10,7 +10,8 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
-DEFAULT_TIMESTAMP = 32000
+TIME_ELAPS_ONE_HOUR = 32000
+TIME_ELAPS_SIX_HOURS = 192000
 
 signer = Signer(123456789987654321)
 
@@ -21,7 +22,7 @@ async def get_starknet():
     return starknet
 
 
-def update_starknet_block(starknet, block_number=1, block_timestamp=DEFAULT_TIMESTAMP):
+def update_starknet_block(starknet, block_number=1, block_timestamp=TIME_ELAPS_ONE_HOUR):
     starknet.state.state.block_info = BlockInfo(
         block_number=block_number, block_timestamp=block_timestamp)
 
@@ -107,3 +108,19 @@ async def test_production(get_starknet, contract_factory, account_factory):
                                  get_selector_from_name('deuterium_stored'),
                                  [], 4).invoke()
     assert data.result.response[0] == 70
+
+
+@pytest.mark.asyncio
+async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
+    starknet = get_starknet
+    contract = contract_factory
+    account = account_factory
+
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('generate_planet'),
+                          [], 0).invoke()
+
+    update_starknet_block(starknet=starknet, block_timestamp=DEFAULT_TIMESTAMP)
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('collect_resources'),
+                          [], 1).invoke()

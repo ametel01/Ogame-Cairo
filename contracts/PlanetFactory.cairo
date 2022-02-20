@@ -1,7 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_not_zero
+from starkware.cairo.common.math import assert_not_zero, assert_le
 from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
@@ -52,6 +52,21 @@ func get_my_planet{
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     return(planet_id=id)
+end
+
+@view
+func get_structures_levels{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt):
+    let (address) = get_caller_address()
+    let (id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(id)
+    let metal = planet.metal_mine 
+    let crystal = planet.crystal_mine 
+    let deuterium = planet.deuterium_mine
+    return(metal_mine=metal, crystal_mine=crystal, deuterium_mine=deuterium)
 end
 
 @view
@@ -157,7 +172,25 @@ func upgrade_metal_mine{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    let (account) = get_caller_address()
-    let (planet) = PlanetFactory_planet_to_owner(address)
+    alloc_locals
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (local planet) = PlanetFactory_planets.read(planet_id)
     let current_mine_level = planet.metal_mine
     let (metal_required, crystal_required) = formulas_metal_building(current_mine_level)
+    let metal_available = planet.metal_storage
+    let crystal_available = planet.crystal_storage
+    assert_le(metal_required, metal_available)
+    assert_le(crystal_required, crystal_available)
+    let new_planet = Planet(
+                        metal_mine=current_mine_level + 1,
+                        crystal_mine=planet.crystal_mine,
+                        deuterium_mine=planet.deuterium_mine,
+                        metal_storage=metal_available - metal_required,
+                        crystal_storage=crystal_available - crystal_required,
+                        deuterium_storage = planet.deuterium_storage,
+                        timer = planet.timer,
+                    )             
+    PlanetFactory_planets.write(planet_id, new_planet)
+    return()
+end
