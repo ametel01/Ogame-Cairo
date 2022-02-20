@@ -61,3 +61,22 @@ func formulas_deuterium_mine{
     let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
     return(metal_produced=prod_scaled)
 end 
+
+#############
+# Buildings #
+#############
+
+func formulas_metal_building{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(metal_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    let base_metal = 60
+    let base_crystal = 15
+    let (second_fact) = Math64x61_pow(15, metal_mine_level-1)
+    let metal_cost = base_metal * second_fact
+    let crystal_cost = base_crystal * second_fact
+    let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
+    let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+    return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+end

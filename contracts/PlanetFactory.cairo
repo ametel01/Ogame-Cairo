@@ -6,6 +6,7 @@ from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.starknet.common.syscalls import get_block_timestamp
 from contracts.utils.constants import TRUE, FALSE
+from contracts.utils.Formulas import formulas_metal_building
 
 from contracts.PlanetFactory_base import (
     Planet, 
@@ -149,3 +150,14 @@ func collect_resources{
     PlanetFactory_collect_resources(planet_id=id)
     return()
 end
+
+@external
+func upgrade_metal_mine{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    let (account) = get_caller_address()
+    let (planet) = PlanetFactory_planet_to_owner(address)
+    let current_mine_level = planet.metal_mine
+    let (metal_required, crystal_required) = formulas_metal_building(current_mine_level)
