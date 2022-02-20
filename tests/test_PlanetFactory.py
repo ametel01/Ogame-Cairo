@@ -131,6 +131,8 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                           get_selector_from_name('upgrade_metal_mine'),
                           [], 2).invoke()
 
-    await account.execute(contract.contract_address,
-                          get_selector_from_name('get_structures_levels'),
-                          [], 3).invoke()
+    data = await account.execute(contract.contract_address,
+                                 get_selector_from_name(
+                                     'get_structures_levels'),
+                                 [], 3).invoke()
+    assert data.result.response == [2, 1, 1]

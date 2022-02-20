@@ -2,8 +2,9 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_block_timestamp
-from starkware.cairo.common.math import unsigned_div_rem
+from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
 from contracts.utils.Math64x61 import Math64x61_pow, Math64x61_div
+from contracts.utils.constants import TRUE, FALSE
 
 
 const Math64x61_FRACT_PART = 2 ** 61
@@ -73,10 +74,15 @@ func formulas_metal_building{
         }(metal_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
     let base_metal = 60
     let base_crystal = 15
-    let (second_fact) = Math64x61_pow(15, metal_mine_level-1)
-    let metal_cost = base_metal * second_fact
-    let crystal_cost = base_crystal * second_fact
-    let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
-    let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
-    return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+    let exponent = metal_mine_level - 1
+    if exponent == 0:
+        return(metal_cost=base_metal, crystal_cost=base_crystal)
+    else: 
+        let (second_fact) = Math64x61_pow(15, exponent)
+        let metal_cost = base_metal * second_fact
+        let crystal_cost = base_crystal * second_fact
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+    end
 end
