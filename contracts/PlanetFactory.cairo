@@ -171,7 +171,7 @@ func upgrade_metal_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
+        }() -> (metal : felt, crystal : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
@@ -192,5 +192,5 @@ func upgrade_metal_mine{
                         timer = planet.timer,
                     )             
     PlanetFactory_planets.write(planet_id, new_planet)
-    return()
+    return(metal_required, crystal_required)
 end
