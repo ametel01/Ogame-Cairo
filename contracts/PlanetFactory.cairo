@@ -48,8 +48,8 @@ func get_my_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (planet_id : felt):
-    let (address) = get_caller_address()
+        }(address : felt) -> (planet_id : felt):
+    #let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     return(planet_id=id)
 end
@@ -59,8 +59,8 @@ func get_structures_levels{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt):
-    let (address) = get_caller_address()
+        }(address : felt) -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt):
+    #let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
     let metal = planet.metal_mine 
@@ -74,8 +74,8 @@ func metal_stored{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal : felt):
-    let (address) = get_caller_address()
+        }(address : felt) -> (metal : felt):
+    #let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
     let stored = planet.metal_storage
@@ -87,8 +87,8 @@ func crystal_stored{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (crystal : felt):
-    let (address) = get_caller_address()
+        }(address : felt) -> (crystal : felt):
+    #let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
     let stored = planet.crystal_storage
@@ -100,8 +100,8 @@ func deuterium_stored{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (deuterium : felt):
-    let (address) = get_caller_address()
+        }(address : felt) -> (deuterium : felt):
+    #let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
     let stored = planet.deuterium_storage
