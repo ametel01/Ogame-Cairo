@@ -59,7 +59,7 @@ func get_structures_levels{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt):
+        }(address : felt) -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt):
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
