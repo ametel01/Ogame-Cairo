@@ -2,12 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
-from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address
-from starkware.starknet.common.syscalls import get_block_timestamp
-from contracts.utils.constants import TRUE, FALSE
-
-
 from contracts.PlanetFactory_base import (
     Planet, 
     PlanetFactory_number_of_planets, 
