@@ -65,11 +65,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                               'collect_resources'),
                           [], 1).invoke()
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_metal_mine'),
-                                 [], 2).invoke()
-    assert data.result.response == [60, 15]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_metal_mine'),
+                          [], 2).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(
@@ -77,11 +76,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                  [], 3).invoke()
     assert data.result.response == [2, 1, 1]
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_metal_mine'),
-                                 [], 4).invoke()
-    assert data.result.response == [90, 22]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_metal_mine'),
+                          [], 4).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(
@@ -89,11 +87,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                  [], 5).invoke()
     assert data.result.response == [3, 1, 1]
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_crystal_mine'),
-                                 [], 6).invoke()
-    assert data.result.response == [48, 24]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_crystal_mine'),
+                          [], 6).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(
@@ -101,11 +98,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                  [], 7).invoke()
     assert data.result.response == [3, 2, 1]
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_crystal_mine'),
-                                 [], 8).invoke()
-    assert data.result.response == [76, 38]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_crystal_mine'),
+                          [], 8).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(
@@ -113,11 +109,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                  [], 9).invoke()
     assert data.result.response == [3, 3, 1]
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_deuterium_mine'),
-                                 [], 10).invoke()
-    assert data.result.response == [225, 75]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_deuterium_mine'),
+                          [], 10).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(
@@ -125,11 +120,10 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                                  [], 11).invoke()
     assert data.result.response == [3, 3, 2]
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'upgrade_deuterium_mine'),
-                                 [], 12).invoke()
-    assert data.result.response == [337, 112]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'upgrade_deuterium_mine'),
+                          [], 12).invoke()
 
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name(

@@ -99,7 +99,7 @@ async def test_production(get_starknet, contract_factory, account_factory):
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name('resources_available'),
                                  [], 2).invoke()
-    assert data.result.response == [211, 140, 70]
+    assert data.result.response == [711, 440, 170]
 
 
 @pytest.mark.asyncio
@@ -118,24 +118,20 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
                           get_selector_from_name('collect_resources'),
                           [], 1).invoke()
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('upgrade_metal_mine'),
-                                 [], 2).invoke()
-    assert data.result.response == [60, 15]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('upgrade_metal_mine'),
+                          [], 2).invoke()
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'get_structures_levels'),
-                                 [], 3).invoke()
-    assert data.result.response == [2, 1, 1]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'get_structures_levels'),
+                          [], 3).invoke()
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('upgrade_metal_mine'),
-                                 [], 4).invoke()
-    assert data.result.response == [90, 22]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name('upgrade_metal_mine'),
+                          [], 4).invoke()
 
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name(
-                                     'get_structures_levels'),
-                                 [], 5).invoke()
-    assert data.result.response == [3, 1, 1]
+    await account.execute(contract.contract_address,
+                          get_selector_from_name(
+                              'get_structures_levels'),
+                          [], 5).invoke()
