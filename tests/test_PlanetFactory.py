@@ -1,3 +1,4 @@
+from ctypes.wintypes import PHKEY
 import pytest
 import os
 from utils.Signer import Signer
@@ -59,6 +60,7 @@ async def test_generate_planet(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
+    pkey = (await account.get_public_key().call()).result.res
     await account.execute(contract.contract_address,
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
@@ -83,7 +85,7 @@ async def test_production(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
-
+    pkey = (await account.get_public_key().call()).result.res
     await account.execute(contract.contract_address,
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
@@ -95,19 +97,9 @@ async def test_production(get_starknet, contract_factory, account_factory):
                           [], 1).invoke()
 
     data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('metal_stored'),
+                                 get_selector_from_name('resources_available'),
                                  [], 2).invoke()
-    assert data.result.response[0] == 211
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('crystal_stored'),
-                                 [], 3).invoke()
-    assert data.result.response[0] == 140
-
-    data = await account.execute(contract.contract_address,
-                                 get_selector_from_name('deuterium_stored'),
-                                 [], 4).invoke()
-    assert data.result.response[0] == 70
+    assert data.result.response == [211, 140, 70]
 
 
 @pytest.mark.asyncio
@@ -115,7 +107,7 @@ async def test_mines_upgrade(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
-
+    pkey = (await account.get_public_key().call()).result.res
     await account.execute(contract.contract_address,
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
