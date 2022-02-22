@@ -8,7 +8,7 @@ OGame is a browser-based, money-management and space-war themed massively multip
 
 ## Roadmap
 
-1. Account can create a planet and upgrade resources. Only mines are available. ✅
+1. Account can create a planet and upgrade resources. Only mines are available. :heavy_check_mark:
 2. Integration of ERC721: planets will be NFTs.
 3. Integration of ERC20: resources will be tokenized.
 4. Add energy production requirements for mines.
