@@ -112,7 +112,7 @@ func PlanetFactory_generate_planet{
         deuterium_storage=100,
         timer=time_now,)
     #let (last_id) = PlanetFactory_number_of_planets.read() 
-    let (_,new_planet_id) = unsigned_div_rem(time_now, ID_MOD) 
+    let (_,new_planet_id) = unsigned_div_rem(time_now, ID_MOD)  # working on improve randemness
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
     assert has_already_planet = FALSE
     let (id_already_exist) = PlanetFactory_planets.read(new_planet_id)
