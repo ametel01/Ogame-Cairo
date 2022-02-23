@@ -1,8 +1,10 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_not_zero, assert_le
+from starkware.cairo.common.hash import hash2
+from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
+from contracts.utils.constants import TRUE, FALSE
 from contracts.utils.Formulas import (
                                 formulas_metal_mine, 
                                 formulas_crystal_mine, 
@@ -10,10 +12,13 @@ from contracts.utils.Formulas import (
                                 formulas_metal_building,
                                 formulas_crystal_building,
                                 formulas_deuterium_building)
+from contracts.utils.Math64x61 import Math64x61_mul
+
 
 ###########
 # Structs #
 ###########
+const ID_MOD = 65536
 
 struct Planet:
     # Mines level
@@ -92,9 +97,12 @@ end
 func PlanetFactory_generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
-        range_check_ptr
+        range_check_ptr,
         }() -> (new_planet : Planet):
-    let (time_now) = get_block_timestamp()
+    alloc_locals
+    let (local time_now) = get_block_timestamp()
+    let (address) = get_caller_address()
+    assert_not_zero(address)
     let planet = Planet(
         metal_mine=1, 
         crystal_mine=1,
@@ -103,14 +111,15 @@ func PlanetFactory_generate_planet{
         crystal_storage=300,
         deuterium_storage=100,
         timer=time_now,)
-    let (last_id) = PlanetFactory_number_of_planets.read() 
-    let new_planet_id = last_id + 1
-    let (address) = get_caller_address()
-    assert_not_zero(address)
+    #let (last_id) = PlanetFactory_number_of_planets.read() 
+    let (_,new_planet_id) = unsigned_div_rem(time_now, ID_MOD) 
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
-    assert has_already_planet = 0
+    assert has_already_planet = FALSE
+    let (id_already_exist) = PlanetFactory_planets.read(new_planet_id)
+    assert id_already_exist.metal_mine = FALSE
     PlanetFactory_planet_to_owner.write(address, new_planet_id)
-    PlanetFactory_number_of_planets.write(new_planet_id)
+    let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
+    PlanetFactory_number_of_planets.write(current_number_of_planets+1)
     PlanetFactory_planets.write(new_planet_id, planet)
     planet_genereted.emit(id=new_planet_id)
     return(new_planet=planet)

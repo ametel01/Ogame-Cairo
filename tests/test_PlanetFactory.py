@@ -1,4 +1,3 @@
-from ctypes.wintypes import PHKEY
 import pytest
 import os
 from utils.Signer import Signer
@@ -60,22 +59,22 @@ async def test_generate_planet(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
-    pkey = (await account.get_public_key().call()).result.res
+    update_starknet_block(
+        starknet=starknet, block_timestamp=156*TIME_ELAPS_ONE_HOUR)
     await account.execute(contract.contract_address,
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
 
     assert (await contract.number_of_planets().call()).result.n_planets == 1
 
-    data = await contract.get_planet(1).call()
-    assert data.result.planet.metal_mine == 1
-    assert data.result.planet.crystal_mine == 1
-    assert data.result.planet.deuterium_mine == 1
-
     data = await account.execute(contract.contract_address,
                                  get_selector_from_name('get_my_planet'),
                                  [], 1).invoke()
-    assert data.result.response[0] == 1
+
+    data2 = await contract.get_planet(data.result.response[0]).call()
+    assert data2.result.planet.metal_mine == 1
+    assert data2.result.planet.crystal_mine == 1
+    assert data2.result.planet.deuterium_mine == 1
 
     # assert (await contract.query_metal_production(signer.public_key).call()).result.production == 6
 
@@ -85,7 +84,6 @@ async def test_production(get_starknet, contract_factory, account_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
-    pkey = (await account.get_public_key().call()).result.res
     await account.execute(contract.contract_address,
                           get_selector_from_name('generate_planet'),
                           [], 0).invoke()
