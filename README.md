@@ -1,4 +1,4 @@
-# Ogame-Cairo
+# Ogame-Cairogit
 
 _Ogame logic implementation written in Cairo for Starknet._
 
