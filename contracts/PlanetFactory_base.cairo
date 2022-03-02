@@ -7,13 +7,14 @@ from starkware.starknet.common.syscalls import get_caller_address, get_block_tim
 from starkware.cairo.common.uint256 import Uint256, uint256_add
 from contracts.utils.constants import TRUE, FALSE
 from contracts.utils.Formulas import (
-                                formulas_metal_mine, 
-                                formulas_crystal_mine, 
-                                formulas_deuterium_mine,
-                                formulas_metal_building,
-                                formulas_crystal_building,
-                                formulas_deuterium_building)
+    formulas_metal_mine, 
+    formulas_crystal_mine, 
+    formulas_deuterium_mine,
+    formulas_metal_building,
+    formulas_crystal_building,
+    formulas_deuterium_building)
 from contracts.utils.Math64x61 import Math64x61_mul
+from contracts.token.erc721.interfaces.IERC721 import IERC721
 
 
 ###########
@@ -50,13 +51,17 @@ end
 func PlanetFactory_planet_to_owner(address : felt) -> (planet_id : Uint256):
 end
 
+@storage_var
+func erc721_token_address() -> (address : felt):
+end
+
 
 ##########
 # Events #
 ##########
 
 @event
-func planet_genereted(planet_id : Uint256):
+func planet_genereted(planet_id : felt):
 end
 
 @event
@@ -83,14 +88,14 @@ func PlanetFactory_collect_resources{
     let (deuterium_produced) = formulas_deuterium_mine(time_start, deuterium_level)
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
-                                metal_mine = 1,
-                                crystal_mine = 1,
-                                deuterium_mine = 1,
-                                metal_storage = planet.metal_storage + metal_produced,
-                                crystal_storage = planet.crystal_storage + crystal_produced,
-                                deuterium_storage = planet.deuterium_storage + deuterium_produced,
-                                timer = time_now,
-                            )
+        metal_mine = 1,
+        crystal_mine = 1,
+        deuterium_mine = 1,
+        metal_storage = planet.metal_storage + metal_produced,
+        crystal_storage = planet.crystal_storage + crystal_produced,
+        deuterium_storage = planet.deuterium_storage + deuterium_produced,
+        timer = time_now,
+        )
     PlanetFactory_planets.write(planet_id, updated_planet)
     return()
 end
@@ -102,7 +107,7 @@ func PlanetFactory_generate_planet{
         }() -> (new_planet : Planet):
     alloc_locals
     let (local time_now) = get_block_timestamp()
-    let (address) = get_caller_address()
+    let (local address) = get_caller_address()
     assert_not_zero(address)
     let planet = Planet(
         metal_mine=1, 
@@ -119,8 +124,9 @@ func PlanetFactory_generate_planet{
     PlanetFactory_planet_to_owner.write(address, Uint256(new_planet_id, 0))
     let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
     PlanetFactory_number_of_planets.write(current_number_of_planets+1)
-    PlanetFactory_planets.write(new_planet_id, planet)
-    planet_genereted.emit(id=new_planet_id)
+    let (erc721_address) = erc721_token_address.read()
+    IERC721.mint(erc721_address, address, Uint256(new_planet_id, 0))
+    planet_genereted.emit(new_planet_id)
     return(new_planet=planet)
 end
 

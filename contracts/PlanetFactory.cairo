@@ -13,7 +13,10 @@ from contracts.PlanetFactory_base import (
     PlanetFactory_upgrade_metal_mine,
     PlanetFactory_upgrade_crystal_mine,
     PlanetFactory_upgrade_deuterium_mine,
+    erc721_token_address
 )
+from contracts.token.erc721.interfaces.IERC721 import IERC721
+from starkware.cairo.common.uint256 import Uint256
 
 ###########
 # Getters #
@@ -34,7 +37,9 @@ func get_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(planet_id : felt) -> (planet : Planet):
+        }() -> (planet : Planet):
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(planet_id)
     return(planet)
 end
@@ -44,7 +49,7 @@ func get_my_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (planet_id : felt):
+        }() -> (planet_id : Uint256):
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     return(planet_id=id)
@@ -89,7 +94,8 @@ func constructor{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }():
+        }(erc721_address : felt):
+    erc721_token_address.write(erc721_address)
     return()
 end
 
