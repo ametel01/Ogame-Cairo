@@ -1,3 +1,4 @@
+from numpy import source
 import pytest
 import os
 from utils.Signer import Signer
@@ -9,6 +10,8 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
+ERC721_FILE = os.path.join("contracts", "token" "erc721",
+                           "ERC721_Mintable_Burnable.cairo")
 TIME_ELAPS_ONE_HOUR = 32000
 TIME_ELAPS_SIX_HOURS = 192000
 
@@ -42,9 +45,16 @@ async def account_factory(get_starknet):
 @pytest.fixture
 async def contract_factory(get_starknet):
     starknet = get_starknet
+    contract = await starknet.deploy(source=CONTRACT_FILE)
+    return contract
+
+
+@pytest.fixture
+async def erc721_factory(get_starknet):
+    starknet = get_starknet
     contract = await starknet.deploy(
-        source=CONTRACT_FILE,
-    )
+        source=ERC721_FILE,
+        constructor_calldata=[79717795807684, 79717795807684, signer.public_key])
     return contract
 
 
@@ -55,10 +65,11 @@ async def test_initializer(account_factory):
 
 
 @pytest.mark.asyncio
-async def test_generate_planet(get_starknet, contract_factory, account_factory):
+async def test_generate_planet(get_starknet, contract_factory, account_factory, erc721_factory):
     starknet = get_starknet
     contract = contract_factory
     account = account_factory
+    erc721 = erc721_factory
     update_starknet_block(
         starknet=starknet, block_timestamp=156*TIME_ELAPS_ONE_HOUR)
     await account.execute(contract.contract_address,
