@@ -4,6 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
+from starkware.cairo.common.uint256 import Uint256, uint256_add
 from contracts.utils.constants import TRUE, FALSE
 from contracts.utils.Formulas import (
                                 formulas_metal_mine, 
@@ -18,7 +19,7 @@ from contracts.utils.Math64x61 import Math64x61_mul
 ###########
 # Structs #
 ###########
-const ID_MOD = 65536
+
 
 struct Planet:
     # Mines level
@@ -42,11 +43,11 @@ func PlanetFactory_number_of_planets() -> (n : felt):
 end
 
 @storage_var
-func PlanetFactory_planets(id : felt) -> (planet : Planet):
+func PlanetFactory_planets(planet_id : Uint256) -> (planet : Planet):
 end
 
 @storage_var
-func PlanetFactory_planet_to_owner(address : felt) -> (planet_id : felt):
+func PlanetFactory_planet_to_owner(address : felt) -> (planet_id : Uint256):
 end
 
 
@@ -55,7 +56,7 @@ end
 ##########
 
 @event
-func planet_genereted(id : felt):
+func planet_genereted(planet_id : Uint256):
 end
 
 @event
@@ -70,7 +71,7 @@ func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }(planet_id : felt) -> ():
+        }(planet_id : Uint256) -> ():
     alloc_locals
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
@@ -111,13 +112,11 @@ func PlanetFactory_generate_planet{
         crystal_storage=300,
         deuterium_storage=100,
         timer=time_now,)
-    #let (last_id) = PlanetFactory_number_of_planets.read() 
-    let (_,new_planet_id) = unsigned_div_rem(time_now, ID_MOD)  # working on improve randemness
+    let (last_id) = PlanetFactory_number_of_planets.read()
+    let new_planet_id = last_id + 1
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
-    assert has_already_planet = FALSE
-    let (id_already_exist) = PlanetFactory_planets.read(new_planet_id)
-    assert id_already_exist.metal_mine = FALSE
-    PlanetFactory_planet_to_owner.write(address, new_planet_id)
+    assert has_already_planet = Uint256(0,0)
+    PlanetFactory_planet_to_owner.write(address, Uint256(new_planet_id, 0))
     let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
     PlanetFactory_number_of_planets.write(current_number_of_planets+1)
     PlanetFactory_planets.write(new_planet_id, planet)
