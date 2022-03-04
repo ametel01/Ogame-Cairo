@@ -64,7 +64,7 @@ func ERC721_Metadata_tokenURI{
         base_token_uri_len,
         base_token_uri,
         token_id_ss_len,
-        token_id_ss,
+        token_id_ss
     )
 
     return (token_uri_len=token_uri_len, token_uri=token_uri)
