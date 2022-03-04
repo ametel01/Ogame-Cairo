@@ -41,7 +41,7 @@ func get_planet{
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(planet_id)
-    return(planet)
+    return(planet=planet)
 end
 
 @view
@@ -53,6 +53,16 @@ func get_my_planet{
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     return(planet_id=id)
+end
+
+@view
+func erc721_address{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (res : felt):
+    let (res) = erc721_token_address.read()
+    return(res)
 end
 
 @view

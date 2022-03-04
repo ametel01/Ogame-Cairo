@@ -1,5 +1,4 @@
-# SPDX-License-Identifier: MIT
-# OpenZeppelin Cairo Contracts v0.1.0 (token/erc721/library.cairo)
+# https://github.com/playoasis/starknet-contracts/blob/main/contracts/token/ERC721_base.cairo
 
 %lang starknet
 
@@ -7,20 +6,15 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.math import assert_not_zero, assert_not_equal
 from starkware.cairo.common.alloc import alloc
 from starkware.starknet.common.syscalls import get_caller_address
-from starkware.cairo.common.uint256 import Uint256, uint256_check
-
-from contracts.utils.Safemath import (
-    uint256_checked_add,
-    uint256_checked_sub_le
+from starkware.cairo.common.uint256 import (
+    Uint256, uint256_add, uint256_sub
 )
 
-from contracts.utils.ERC165_base import ERC165_register_interface
+from contracts.utils.ERC165_base import (
+    ERC165_register_interface
+)
 
 from contracts.token.erc721.interfaces.IERC721_Receiver import IERC721_Receiver
-
-from contracts.utils.IERC165 import IERC165
-
-from contracts.utils.constants import TRUE, FALSE
 
 #
 # Storage
@@ -50,9 +44,22 @@ end
 func ERC721_operator_approvals(owner: felt, operator: felt) -> (res: felt):
 end
 
-@storage_var
-func ERC721_token_uri(token_id: Uint256) -> (token_uri: felt):
+#
+# Events
+#
+
+@event
+func Transfer(_from: felt, to: felt, tokenId: Uint256):
 end
+
+@event
+func Approve(owner: felt, approved: felt, tokenId: Uint256):
+end
+
+@event
+func ApprovalForAll(owner: felt, operator: felt, approved: felt):
+end
+
 
 #
 # Constructor
@@ -70,8 +77,6 @@ func ERC721_initializer{
     ERC721_symbol_.write(symbol)
     # register IERC721
     ERC165_register_interface(0x80ac58cd)
-    # register IERC721_Metadata
-    ERC165_register_interface(0x5b5e139f)
     return ()
 end
 
@@ -102,8 +107,8 @@ func ERC721_balanceOf{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
     }(owner: felt) -> (balance: Uint256):
-    assert_not_zero(owner)
     let (balance: Uint256) = ERC721_balances.read(owner)
+    assert_not_zero(owner)
     return (balance)
 end
 
@@ -112,7 +117,6 @@ func ERC721_ownerOf{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
     }(token_id: Uint256) -> (owner: felt):
-    uint256_check(token_id)
     let (owner) = ERC721_owners.read(token_id)
     # Ensuring the query is not for nonexistent token
     assert_not_zero(owner)
@@ -124,9 +128,8 @@ func ERC721_getApproved{
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
     }(token_id: Uint256) -> (approved: felt):
-    uint256_check(token_id)
     let (exists) = _exists(token_id)
-    assert exists = TRUE
+    assert exists = 1
 
     let (approved) = ERC721_token_approvals.read(token_id)
     return (approved)
@@ -141,19 +144,6 @@ func ERC721_isApprovedForAll{
     return (is_approved)
 end
 
-func ERC721_tokenURI{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        range_check_ptr
-    }(token_id: Uint256) -> (token_uri: felt):
-    let (exists) = _exists(token_id)
-    assert exists = TRUE
-
-    # if tokenURI is not set, it will return 0
-    let (token_uri) = ERC721_token_uri.read(token_id)
-    return (token_uri)
-end
-
 #
 # Externals
 #
@@ -163,7 +153,6 @@ func ERC721_approve{
         syscall_ptr: felt*,
         range_check_ptr
     }(to: felt, token_id: Uint256):
-    uint256_check(token_id)
     # Checks caller is not zero address
     let (caller) = get_caller_address()
     assert_not_zero(caller)
@@ -175,12 +164,12 @@ func ERC721_approve{
     # Checks that either caller equals owner or
     # caller isApprovedForAll on behalf of owner
     if caller == owner:
-        _approve(to, token_id)
+        _approve(owner, to, token_id)
         return ()
     else:
         let (is_approved) = ERC721_operator_approvals.read(owner, caller)
         assert_not_zero(is_approved)
-        _approve(to, token_id)
+        _approve(owner, to, token_id)
         return ()
     end
 end
@@ -192,19 +181,16 @@ func ERC721_setApprovalForAll{
     }(operator: felt, approved: felt):
     # Ensures caller is neither zero address nor operator
     let (caller) = get_caller_address()
-    assert_not_zero(caller * operator)
-    # note this pattern as we'll frequently use it:
-    #   instead of making an `assert_not_zero` call for each address
-    #   we can always briefly write `assert_not_zero(a0 * a1 * ... * aN)`.
-    #   This is because these addresses are field elements,
-    #   meaning that a*0==0 for all a in the field,
-    #   and a*b==0 implies that at least one of a,b are zero in the field
+    assert_not_zero(caller)
     assert_not_equal(caller, operator)
 
     # Make sure `approved` is a boolean (0 or 1)
     assert approved * (1 - approved) = 0
 
     ERC721_operator_approvals.write(owner=caller, operator=operator, value=approved)
+
+    # Emit ApprovalForAll event
+    ApprovalForAll.emit(owner=caller, operator=operator, approved=approved)
     return ()
 end
 
@@ -214,7 +200,7 @@ func ERC721_transferFrom{
         range_check_ptr
     }(_from: felt, to: felt, token_id: Uint256):
     alloc_locals
-    uint256_check(token_id)
+
     let (caller) = get_caller_address()
     let (is_approved) = _is_approved_or_owner(caller, token_id)
     assert_not_zero(caller * is_approved)
@@ -240,7 +226,7 @@ func ERC721_safeTransferFrom{
         data: felt*
     ):
     alloc_locals
-    uint256_check(token_id)
+
     let (caller) = get_caller_address()
     let (is_approved) = _is_approved_or_owner(caller, token_id)
     assert_not_zero(caller * is_approved)
@@ -259,17 +245,23 @@ func ERC721_mint{
         syscall_ptr: felt*,
         range_check_ptr
     }(to: felt, token_id: Uint256):
-    uint256_check(token_id)
     assert_not_zero(to)
 
     # Ensures token_id is unique
     let (exists) = _exists(token_id)
-    assert exists = FALSE
+    assert exists = 0
 
     let (balance: Uint256) = ERC721_balances.read(to)
-    let (new_balance: Uint256) = uint256_checked_add(balance, Uint256(1, 0))
+    # Overflow is not possible because token_ids are checked for duplicate ids with `_exists()`
+    # thus, each token is guaranteed to be a unique uint256
+    let (new_balance: Uint256, _) = uint256_add(balance, Uint256(1, 0))
     ERC721_balances.write(to, new_balance)
+
+    # low + high felts = uint256
     ERC721_owners.write(token_id, to)
+
+    # Emit Transfer event
+    Transfer.emit(_from=0, to=to, tokenId=token_id)
     return ()
 end
 
@@ -279,19 +271,21 @@ func ERC721_burn{
         range_check_ptr
     }(token_id: Uint256):
     alloc_locals
-    uint256_check(token_id)
-    let (owner) = ERC721_ownerOf(token_id)
+    let (local owner) = ERC721_ownerOf(token_id)
 
     # Clear approvals
-    _approve(0, token_id)
+    _approve(owner, 0, token_id)
 
     # Decrease owner balance
     let (balance: Uint256) = ERC721_balances.read(owner)
-    let (new_balance: Uint256) = uint256_checked_sub_le(balance, Uint256(1, 0))
+    let (new_balance) = uint256_sub(balance, Uint256(1, 0))
     ERC721_balances.write(owner, new_balance)
 
     # Delete owner
     ERC721_owners.write(token_id, 0)
+
+    # Emit Transfer event
+    Transfer.emit(_from=owner, to=0, tokenId=token_id)
     return ()
 end
 
@@ -305,43 +299,14 @@ func ERC721_safeMint{
         data_len: felt,
         data: felt*
     ):
-    uint256_check(token_id)
     ERC721_mint(to, token_id)
-
-    let (success) = _check_onERC721Received(
+    _check_onERC721Received(
         0,
         to,
         token_id,
         data_len,
         data
     )
-    assert_not_zero(success)
-    return ()
-end
-
-func ERC721_only_token_owner{
-        pedersen_ptr: HashBuiltin*,
-        syscall_ptr: felt*,
-        range_check_ptr
-    }(token_id: Uint256):
-    uint256_check(token_id)
-    let (caller) = get_caller_address()
-    let (owner) = ERC721_ownerOf(token_id)
-    # Note `ERC721_ownerOf` checks that the owner is not the zero address
-    assert caller = owner
-    return ()
-end
-
-func ERC721_setTokenURI{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        range_check_ptr
-    }(token_id: Uint256, token_uri: felt):
-    uint256_check(token_id)
-    let (exists) = _exists(token_id)
-    assert exists = TRUE
-
-    ERC721_token_uri.write(token_id, token_uri)
     return ()
 end
 
@@ -353,8 +318,9 @@ func _approve{
         syscall_ptr: felt*,
         pedersen_ptr: HashBuiltin*,
         range_check_ptr
-    }(to: felt, token_id: Uint256):
+    }(owner: felt, to: felt, token_id: Uint256):
     ERC721_token_approvals.write(token_id, to)
+    Approve.emit(owner=owner, approved=to, tokenId=token_id)
     return ()
 end
 
@@ -366,24 +332,24 @@ func _is_approved_or_owner{
     alloc_locals
 
     let (exists) = _exists(token_id)
-    assert exists = TRUE
+    assert exists = 1
 
     let (owner) = ERC721_ownerOf(token_id)
     if owner == spender:
-        return (TRUE)
+        return (1)
     end
 
     let (approved_addr) = ERC721_getApproved(token_id)
     if approved_addr == spender:
-        return (TRUE)
+        return (1)
     end
 
     let (is_operator) = ERC721_isApprovedForAll(owner, spender)
-    if is_operator == TRUE:
-        return (TRUE)
+    if is_operator == 1:
+        return (1)
     end
 
-    return (FALSE)
+    return (0)
 end
 
 func _exists{
@@ -394,9 +360,9 @@ func _exists{
     let (res) = ERC721_owners.read(token_id)
 
     if res == 0:
-        return (FALSE)
+        return (0)
     else:
-        return (TRUE)
+        return (1)
     end
 end
 
@@ -412,20 +378,24 @@ func _transfer{
     assert_not_zero(to)
 
     # Clear approvals
-    _approve(0, token_id)
+    _approve(_ownerOf, 0, token_id)
 
     # Decrease owner balance
     let (owner_bal) = ERC721_balances.read(_from)
-    let (new_balance: Uint256) = uint256_checked_sub_le(owner_bal, Uint256(1, 0))
+    let (new_balance) = uint256_sub(owner_bal, Uint256(1, 0))
     ERC721_balances.write(_from, new_balance)
 
     # Increase receiver balance
     let (receiver_bal) = ERC721_balances.read(to)
-    let (new_balance: Uint256) = uint256_checked_add(receiver_bal, Uint256(1, 0))
+    # overflow not possible because token_id must be unique
+    let (new_balance: Uint256, _) = uint256_add(receiver_bal, Uint256(1, 0))
     ERC721_balances.write(to, new_balance)
 
     # Update token_id owner
     ERC721_owners.write(token_id, to)
+
+    # Emit transfer event
+    Transfer.emit(_from=_from, to=to, tokenId=token_id)
     return ()
 end
 
@@ -458,25 +428,23 @@ func _check_onERC721Received{
         data_len: felt,
         data: felt*
     ) -> (success: felt):
+    # We need to consider how to differentiate between EOA and contracts
+    # and insert a conditional to know when to use the proceeding check
     let (caller) = get_caller_address()
-    # ERC721_RECEIVER_ID = 0x150b7a02
-    let (is_supported) = IERC165.supportsInterface(to, 0x150b7a02)
-    if is_supported == TRUE:
-        let (selector) = IERC721_Receiver.onERC721Received(
-            to,
-            caller,
-            _from,
-            token_id,
-            data_len,
-            data
-        )
+    # The first parameter in an imported interface is the contract
+    # address of the interface being called
+    let (selector) = IERC721_Receiver.onERC721Received(
+        to,
+        caller,
+        _from,
+        token_id,
+        data_len,
+        data
+    )
 
-        # ERC721_RECEIVER_ID
-        assert selector = 0x150b7a02
-        return (TRUE)
-    end
+    # ERC721_RECEIVER_ID
+    assert (selector) = 0x150b7a02
 
-    # IAccount_ID = 0xf10dbd44
-    let (is_account) = IERC165.supportsInterface(to, 0xf10dbd44)
-    return (is_account)
+    # Cairo equivalent to 'return (true)'
+    return (1)
 end

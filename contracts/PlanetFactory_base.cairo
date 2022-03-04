@@ -104,7 +104,7 @@ func PlanetFactory_generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr,
-        }() -> (new_planet : Planet):
+        }():
     alloc_locals
     let (local time_now) = get_block_timestamp()
     let (local address) = get_caller_address()
@@ -118,16 +118,18 @@ func PlanetFactory_generate_planet{
         deuterium_storage=100,
         timer=time_now,)
     let (last_id) = PlanetFactory_number_of_planets.read()
-    let new_planet_id = last_id + 1
+    let new_planet_id_felt = last_id + 1
+    let new_planet_id = Uint256(new_planet_id_felt, 0)
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
     assert has_already_planet = Uint256(0,0)
-    PlanetFactory_planet_to_owner.write(address, Uint256(new_planet_id, 0))
+    PlanetFactory_planet_to_owner.write(address, new_planet_id)
+    PlanetFactory_planets.write(new_planet_id, planet)
     let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
     PlanetFactory_number_of_planets.write(current_number_of_planets+1)
     let (erc721_address) = erc721_token_address.read()
-    IERC721.mint(erc721_address, address, Uint256(new_planet_id, 0))
-    planet_genereted.emit(new_planet_id)
-    return(new_planet=planet)
+    IERC721.mint(erc721_address, address, new_planet_id)
+    planet_genereted.emit(new_planet_id_felt)
+    return()
 end
 
 func PlanetFactory_upgrade_metal_mine{
