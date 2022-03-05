@@ -4,7 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
-from starkware.cairo.common.uint256 import Uint256, uint256_add
+from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_unsigned_div_rem
 from contracts.utils.constants import TRUE, FALSE
 from contracts.utils.Formulas import (
     formulas_metal_mine, 
@@ -15,6 +15,7 @@ from contracts.utils.Formulas import (
     formulas_deuterium_building)
 from contracts.utils.Math64x61 import Math64x61_mul
 from contracts.token.erc721.interfaces.IERC721 import IERC721
+
 
 
 ###########
@@ -55,6 +56,10 @@ end
 func erc721_token_address() -> (address : felt):
 end
 
+@storage_var
+func erc721_owner_address() -> (address : felt):
+end
+
 
 ##########
 # Events #
@@ -71,6 +76,43 @@ end
 ######################
 # Internal functions #
 ######################
+
+func PlanetFactory_generate_planet{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr,
+        }():
+    alloc_locals
+    let (local time_now) = get_block_timestamp()
+    let (local address) = get_caller_address()
+    assert_not_zero(address)
+    # One address can only have one planet at this stage.
+    let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
+    assert has_already_planet = Uint256(0,0)
+    let planet = Planet(
+        metal_mine=1, 
+        crystal_mine=1,
+        deuterium_mine=1,
+        metal_storage=500,
+        crystal_storage=300,
+        deuterium_storage=100,
+        timer=time_now,)
+    # Hash of address and time_now used to generate pseudo-random planet_id
+    let (new_planet_id_felt) = hash2{hash_ptr=pedersen_ptr}(address, time_now)
+    let new_id_no_mod = Uint256(new_planet_id_felt, 0)
+    let mod = Uint256(750,0)
+    let (_, new_planet_id) = uint256_unsigned_div_rem(new_id_no_mod, mod)
+    # Tranfer ERC721 to caller
+
+    PlanetFactory_planet_to_owner.write(address, new_planet_id)
+    PlanetFactory_planets.write(new_planet_id, planet)
+    let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
+    PlanetFactory_number_of_planets.write(current_number_of_planets+1)
+    let (erc721_address) = erc721_token_address.read()
+    IERC721.mint(erc721_address, address, new_planet_id)
+    planet_genereted.emit(new_planet_id_felt)
+    return()
+end
 
 func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
@@ -97,38 +139,6 @@ func PlanetFactory_collect_resources{
         timer = time_now,
         )
     PlanetFactory_planets.write(planet_id, updated_planet)
-    return()
-end
-
-func PlanetFactory_generate_planet{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr,
-        }():
-    alloc_locals
-    let (local time_now) = get_block_timestamp()
-    let (local address) = get_caller_address()
-    assert_not_zero(address)
-    let planet = Planet(
-        metal_mine=1, 
-        crystal_mine=1,
-        deuterium_mine=1,
-        metal_storage=500,
-        crystal_storage=300,
-        deuterium_storage=100,
-        timer=time_now,)
-    let (last_id) = PlanetFactory_number_of_planets.read()
-    let new_planet_id_felt = last_id + 1
-    let new_planet_id = Uint256(new_planet_id_felt, 0)
-    let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
-    assert has_already_planet = Uint256(0,0)
-    PlanetFactory_planet_to_owner.write(address, new_planet_id)
-    PlanetFactory_planets.write(new_planet_id, planet)
-    let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
-    PlanetFactory_number_of_planets.write(current_number_of_planets+1)
-    let (erc721_address) = erc721_token_address.read()
-    IERC721.mint(erc721_address, address, new_planet_id)
-    planet_genereted.emit(new_planet_id_felt)
     return()
 end
 

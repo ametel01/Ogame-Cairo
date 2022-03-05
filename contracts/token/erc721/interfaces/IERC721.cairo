@@ -39,6 +39,4 @@ namespace IERC721:
     func isApprovedForAll(owner: felt, operator: felt) -> (isApproved: felt):
     end
 
-    func mint(to : felt, token_id : Uint256):
-    end
 end
