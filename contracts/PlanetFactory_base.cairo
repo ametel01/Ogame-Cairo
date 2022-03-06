@@ -3,7 +3,9 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
-from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
+from starkware.starknet.common.syscalls import (get_caller_address, 
+    get_block_timestamp, 
+    get_contract_address)
 from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_unsigned_div_rem
 from contracts.utils.constants import TRUE, FALSE
 from contracts.utils.Formulas import (
@@ -103,13 +105,14 @@ func PlanetFactory_generate_planet{
     let mod = Uint256(750,0)
     let (_, new_planet_id) = uint256_unsigned_div_rem(new_id_no_mod, mod)
     # Tranfer ERC721 to caller
-
+    let (erc721_owner) = erc721_owner_address.read()
+    let (erc721_address) = erc721_token_address.read()
+    IERC721.transferFrom(erc721_address, erc721_owner, address, new_planet_id)
     PlanetFactory_planet_to_owner.write(address, new_planet_id)
     PlanetFactory_planets.write(new_planet_id, planet)
     let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
     PlanetFactory_number_of_planets.write(current_number_of_planets+1)
     let (erc721_address) = erc721_token_address.read()
-    IERC721.mint(erc721_address, address, new_planet_id)
     planet_genereted.emit(new_planet_id_felt)
     return()
 end
