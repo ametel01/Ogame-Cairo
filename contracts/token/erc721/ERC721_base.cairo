@@ -240,6 +240,7 @@ func ERC721_safeTransferFrom{
     return ()
 end
 
+# This function has been modified to allow the minter contract to work.
 func ERC721_mint{
         pedersen_ptr: HashBuiltin*,
         syscall_ptr: felt*,

@@ -5,8 +5,6 @@ from starkware.cairo.common.uint256 import Uint256, uint256_add
 from starkware.starknet.common.syscalls import get_caller_address
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 
-#const owner = 1486529712031020840639405026195312730009946709614678266731041796349964152927
-
 @storage_var
 func erc721_address() -> (address : felt):
 end
