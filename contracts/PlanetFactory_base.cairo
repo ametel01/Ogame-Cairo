@@ -75,10 +75,6 @@ end
 func structure_updated(metal_used : felt, crystal_used : felt, deuterium_used : felt):
 end
 
-######################
-# Internal functions #
-######################
-
 func PlanetFactory_generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
@@ -128,8 +124,10 @@ func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }(planet_id : Uint256) -> ():
+        }():
     alloc_locals
+    let (caller) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(caller)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
     let metal_level = planet.metal_mine

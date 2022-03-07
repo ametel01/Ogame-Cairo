@@ -106,9 +106,7 @@ func constructor{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
         }(erc721_address : felt):
-    let (owner_address) = get_caller_address()
     erc721_token_address.write(erc721_address)
-    erc721_owner_address.write(owner_address)
     return()
 end
 
@@ -135,7 +133,7 @@ func collect_resources{
     let (address) = get_caller_address()
     assert_not_zero(address)
     let (id) = PlanetFactory_planet_to_owner.read(address)
-    PlanetFactory_collect_resources(planet_id=id)
+    PlanetFactory_collect_resources()
     return()
 end
 
