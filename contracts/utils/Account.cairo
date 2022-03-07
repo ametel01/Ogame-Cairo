@@ -179,7 +179,7 @@ func execute{
         _current_nonce
     )
 
-    # validate transaction
+    # # validate transaction
     # let (hash) = hash_message(&message)
     # let (signature_len, signature) = get_tx_signature()
     # is_valid_signature(hash, signature_len, signature)

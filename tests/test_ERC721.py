@@ -1,8 +1,5 @@
-from ast import operator
 import pytest
 import os
-
-from sympy import re
 from utils.Signer import Signer
 
 from starkware.starknet.testing.starknet import Starknet

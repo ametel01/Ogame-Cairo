@@ -85,7 +85,7 @@ func PlanetFactory_generate_planet{
         range_check_ptr,
         }():
     alloc_locals
-    let (local time_now) = get_block_timestamp()
+    let (time_now) = get_block_timestamp()
     let (local address) = get_caller_address()
     assert_not_zero(address)
     # One address can only have one planet at this stage.
@@ -99,23 +99,30 @@ func PlanetFactory_generate_planet{
         crystal_storage=300,
         deuterium_storage=100,
         timer=time_now,)
-    # Hash of address and time_now used to generate pseudo-random planet_id
-    let (new_planet_id_felt) = hash2{hash_ptr=pedersen_ptr}(address, time_now)
-    let new_id_no_mod = Uint256(new_planet_id_felt, 0)
-    let mod = Uint256(750,0)
-    let (_, new_planet_id) = uint256_unsigned_div_rem(new_id_no_mod, mod)
-    # Tranfer ERC721 to caller
-    let (erc721_owner) = erc721_owner_address.read()
-    let (erc721_address) = erc721_token_address.read()
+    # Approve ERC721 to caller
+    let (local erc721_address) = erc721_token_address.read()
+    let (local last_id) = PlanetFactory_number_of_planets.read()
+    let new_planet_id = Uint256(last_id+1, 0)
+    let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, address, new_planet_id)
     PlanetFactory_planet_to_owner.write(address, new_planet_id)
     PlanetFactory_planets.write(new_planet_id, planet)
-    let (current_number_of_planets) = PlanetFactory_number_of_planets.read()
-    PlanetFactory_number_of_planets.write(current_number_of_planets+1)
-    let (erc721_address) = erc721_token_address.read()
-    planet_genereted.emit(new_planet_id_felt)
+    PlanetFactory_number_of_planets.write(last_id+1)
+    # #planet_genereted.emit(new_planet_id_felt)
     return()
 end
+
+# func _gen_rand_id{
+#         syscall_ptr : felt*,
+#         pedersen_ptr : HashBuiltin*,
+#         range_check_ptr,
+#         }() -> (id : Uint256):
+#     alloc_locals
+#     let (time_now) = get_block_timestamp()
+#     let (_, new_planet_id) = unsigned_div_rem(time_now, 10)
+#     let id = Uint256(new_planet_id, 0)
+#     return(id)
+# end
 
 func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
