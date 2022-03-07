@@ -12,7 +12,8 @@ end
 @storage_var
 func erc721_owner() -> (address : felt):
 end
-    
+
+# @args: address -> the erc721 address, owner -> the token contract owner
 @constructor
 func constructor{
         syscall_ptr : felt*,
