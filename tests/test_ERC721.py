@@ -1,3 +1,4 @@
+from numpy import source
 import pytest
 import os
 from utils.Signer import Signer
@@ -11,6 +12,7 @@ CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
 ERC721_FILE = os.path.join("contracts", "token", "erc721",
                            "ERC721.cairo")
+MINTER_FILE = os.path.join("minter", "erc721_minter.cairo")
 
 TIME_ELAPS_ONE_HOUR = 32000
 TIME_ELAPS_SIX_HOURS = 192000
@@ -86,13 +88,25 @@ async def erc721_factory(get_starknet, account_factory):
     return contract
 
 
+@pytest.fixture
+async def minter_factory(get_starknet, erc721_factory, account_factory):
+    starknet = get_starknet
+    erc721 = erc721_factory
+    account = account_factory
+    contract = await starknet.deploy(
+        source=MINTER_FILE,
+        constructor_calldata=[erc721.contract_address, account.contract_address])
+    return contract
+
+
 @pytest.mark.asyncio
-async def test_erc721_constructor(get_starknet, erc721_factory, account_factory, acc_2_factory, acc_3_factory):
+async def test_erc721_constructor(get_starknet, minter_factory, erc721_factory, account_factory, acc_2_factory, acc_3_factory):
     starknet = get_starknet
     token_contract = erc721_factory
     account = account_factory
     receiver = acc_3_factory
     operator = acc_2_factory
+    minter = minter_factory
 
     data = await account.execute(token_contract.contract_address,
                                  get_selector_from_name('getOwner'),
@@ -115,6 +129,25 @@ async def test_erc721_constructor(get_starknet, erc721_factory, account_factory,
                                  get_selector_from_name('ownerOf'),
                                  [1, 0], 3).invoke()
     assert data.result.response[0] == receiver.contract_address
+
+    await account.execute(token_contract.contract_address,
+                          get_selector_from_name('setApprovalForAll'),
+                          [minter.contract_address, 1], 4).invoke()
+    data = await account.execute(token_contract.contract_address,
+                                 get_selector_from_name('isApprovedForAll'),
+                                 [account.contract_address, minter.contract_address], 5).invoke()
+    assert data.result.response[0] == 1
+
+    await account.execute(minter.contract_address,
+                          get_selector_from_name('mint_all'),
+                          [100, 2, 0], 6).invoke()
+
+    data = await account.execute(token_contract.contract_address,
+                                 get_selector_from_name('balanceOf'),
+                                 [account.contract_address], 7).invoke()
+    assert data.result.response[0] == 100
+
+    # await minter.mint_all(750, (1, 0)).invoke()
 
     # data = await account.execute(token_contract.contract_address,
     #                              get_selector_from_name('tokenURI'),

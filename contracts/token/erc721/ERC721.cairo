@@ -4,7 +4,9 @@
 %builtins pedersen range_check ecdsa
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
+from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
+from contracts.utils.constants import TRUE
 
 from contracts.token.erc721.ERC721_base import (
     ERC721_name,
@@ -20,7 +22,8 @@ from contracts.token.erc721.ERC721_base import (
     ERC721_approve,
     ERC721_setApprovalForAll,
     ERC721_transferFrom,
-    ERC721_safeTransferFrom
+    ERC721_safeTransferFrom,
+    ERC721_operator_approvals
 )
 
 from contracts.token.erc721.ERC721_Metadata_base import (
@@ -219,9 +222,17 @@ func mint{
         syscall_ptr: felt*,
         range_check_ptr
     }(to: felt, token_id: Uint256):
-    Ownable_only_owner()
-    ERC721_mint(to, token_id)
-    return ()
+    alloc_locals
+    let (caller) = get_caller_address()
+    let (is_approved) = ERC721_operator_approvals.read(to, caller)
+    if is_approved == TRUE:
+        ERC721_mint(to, token_id)
+        return()
+    else:
+        Ownable_only_owner()
+        ERC721_mint(to, token_id)
+        return ()
+    end
 end
 
 @external
