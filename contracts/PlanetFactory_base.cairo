@@ -17,6 +17,7 @@ from contracts.utils.Formulas import (
     formulas_deuterium_building)
 from contracts.utils.Math64x61 import Math64x61_mul
 from contracts.token.erc721.interfaces.IERC721 import IERC721
+from contracts.token.erc20.interfaces.IERC20 import IERC20
 
 
 
@@ -62,6 +63,17 @@ end
 func erc721_owner_address() -> (address : felt):
 end
 
+@storage_var
+func erc20_metal_address() -> (address : felt):
+end
+
+@storage_var
+func erc20_crystal_address() -> (address : felt):
+end
+
+@storage_var
+func erc20_deuterium_address() -> (address : felt):
+end
 
 ##########
 # Events #
@@ -147,6 +159,8 @@ func PlanetFactory_collect_resources{
         timer = time_now,
         )
     PlanetFactory_planets.write(planet_id, updated_planet)
+    # Update ERC20 contract for resources
+    _update_resources_erc20(caller, metal_produced, crystal_produced, deuterium_produced)
     return()
 end
 
@@ -237,5 +251,21 @@ func PlanetFactory_upgrade_deuterium_mine{
     return()
 end
 
+func _update_resources_erc20{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(to : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt):
+    let (metal_address) = erc20_metal_address.read()
+    let (crystal_address) = erc20_crystal_address.read()
+    let (deuterium_address) = erc20_deuterium_address.read()
+    let metal = Uint256(metal_amount, 0)
+    let crystal = Uint256(crystal_amount, 0)
+    let deuterium = Uint256(deuterium_amount, 0)
+    IERC20.mint(metal_address, to, metal)
+    IERC20.mint(crystal_address, to, crystal)
+    IERC20.mint(deuterium_address, to, deuterium)
+    return()
+end
 
     
