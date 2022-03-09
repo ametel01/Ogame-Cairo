@@ -37,4 +37,8 @@ namespace IERC20:
 
     func approve(spender: felt, amount: Uint256) -> (success: felt):
     end
+
+    # This function is not part of the erc20 standard, it has been added.
+    func mint(to : felt, amount : Uint256):
+    end
 end
