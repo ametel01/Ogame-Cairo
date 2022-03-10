@@ -14,8 +14,17 @@ from contracts.PlanetFactory_base import (
     PlanetFactory_upgrade_crystal_mine,
     PlanetFactory_upgrade_deuterium_mine,
     erc721_token_address,
-    erc721_owner_address
+    erc721_owner_address,
+    erc20_metal_address,
+    erc20_crystal_address,
+    erc20_deuterium_address
 )
+
+from contracts.utils.Ownable import (
+    Ownable_initializer,
+    Ownable_only_owner
+)
+
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 from starkware.cairo.common.uint256 import Uint256
 
@@ -105,14 +114,28 @@ func constructor{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(erc721_address : felt):
+        }(erc721_address : felt, owner : felt):
     erc721_token_address.write(erc721_address)
+    Ownable_initializer(owner)
     return()
 end
 
 #############
 # Externals #
 #############
+
+@external
+func erc20_addresses{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }(metal_token : felt, crystal_token : felt, deuterium_token : felt):
+    Ownable_only_owner()
+    erc20_metal_address.write(metal_token)
+    erc20_crystal_address.write(crystal_token)
+    erc20_deuterium_address.write(deuterium_token)
+    return()
+end
 
 @external
 func generate_planet{
@@ -133,7 +156,7 @@ func collect_resources{
     let (address) = get_caller_address()
     assert_not_zero(address)
     let (id) = PlanetFactory_planet_to_owner.read(address)
-    PlanetFactory_collect_resources()
+    PlanetFactory_collect_resources(address)
     return()
 end
 

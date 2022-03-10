@@ -4,14 +4,14 @@ from utils.fix import CONTRACT_FILE, ACCOUNT_FILE, ERC721_FILE, TIME_ELAPS_SIX_H
 from utils.fix import owner, user1, user2
 from utils.fix import (
     get_starknet, owner_factory, user1_factory, user2_factory,
-    contract_factory, erc721_factory, update_starknet_block)
+    game_factory, erc721_factory, update_starknet_block)
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 
 @pytest.mark.asyncio
-async def test_generate_planet(get_starknet, contract_factory, owner_factory, user1_factory, user2_factory, erc721_factory):
+async def test_generate_planet(get_starknet, game_factory, owner_factory, user1_factory, user2_factory, erc721_factory):
     starknet = get_starknet
-    contract = contract_factory
+    contract = game_factory
     owner = owner_factory
     user1 = user1_factory
     user2 = user2_factory

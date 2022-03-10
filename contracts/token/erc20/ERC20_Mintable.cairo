@@ -5,6 +5,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
+from starkware.starknet.common.syscalls import get_caller_address
 
 from contracts.token.erc20.ERC20_base import (
     ERC20_name,
@@ -99,6 +100,8 @@ func balanceOf{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
     }(account: felt) -> (balance: Uint256):
+    #let (caller) = get_caller_address()
+   #assert account = caller
     let (balance: Uint256) = ERC20_balanceOf(account)
     return (balance)
 end

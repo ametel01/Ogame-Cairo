@@ -87,6 +87,9 @@ end
 func structure_updated(metal_used : felt, crystal_used : felt, deuterium_used : felt):
 end
 
+# Used to create the first planet for a player. It does register the new planet in the contract storage
+# and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a 
+# random ID generator.
 func PlanetFactory_generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
@@ -136,9 +139,8 @@ func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
+        }(caller : felt):
     alloc_locals
-    let (caller) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(caller)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
@@ -251,6 +253,7 @@ func PlanetFactory_upgrade_deuterium_mine{
     return()
 end
 
+# Updates the ERC20 resources contract
 func _update_resources_erc20{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
@@ -262,9 +265,9 @@ func _update_resources_erc20{
     let metal = Uint256(metal_amount, 0)
     let crystal = Uint256(crystal_amount, 0)
     let deuterium = Uint256(deuterium_amount, 0)
-    IERC20.mint(metal_address, to, metal)
-    IERC20.mint(crystal_address, to, crystal)
-    IERC20.mint(deuterium_address, to, deuterium)
+    IERC20.transfer(metal_address, to, metal)
+    IERC20.transfer(crystal_address, to, crystal)
+    IERC20.transfer(deuterium_address, to, deuterium)
     return()
 end
 

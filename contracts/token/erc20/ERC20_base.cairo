@@ -10,9 +10,6 @@ from starkware.cairo.common.uint256 import (
     Uint256, uint256_add, uint256_sub, uint256_le, uint256_lt, uint256_check
 )
 
-#from contracts.utils.constants import UINT8_MAX
-
-
 #
 # Events
 #
@@ -68,7 +65,7 @@ func ERC20_initializer{
     ):
     ERC20_name_.write(name)
     ERC20_symbol_.write(symbol)
-    assert_lt(decimals, 256)
+    assert_lt(decimals, 8)
     ERC20_decimals_.write(decimals)
     return ()
 end

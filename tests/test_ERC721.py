@@ -1,4 +1,3 @@
-from numpy import source
 import pytest
 import os
 from utils.Signer import Signer
