@@ -14,6 +14,7 @@ ERC721_FILE = os.path.join("contracts", "token", "erc721",
                            "ERC721.cairo")
 ERC20_FILE = os.path.join("contracts", "token", "erc20",
                           "ERC20_Mintable.cairo")
+MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
@@ -126,4 +127,12 @@ async def deuterium_erc20_factory(get_starknet, owner_factory, game_factory):
         source=ERC20_FILE,
         constructor_calldata=[1851985284920121062765, 22314920796505429, 0, MAX_UINT, 0,
                               game.contract_address, owner.contract_address])
+    return contract
+
+pytest.fixture
+async def minter_factory(get_starknet):
+    starknet = get_starknet
+    contract = await starknet.deploy(
+        source=MINTER_FILE,
+        constructor_calldata=[])
     return contract
