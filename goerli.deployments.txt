@@ -3,6 +3,24 @@ https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73
 727713669677773499424935395146774672965422722660995087308605307047208038
 167058432561934416655812751101829711222203357542195
 
+Planets ERC721:
+0x00422d46ab1d25b9b1a48757d2adc7e555a222d348d41401f47ddd998f82d425:artifacts/abis/ERC721.json
 
-0x01b9cf9394bf74059cbe6d3fc4de8bae5a97f10a6d771d394b14a2035bcadba8:artifacts/abis/ERC721.json
-0x03aa02661f07ef1703da9ccab7dfc94cf51d68d1661cb4d029aae437cdee6746:artifacts/erc721_minter.json 
+Minter for NFT:
+0x041dbda18646fc20caae710fbbf090e1803957cd0234789530fef4bbf38bd3fd:artifacts/abis/erc721_minter.json
+
+Ogame: 
+0x04a8596c50a1e1171717a87bda29656c1c5236129c23c4fc7fd36fa265b0e398:artifacts/abis/PlanetFactory.json
+
+
+Metal:
+0x01bf83220444f7171c254613dd1f6cbc574d2661f0080edbaca376ed98b2b492:artifacts/abis/ERC20_Mintable.json
+Crystal:
+0x04782bbea030a9f8928a526fd09fbffee134820e475f3a0457a659fc431b4f63:artifacts/abis/ERC20_Mintable.json
+Deuterium:
+0x0612bb0aac8d0ef46152dc4edd2122534186e154fe416a1e2e2ee3ae638a1d7f:artifacts/abis/ERC20_Mintable.json
+
+
+
+
+
