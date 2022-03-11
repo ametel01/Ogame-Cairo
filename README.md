@@ -20,9 +20,12 @@ OGame is a browser-based, money-management and space-war themed massively multip
    - Shipyard
    - Robot Factory
 9. Allow creation of colonies.
-10. Implementation of basic ships:
+10. Implement logic for space travel between planets.
+11. Implementation of basic ships:
    - Small Cargo
    - Light Fighter
+
+
 
 
 This will most likely keep me busy for a while. The rest of the roadmap is yet to be decided.
