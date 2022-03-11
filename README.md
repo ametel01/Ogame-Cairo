@@ -13,12 +13,14 @@ OGame is a browser-based, money-management and space-war themed massively multip
 3. Integration of ERC20: resources will be tokenized. :heavy_check_mark:
 4. Add energy production requirements for mines.
 5. Add time constraints for buildings upgrades.
-6. Add game points.
-6. Implementation of basic facilities:
+6. Add energy requirements for energy production.
+6. Add research lab.
+7. Add technologies.
+8. Implementation of basic facilities:
    - Shipyard
    - Robot Factory
-7. Allow creation of colonies.
-8. Implementation of basic ships:
+9. Allow creation of colonies.
+10. Implementation of basic ships:
    - Small Cargo
    - Light Fighter
 
