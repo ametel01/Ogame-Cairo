@@ -1,24 +1,36 @@
 import pytest
-from utils.Signer import Signer
-from utils.fix import owner
-from utils.fix import (
-    get_starknet, owner_factory, erc721_factory, minter_factory, assert_equals)
+from utils.fix import assert_equals
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 @pytest.mark.asyncio
-async def test_mint_NFTs(get_starknet, owner_factory, erc721_factory, minter_factory):
-    starknet = get_starknet
+async def test_mint_NFTs(owner_factory, erc721_factory, minter_factory, game_factory):
+    #starknet = get_starknet
     erc721 = erc721_factory
-    owner = owner_factory
+    admin = owner_factory
     minter = minter_factory
+    ogame = game_factory
     
-
-    await owner.execute(minter.contract_address,
-                        get_selector_from_name('setNftAddress'),
+    # Submit NFT contract address to minter.
+    await admin.execute(minter.contract_address,
+                        get_selector_from_name('setNFTaddress'),
                         [erc721.contract_address], 0).invoke()
-
-    await owner.execute(minter.contract_address,
+    
+    # Mint 200 NFTs and assign them to minter.
+    await admin.execute(minter.contract_address,
                         get_selector_from_name('mintAll'),
                         [200, 1, 0], 1).invoke()
-
     
+    # Assert minte contract NFT balance is equal 200.
+    data = await admin.execute(erc721.contract_address,
+                        get_selector_from_name('balanceOf'),
+                        [minter.contract_address], 2).invoke()
+    assert_equals(data.result.response[0], 200)
+    
+    # Assert admin can give game contract approval on NFT transfer.
+    await admin.execute(minter.contract_address,
+                        get_selector_from_name('setNFTapproval'),
+                        [ogame.contract_address, 1], 3).invoke()
+    data = await admin.execute(erc721.contract_address,
+                        get_selector_from_name('isApprovedForAll'),
+                        [minter.contract_address, ogame.contract_address], 4).invoke()
+    assert_equals(data.result.response[0], 1)                        

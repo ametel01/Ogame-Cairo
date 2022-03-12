@@ -1,28 +1,18 @@
 import pytest
-from utils.Signer import Signer
-from utils.fix import CONTRACT_FILE, ACCOUNT_FILE, ERC721_FILE, TIME_ELAPS_SIX_HOURS, MAX_UINT
-from utils.fix import owner, user1, user2
-from utils.fix import (
-    get_starknet, owner_factory, user1_factory, user2_factory,
-    game_factory, erc721_factory, update_starknet_block, metal_erc20_factory, crystal_erc20_factory,
-    deuterium_erc20_factory, assert_equals)
+from utils.fix import (assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS)
 from starkware.starknet.compiler.compile import get_selector_from_name
-
-metal_contract = metal_erc20_factory
-crystal_contract = crystal_erc20_factory
-deuterium_contract = deuterium_erc20_factory
-
 
 @pytest.mark.asyncio
 async def test_distribute_resources(get_starknet, owner_factory, user1_factory, game_factory,
                                     metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory,
-                                    erc721_factory):
+                                    erc721_factory, minter_factory):
     starknet = get_starknet
     game_contract = game_factory
     erc721 = erc721_factory
     metal_contract = metal_erc20_factory
     crystal_contract = crystal_erc20_factory
     deuterium_contract = deuterium_erc20_factory
+    minter = minter_factory
     owner = owner_factory
     user = user1_factory
 

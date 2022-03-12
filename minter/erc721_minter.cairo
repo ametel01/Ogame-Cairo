@@ -24,15 +24,15 @@ func constructor{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-    }():
+    }(admin_address : felt):
     let (owner) = get_contract_address()
     erc721_owner.write(owner)
-    admim.write(1282787889235745818933906930526000651166852647073376211792755770227777878671)
+    admim.write(admin_address)
     return()
 end
 
 @external
-func setNftAddress{
+func setNFTaddress{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
@@ -45,7 +45,7 @@ func setNftAddress{
 end
 
 @external
-func setNftApproval{
+func setNFTapproval{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
@@ -59,7 +59,7 @@ func setNftApproval{
 end
 
 @external
-func mint_all{
+func mintAll{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
@@ -71,7 +71,7 @@ func mint_all{
         return()
     end
     let (next_id, _) = uint256_add(token_id, Uint256(1,0))
-    mint_all(n-1, next_id)
+    mintAll(n-1, next_id)
     IERC721.mint(erc721, owner, token_id)
     return()
 end
