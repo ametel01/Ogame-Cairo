@@ -84,9 +84,9 @@ func get_structures_levels{
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
-    let metal = planet.metal_mine 
-    let crystal = planet.crystal_mine 
-    let deuterium = planet.deuterium_mine
+    let metal = planet.mines.metal 
+    let crystal = planet.mines.crystal 
+    let deuterium = planet.mines.deuterium
     return(metal_mine=metal, crystal_mine=crystal, deuterium_mine=deuterium)
 end
 
@@ -99,9 +99,9 @@ func resources_available{
     let (address) = get_caller_address()
     let (id) = PlanetFactory_planet_to_owner.read(address)
     let (planet) = PlanetFactory_planets.read(id)
-    let metal_available = planet.metal_storage
-    let crystal_available = planet.crystal_storage
-    let deuterium_available = planet.deuterium_storage
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    let deuterium_available = planet.storage.deuterium
     return(metal=metal_available, crystal=crystal_available, deuterium=deuterium_available)
 end
 

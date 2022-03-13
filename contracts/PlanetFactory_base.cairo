@@ -24,18 +24,21 @@ from contracts.token.erc20.interfaces.IERC20 import IERC20
 ###########
 # Structs #
 ###########
+struct MineLevels:
+    member metal : felt
+    member crystal : felt
+    member deuterium : felt
+end
 
+struct MineStorage:
+    member metal : felt
+    member crystal : felt
+    member deuterium : felt
+end
 
 struct Planet:
-    # Mines level
-    member metal_mine : felt
-    member crystal_mine : felt
-    member deuterium_mine : felt
-    # Mines storage
-    member metal_storage : felt
-    member crystal_storage : felt
-    member deuterium_storage : felt
-    # Mines timer
+    member mines : MineLevels
+    member storage : MineStorage
     member timer : felt
 end
 
@@ -103,12 +106,8 @@ func PlanetFactory_generate_planet{
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
     assert has_already_planet = Uint256(0,0)
     let planet = Planet(
-        metal_mine=1, 
-        crystal_mine=1,
-        deuterium_mine=1,
-        metal_storage=500,
-        crystal_storage=300,
-        deuterium_storage=100,
+        MineLevels(metal=1, crystal=1, deuterium=1),
+        MineStorage(metal=500, crystal=300,deuterium=100),
         timer=time_now,)
     # Transfer ERC721 to caller
     let (local erc721_address) = erc721_token_address.read()
@@ -150,21 +149,19 @@ func PlanetFactory_collect_resources{
     let (planet_id) = PlanetFactory_planet_to_owner.read(caller)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
-    let metal_level = planet.metal_mine
-    let crystal_level = planet.crystal_mine
-    let deuterium_level = planet.deuterium_mine
+    let metal_level = planet.mines.metal
+    let crystal_level = planet.mines.crystal
+    let deuterium_level = planet.mines.deuterium
     let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
     let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
     let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
-        metal_mine = 1,
-        crystal_mine = 1,
-        deuterium_mine = 1,
-        metal_storage = planet.metal_storage + metal_produced,
-        crystal_storage = planet.crystal_storage + crystal_produced,
-        deuterium_storage = planet.deuterium_storage + deuterium_produced,
-        timer = time_now,
+        MineLevels(metal=1,crystal=1,deuterium=1),
+        MineStorage(metal=planet.storage.metal + metal_produced,
+                    crystal=planet.storage.crystal + crystal_produced,
+                    deuterium=planet.storage.deuterium + deuterium_produced),
+                    timer = time_now,
         )
     PlanetFactory_planets.write(planet_id, updated_planet)
     # Update ERC20 contract for resources
@@ -184,21 +181,20 @@ func PlanetFactory_upgrade_metal_mine{
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
-    let current_mine_level = planet.metal_mine
+    let current_mine_level = planet.mines.metal
     let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
-    let metal_available = planet.metal_storage
-    let crystal_available = planet.crystal_storage
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
     assert_le(metal_required, metal_available)
     assert_le(crystal_required, crystal_available)
     let new_planet = Planet(
-                        metal_mine=current_mine_level + 1,
-                        crystal_mine=planet.crystal_mine,
-                        deuterium_mine=planet.deuterium_mine,
-                        metal_storage=metal_available - metal_required,
-                        crystal_storage=crystal_available - crystal_required,
-                        deuterium_storage = planet.deuterium_storage,
-                        timer = planet.timer,
-                    )             
+                        MineLevels(metal=current_mine_level + 1,
+                                    crystal=planet.mines.crystal,
+                                    deuterium=planet.mines.deuterium),
+                        MineStorage(metal=metal_available - metal_required,
+                                    crystal=crystal_available - crystal_required,
+                                    deuterium = planet.storage.deuterium),
+                        timer = planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
@@ -213,21 +209,20 @@ func PlanetFactory_upgrade_crystal_mine{
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
-    let current_mine_level = planet.crystal_mine
+    let current_mine_level = planet.mines.crystal
     let (metal_required, crystal_required) = formulas_crystal_building(crystal_mine_level=current_mine_level)
-    let metal_available = planet.metal_storage
-    let crystal_available = planet.crystal_storage
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
     assert_le(metal_required, metal_available)
     assert_le(crystal_required, crystal_available)
     let new_planet = Planet(
-                        metal_mine=planet.metal_mine,
-                        crystal_mine=planet.crystal_mine + 1,
-                        deuterium_mine=planet.deuterium_mine,
-                        metal_storage=metal_available - metal_required,
-                        crystal_storage=crystal_available - crystal_required,
-                        deuterium_storage = planet.deuterium_storage,
-                        timer = planet.timer,
-                    )             
+                        MineLevels(metal=planet.mines.metal,
+                                    crystal=planet.mines.crystal + 1,
+                                    deuterium=planet.mines.deuterium),
+                        MineStorage(metal=metal_available - metal_required,
+                                    crystal=crystal_available - crystal_required,
+                                    deuterium=planet.storage.deuterium),
+                        timer = planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
@@ -242,21 +237,20 @@ func PlanetFactory_upgrade_deuterium_mine{
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
-    let current_mine_level = planet.deuterium_mine
+    let current_mine_level = planet.mines.deuterium
     let (metal_required, crystal_required) = formulas_deuterium_building(deuterium_mine_level=current_mine_level)
-    let metal_available = planet.metal_storage
-    let crystal_available = planet.crystal_storage
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
     assert_le(metal_required, metal_available)
     assert_le(crystal_required, crystal_available)
     let new_planet = Planet(
-                        metal_mine=planet.metal_mine,
-                        crystal_mine=planet.crystal_mine,
-                        deuterium_mine=planet.deuterium_mine + 1,
-                        metal_storage=metal_available - metal_required,
-                        crystal_storage=crystal_available - crystal_required,
-                        deuterium_storage = planet.deuterium_storage,
-                        timer = planet.timer,
-                    )             
+                        MineLevels(metal=planet.mines.metal,
+                                    crystal=planet.mines.crystal,
+                                    deuterium=planet.mines.deuterium + 1),
+                        MineStorage(metal=metal_available - metal_required,
+                                    crystal=crystal_available - crystal_required,
+                                    deuterium = planet.storage.deuterium),
+                        timer = planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
