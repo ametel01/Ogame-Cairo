@@ -153,9 +153,9 @@ func PlanetFactory_collect_resources{
     let metal_level = planet.metal_mine
     let crystal_level = planet.crystal_mine
     let deuterium_level = planet.deuterium_mine
-    let (metal_produced) = formulas_metal_mine(time_start, metal_level)
-    let (crystal_produced) = formulas_crystal_mine(time_start, crystal_level)
-    let (deuterium_produced) = formulas_deuterium_mine(time_start, deuterium_level)
+    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
+    let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
+    let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
         metal_mine = 1,
@@ -168,7 +168,10 @@ func PlanetFactory_collect_resources{
         )
     PlanetFactory_planets.write(planet_id, updated_planet)
     # Update ERC20 contract for resources
-    _update_resources_erc20(caller, metal_produced, crystal_produced, deuterium_produced)
+    _update_resources_erc20(to=caller, 
+                            metal_amount=metal_produced, 
+                            crystal_amount=crystal_produced,
+                            deuterium_amount=deuterium_produced)
     return()
 end
 
@@ -182,7 +185,7 @@ func PlanetFactory_upgrade_metal_mine{
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let current_mine_level = planet.metal_mine
-    let (metal_required, crystal_required) = formulas_metal_building(current_mine_level)
+    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
     let metal_available = planet.metal_storage
     let crystal_available = planet.crystal_storage
     assert_le(metal_required, metal_available)
@@ -211,7 +214,7 @@ func PlanetFactory_upgrade_crystal_mine{
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let current_mine_level = planet.crystal_mine
-    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
+    let (metal_required, crystal_required) = formulas_crystal_building(crystal_mine_level=current_mine_level)
     let metal_available = planet.metal_storage
     let crystal_available = planet.crystal_storage
     assert_le(metal_required, metal_available)
@@ -240,7 +243,7 @@ func PlanetFactory_upgrade_deuterium_mine{
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
     let (local planet) = PlanetFactory_planets.read(planet_id)
     let current_mine_level = planet.deuterium_mine
-    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
+    let (metal_required, crystal_required) = formulas_deuterium_building(deuterium_mine_level=current_mine_level)
     let metal_available = planet.metal_storage
     let crystal_available = planet.crystal_storage
     assert_le(metal_required, metal_available)
