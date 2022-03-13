@@ -6,7 +6,7 @@ from utils.helpers import (
 
 @pytest.mark.asyncio
 async def test_generate_planet(deploy_game_v1, user1_factory):
-    (ogame, erc721, _, _, _) = deploy_game_v1
+    (ogame, erc721, metal, crystal, deuterium) = deploy_game_v1
     user = user1_factory
 
     # User generate planet and an NFT is assigned.
@@ -25,6 +25,25 @@ async def test_generate_planet(deploy_game_v1, user1_factory):
                               get_selector_from_name('balanceOf'),
                               [user.contract_address], 2).invoke()
     assert_equals(data.result.response[0], 1)
+
+    # Assert that initial amount of resources ERC20 is tranferred to user.
+    data = await user.execute(metal.contract_address,
+                              get_selector_from_name(
+                                  'balanceOf'),
+                              [user.contract_address], 3).invoke()
+    assert_equals(data.result.response, [500, 0])
+
+    data = await user.execute(crystal.contract_address,
+                              get_selector_from_name(
+                                  'balanceOf'),
+                              [user.contract_address], 4).invoke()
+    assert_equals(data.result.response, [300, 0])
+
+    data = await user.execute(deuterium.contract_address,
+                              get_selector_from_name(
+                                  'balanceOf'),
+                              [user.contract_address], 5).invoke()
+    assert_equals(data.result.response, [100, 0])
 
 
 @pytest.mark.asyncio
