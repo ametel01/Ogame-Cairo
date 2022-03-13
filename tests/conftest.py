@@ -30,19 +30,6 @@ async def get_starknet():
     return starknet
 
 
-def assert_equals(a, b):
-    assert a == b
-
-
-def update_starknet_block(starknet, block_number=1, block_timestamp=TIME_ELAPS_ONE_HOUR):
-    starknet.state.state.block_info = BlockInfo(
-        block_number=block_number, block_timestamp=block_timestamp)
-
-
-def reset_starknet_block(starknet):
-    update_starknet_block(starknet=starknet)
-
-
 @pytest.fixture
 async def owner_factory(get_starknet):
     starknet = get_starknet
@@ -67,7 +54,6 @@ async def user2_factory(get_starknet):
     account = await starknet.deploy(
         source=ACCOUNT_FILE,
         constructor_calldata=[user2.public_key])
-    return account
 
 
 @pytest.fixture
@@ -129,11 +115,47 @@ async def deuterium_erc20_factory(get_starknet, owner_factory, game_factory):
                               game.contract_address, owner.contract_address])
     return contract
 
+
 @pytest.fixture
 async def minter_factory(get_starknet, owner_factory):
     starknet = get_starknet
     admin = owner_factory
-    contract = await starknet.deploy(
+    minter = await starknet.deploy(
         source=MINTER_FILE,
         constructor_calldata=[admin.contract_address])
-    return contract
+    return minter
+
+
+@pytest.fixture
+async def deploy_game_v1(minter_factory, erc721_factory, game_factory, owner_factory,
+                         metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory):
+
+    minter = minter_factory
+    erc721 = erc721_factory
+    ogame = game_factory
+    admin = owner_factory
+    metal = metal_erc20_factory
+    crystal = crystal_erc20_factory
+    deuterium = deuterium_erc20_factory
+
+    # Submit NFT contract address to minter.
+    await admin.execute(minter.contract_address,
+                        get_selector_from_name('setNFTaddress'),
+                        [erc721.contract_address], 0).invoke()
+
+    # Assert admin can give game contract approval on NFT transfer.
+    await admin.execute(minter.contract_address,
+                        get_selector_from_name('setNFTapproval'),
+                        [ogame.contract_address, 1], 1).invoke()
+
+    # Mint 200 NFTs and assign them to minter.
+    await admin.execute(minter.contract_address,
+                        get_selector_from_name('mintAll'),
+                        [200, 1, 0], 2).invoke()
+
+    await admin.execute(ogame.contract_address,
+                        get_selector_from_name('erc20_addresses'),
+                        [metal.contract_address,
+                         crystal.contract_address,
+                         deuterium.contract_address], 3).invoke()
+    return(ogame, erc721, metal, crystal, deuterium)

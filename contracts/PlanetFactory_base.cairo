@@ -110,7 +110,7 @@ func PlanetFactory_generate_planet{
         crystal_storage=300,
         deuterium_storage=100,
         timer=time_now,)
-    # Approve ERC721 to caller
+    # Transfer ERC721 to caller
     let (local erc721_address) = erc721_token_address.read()
     let (local last_id) = PlanetFactory_number_of_planets.read()
     let new_planet_id = Uint256(last_id+1, 0)
@@ -120,6 +120,12 @@ func PlanetFactory_generate_planet{
     PlanetFactory_planets.write(new_planet_id, planet)
     PlanetFactory_number_of_planets.write(last_id+1)
     # #planet_genereted.emit(new_planet_id_felt)
+    
+    # Transfer resources ERC20 tokens to caller.
+    _update_resources_erc20(to=address, 
+                            metal_amount=500, 
+                            crystal_amount=300,
+                            deuterium_amount=100)
     return()
 end
 
