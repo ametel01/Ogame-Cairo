@@ -128,7 +128,7 @@ async def minter_factory(get_starknet, owner_factory):
 
 @pytest.fixture
 async def deploy_game_v1(minter_factory, erc721_factory, game_factory, owner_factory,
-                         metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory):
+                         metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory, user1_factory):
 
     minter = minter_factory
     erc721 = erc721_factory
@@ -137,6 +137,7 @@ async def deploy_game_v1(minter_factory, erc721_factory, game_factory, owner_fac
     metal = metal_erc20_factory
     crystal = crystal_erc20_factory
     deuterium = deuterium_erc20_factory
+    user = user1_factory
 
     # Submit NFT contract address to minter.
     await admin.execute(minter.contract_address,
@@ -158,4 +159,9 @@ async def deploy_game_v1(minter_factory, erc721_factory, game_factory, owner_fac
                         [metal.contract_address,
                          crystal.contract_address,
                          deuterium.contract_address], 3).invoke()
-    return(ogame, erc721, metal, crystal, deuterium)
+
+    await user.execute(ogame.contract_address,
+                       get_selector_from_name('generate_planet'),
+                       [], 0).invoke()
+
+    return(ogame, erc721, metal, crystal, deuterium, admin, user)

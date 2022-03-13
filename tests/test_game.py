@@ -5,14 +5,8 @@ from utils.helpers import (
 
 
 @pytest.mark.asyncio
-async def test_generate_planet(deploy_game_v1, user1_factory):
-    (ogame, erc721, metal, crystal, deuterium) = deploy_game_v1
-    user = user1_factory
-
-    # User generate planet and an NFT is assigned.
-    await user.execute(ogame.contract_address,
-                       get_selector_from_name('generate_planet'),
-                       [], 0).invoke()
+async def test_generate_planet(deploy_game_v1):
+    (_, erc721, metal, crystal, deuterium, _, user) = deploy_game_v1
 
     # Assert user is the owner of the NFT generated.
     data = await user.execute(erc721.contract_address,
@@ -47,14 +41,9 @@ async def test_generate_planet(deploy_game_v1, user1_factory):
 
 
 @pytest.mark.asyncio
-async def test_collect_resources(get_starknet, deploy_game_v1, user1_factory):
+async def test_collect_resources(get_starknet, deploy_game_v1):
     starknet = get_starknet
-    (ogame, _, metal, crystal, deuterium) = deploy_game_v1
-    user = user1_factory
-
-    await user.execute(ogame.contract_address,
-                       get_selector_from_name('generate_planet'),
-                       [], 0).invoke()
+    (ogame, _, metal, crystal, deuterium, _, user) = deploy_game_v1
 
     # Equivalent of 12 hours pass.
     update_starknet_block(
@@ -88,3 +77,56 @@ async def test_collect_resources(get_starknet, deploy_game_v1, user1_factory):
                                   'balanceOf'),
                               [user.contract_address], 5).invoke()
     assert_equals(data.result.response, [195, 0])
+
+
+@pytest.mark.asyncio
+async def test_mines_upgrade(deploy_game_v1):
+    (ogame, _, _, _, _, _, user) = deploy_game_v1
+
+    await user.execute(ogame.contract_address,
+                       get_selector_from_name(
+                           'upgrade_metal_mine'),
+                       [], 1).invoke()
+
+    # Assert metal mine level is increasead.
+    data = await user.execute(ogame.contract_address,
+                              get_selector_from_name(
+                                  'get_structures_levels'),
+                              [], 2).invoke()
+    assert_equals(data.result.response, [2, 1, 1])
+
+    await user.execute(ogame.contract_address,
+                       get_selector_from_name(
+                           'upgrade_metal_mine'),
+                       [], 3).invoke()
+
+    # Assert metal mine level is increasead.
+    data = await user.execute(ogame.contract_address,
+                              get_selector_from_name(
+                                  'get_structures_levels'),
+                              [], 4).invoke()
+    assert_equals(data.result.response, [3, 1, 1])
+
+    # Assert crystal mine level is increased.
+    await user.execute(ogame.contract_address,
+                       get_selector_from_name(
+                           'upgrade_crystal_mine'),
+                       [], 5).invoke()
+
+    data = await user.execute(ogame.contract_address,
+                              get_selector_from_name(
+                                  'get_structures_levels'),
+                              [], 6).invoke()
+    assert_equals(data.result.response, [3, 2, 1])
+
+    await user.execute(ogame.contract_address,
+                       get_selector_from_name(
+                           'upgrade_deuterium_mine'),
+                       [], 7).invoke()
+
+    # Assert deuterium mine level is increasead.
+    data = await user.execute(ogame.contract_address,
+                              get_selector_from_name(
+                                  'get_structures_levels'),
+                              [], 8).invoke()
+    assert_equals(data.result.response, [3, 2, 2])

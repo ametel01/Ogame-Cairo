@@ -4,8 +4,8 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 
 
 @pytest.mark.asyncio
-async def test_generate_planet(get_starknet, game_factory, owner_factory, user1_factory, 
-    user2_factory, erc721_factory, metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory):
+async def test_generate_planet(get_starknet, game_factory, owner_factory, user1_factory,
+                               user2_factory, erc721_factory, metal_erc20_factory, crystal_erc20_factory, deuterium_erc20_factory):
     starknet = get_starknet
     contract = game_factory
     owner = owner_factory
@@ -42,7 +42,7 @@ async def test_generate_planet(get_starknet, game_factory, owner_factory, user1_
                         [metal_contract.contract_address,
                          crystal_contract.contract_address,
                          deuterium_contract.contract_address], 4).invoke()
-    
+
     assert (await contract.number_of_planets().call()).result.n_planets == 1
     data = await user1.execute(erc721.contract_address,
                                get_selector_from_name('ownerOf'),
@@ -72,38 +72,38 @@ async def test_generate_planet(get_starknet, game_factory, owner_factory, user1_
                                [], 3).invoke()
     assert data.result.response == [785, 490, 195]
 
-    # await user1.execute(contract.contract_address,
-    #                     get_selector_from_name(
-    #                         'upgrade_metal_mine'),
-    #                     [], 4).invoke()
+    await user1.execute(contract.contract_address,
+                        get_selector_from_name(
+                            'upgrade_metal_mine'),
+                        [], 4).invoke()
 
-    # data = await user1.execute(contract.contract_address,
-    #                            get_selector_from_name(
-    #                                'get_structures_levels'),
-    #                            [], 5).invoke()
-    # assert data.result.response == [2, 1, 1]
+    data = await user1.execute(contract.contract_address,
+                               get_selector_from_name(
+                                   'get_structures_levels'),
+                               [], 5).invoke()
+    assert data.result.response == [2, 1, 1]
 
-    # await user1.execute(contract.contract_address,
-    #                     get_selector_from_name(
-    #                         'upgrade_metal_mine'),
-    #                     [], 6).invoke()
+    await user1.execute(contract.contract_address,
+                        get_selector_from_name(
+                            'upgrade_metal_mine'),
+                        [], 6).invoke()
 
-    # data = await user1.execute(contract.contract_address,
-    #                            get_selector_from_name(
-    #                                'get_structures_levels'),
-    #                            [], 7).invoke()
-    # assert data.result.response == [3, 1, 1]
+    data = await user1.execute(contract.contract_address,
+                               get_selector_from_name(
+                                   'get_structures_levels'),
+                               [], 7).invoke()
+    assert data.result.response == [3, 1, 1]
 
-    # await user1.execute(contract.contract_address,
-    #                     get_selector_from_name(
-    #                         'upgrade_crystal_mine'),
-    #                     [], 8).invoke()
+    await user1.execute(contract.contract_address,
+                        get_selector_from_name(
+                            'upgrade_crystal_mine'),
+                        [], 8).invoke()
 
-    # data = await user1.execute(contract.contract_address,
-    #                            get_selector_from_name(
-    #                                'get_structures_levels'),
-    #                            [], 9).invoke()
-    # assert data.result.response == [3, 2, 1]
+    data = await user1.execute(contract.contract_address,
+                               get_selector_from_name(
+                                   'get_structures_levels'),
+                               [], 9).invoke()
+    assert data.result.response == [3, 2, 1]
 
     # await user1.execute(contract.contract_address,
     #                     get_selector_from_name(
