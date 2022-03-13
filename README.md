@@ -6,6 +6,9 @@ _Ogame logic implementation written in Cairo for Starknet._
 
 OGame is a browser-based, money-management and space-war themed massively multiplayer online browser game with over two million accounts. OGame was created in 2002 and is produced and maintained by Gameforge. Players can have multiple planet, a fleet and attack each other to steal resources.
 
+[Game Docs](https://www.notion.so/Ogame-Cairo-POC-spec-c11b0b44cb2e437889702b10a70b093a)
+
+
 ## Roadmap
 
 1. Account can create a planet and upgrade mines. Only mines are available. :heavy_check_mark:
