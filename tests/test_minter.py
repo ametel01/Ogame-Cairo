@@ -1,5 +1,5 @@
 import pytest
-from utils.fix import assert_equals
+from utils.helpers import assert_equals
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 @pytest.mark.asyncio

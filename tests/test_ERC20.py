@@ -1,5 +1,5 @@
 import pytest
-from utils.fix import (assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS)
+from utils.helpers import (assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS)
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 @pytest.mark.asyncio

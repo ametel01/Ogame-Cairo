@@ -1,11 +1,5 @@
 import pytest
-from utils.Signer import Signer
-from utils.fix import CONTRACT_FILE, ACCOUNT_FILE, ERC721_FILE, TIME_ELAPS_SIX_HOURS
-from utils.fix import owner, user1, user2
-from utils.fix import (
-    get_starknet, owner_factory, user1_factory, user2_factory,
-    game_factory, erc721_factory, update_starknet_block,  metal_erc20_factory, crystal_erc20_factory,
-    deuterium_erc20_factory)
+from utils.helpers import update_starknet_block
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 
