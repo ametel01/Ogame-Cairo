@@ -1,5 +1,5 @@
 import pytest
-from utils.helpers import update_starknet_block
+from utils.helpers import (update_starknet_block, TIME_ELAPS_SIX_HOURS)
 from starkware.starknet.compiler.compile import get_selector_from_name
 
 
