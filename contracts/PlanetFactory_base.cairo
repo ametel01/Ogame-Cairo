@@ -41,14 +41,13 @@ end
 
 struct Energy:
     member solar_plant : felt
-    member satellites : felt
-    member available : felt
+    #member satellites : felt
 end
 
 struct Planet:
     member mines : MineLevels
     member storage : MineStorage
-    #member energy : Energy
+    member energy : Energy
     member timer : felt
 end
 
@@ -118,6 +117,7 @@ func PlanetFactory_generate_planet{
     let planet = Planet(
         MineLevels(metal=1, crystal=1, deuterium=1),
         MineStorage(metal=500, crystal=300,deuterium=100),
+        Energy(solar_plant=1),
         timer=time_now)
     # Transfer ERC721 to caller
     let (local erc721_address) = erc721_token_address.read()
@@ -166,10 +166,12 @@ func PlanetFactory_collect_resources{
     let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
     let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     # Calculate energy requirerments.
-    let (energy_for_metal) = _consumption(metal_level)
-    let (energy_for_crystal) = _consumption(crystal_level)
-    let (energy_for_deuterium) = _consumption_deuterium(deuterium_level)
-    let total_energy_required = energy_for_metal + energy_for_crystal + energy_for_deuterium
+    let (energy_required_metal) = _consumption(metal_level)
+    let (energy_required_crystal) = _consumption(crystal_level)
+    let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
+    let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
+    let solar_plant_level = planet.energy.solar_plant_level
+    let energy_available = formulas_solar_plant(solar_plant_level)
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
                             MineLevels(metal=1,crystal=1,deuterium=1),

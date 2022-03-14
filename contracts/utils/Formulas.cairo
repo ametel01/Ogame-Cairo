@@ -169,3 +169,19 @@ func _consumption_deuterium{
     let (res, _) = unsigned_div_rem(fact3, fact4)
     return(consumption=res)
 end
+
+func _production_limiter{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(
+        production : felt, 
+        energy_required : felt, 
+        energy_available : felt) -> (consumption : felt):
+    let (fact1,_) = unsigned_div_rem(energy_available, energy_required)
+    let fact2 = fact1 * 100
+    let fact3 = fact2 * production
+    let (res,_) = unsigned_div_rem(fact3, 100)
+    return(consumption=res)
+end
+    
