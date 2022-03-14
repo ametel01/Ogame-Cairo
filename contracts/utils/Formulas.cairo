@@ -126,3 +126,19 @@ func formulas_deuterium_building{
         return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
     end
 end
+
+##########
+# Energy #
+##########
+
+func _consumption{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(mine_level : felt) -> (consumption : felt):
+    let fact1 = 100 * mine_level
+    let (fact2) = Math64x61_pow(11, mine_level)
+    let fact3 = fact1 * fact2
+    let (res, _) = unsigned_div_rem(fact3, 10)
+    return(consumption=res)
+end

@@ -1,5 +1,8 @@
 %lang starknet
 
+
+const PREFIX_TRANSACTION = 'StarkNet Transaction'
+
 ############
 # Booleans #
 ############

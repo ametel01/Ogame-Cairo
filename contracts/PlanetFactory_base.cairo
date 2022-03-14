@@ -36,9 +36,16 @@ struct MineStorage:
     member deuterium : felt
 end
 
+struct Energy:
+    member solar_plant : felt
+    member satellites : felt
+    member available : felt
+end
+
 struct Planet:
     member mines : MineLevels
     member storage : MineStorage
+    #member energy : Energy
     member timer : felt
 end
 
@@ -83,7 +90,7 @@ end
 ##########
 
 @event
-func planet_genereted(planet_id : felt):
+func planet_genereted(planet_id : Uint256):
 end
 
 @event
@@ -108,7 +115,7 @@ func PlanetFactory_generate_planet{
     let planet = Planet(
         MineLevels(metal=1, crystal=1, deuterium=1),
         MineStorage(metal=500, crystal=300,deuterium=100),
-        timer=time_now,)
+        timer=time_now)
     # Transfer ERC721 to caller
     let (local erc721_address) = erc721_token_address.read()
     let (local last_id) = PlanetFactory_number_of_planets.read()
@@ -118,7 +125,7 @@ func PlanetFactory_generate_planet{
     PlanetFactory_planet_to_owner.write(address, new_planet_id)
     PlanetFactory_planets.write(new_planet_id, planet)
     PlanetFactory_number_of_planets.write(last_id+1)
-    # #planet_genereted.emit(new_planet_id_felt)
+    planet_genereted.emit(new_planet_id)
     
     # Transfer resources ERC20 tokens to caller.
     _update_resources_erc20(to=address, 
@@ -157,12 +164,11 @@ func PlanetFactory_collect_resources{
     let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
-        MineLevels(metal=1,crystal=1,deuterium=1),
-        MineStorage(metal=planet.storage.metal + metal_produced,
-                    crystal=planet.storage.crystal + crystal_produced,
-                    deuterium=planet.storage.deuterium + deuterium_produced),
-                    timer = time_now,
-        )
+                            MineLevels(metal=1,crystal=1,deuterium=1),
+                            MineStorage(metal=planet.storage.metal + metal_produced,
+                                    crystal=planet.storage.crystal + crystal_produced,
+                                    deuterium=planet.storage.deuterium + deuterium_produced),
+                            timer=time_now)
     PlanetFactory_planets.write(planet_id, updated_planet)
     # Update ERC20 contract for resources
     _update_resources_erc20(to=caller, 
@@ -194,7 +200,7 @@ func PlanetFactory_upgrade_metal_mine{
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
-                        timer = planet.timer)             
+                        timer=planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
