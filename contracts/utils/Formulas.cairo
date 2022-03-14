@@ -22,7 +22,7 @@ func formulas_metal_mine{
         }(last_timestamp : felt, mine_level : felt) -> (metal_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    local time_elapsed = time_now - last_timestamp
+    let time_elapsed = time_now - last_timestamp
     let first_part = 6 * mine_level#Math64x61_mul(6, mine_level)
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
@@ -35,32 +35,32 @@ func formulas_crystal_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }(last_timestamp : felt, mine_level : felt) -> (metal_produced : felt):
+        }(last_timestamp : felt, mine_level : felt) -> (crystal_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    local time_elapsed = time_now - last_timestamp
+    let time_elapsed = time_now - last_timestamp
     let first_part = 4 * mine_level#Math64x61_mul(6, mine_level)
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
     let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
     let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
-    return(metal_produced=prod_scaled)
+    return(crystal_produced=prod_scaled)
 end 
 
 func formulas_deuterium_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }(last_timestamp : felt, mine_level : felt) -> (metal_produced : felt):
+        }(last_timestamp : felt, mine_level : felt) -> (deuterium_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    local time_elapsed = time_now - last_timestamp
+    let  time_elapsed = time_now - last_timestamp
     let first_part = 2 * mine_level#Math64x61_mul(6, mine_level)
     let (second_part) = Math64x61_pow(11,mine_level)
     let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
     let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
     let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
-    return(metal_produced=prod_scaled)
+    return(deuterium_produced=prod_scaled)
 end 
 
 #############
@@ -130,15 +130,42 @@ end
 ##########
 # Energy #
 ##########
+func formulas_solar_plant{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(plant_level : felt) -> (production : felt):
+    let first_part = 4 * plant_level#Math64x61_mul(6, mine_level)
+    let (second_part) = Math64x61_pow(11,plant_level)
+    let production = first_part * second_part#Math64x61_mul(first_part, second_part)
+    let (prod_scaled,_) = unsigned_div_rem(production, 1000)
+    return(production=prod_scaled)
+end
 
 func _consumption{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(mine_level : felt) -> (consumption : felt):
-    let fact1 = 100 * mine_level
+    alloc_locals
+    let fact1 = 10 * mine_level
     let (fact2) = Math64x61_pow(11, mine_level)
     let fact3 = fact1 * fact2
-    let (res, _) = unsigned_div_rem(fact3, 10)
+    let (fact4) = Math64x61_pow(10, mine_level)
+    let (res, _) = unsigned_div_rem(fact3, fact4)
+    return(consumption=res)
+end
+
+func _consumption_deuterium{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(mine_level : felt) -> (consumption : felt):
+    alloc_locals
+    let fact1 = 20 * mine_level
+    let (fact2) = Math64x61_pow(11, mine_level)
+    let fact3 = fact1 * fact2
+    let (fact4) = Math64x61_pow(10, mine_level)
+    let (res, _) = unsigned_div_rem(fact3, fact4)
     return(consumption=res)
 end

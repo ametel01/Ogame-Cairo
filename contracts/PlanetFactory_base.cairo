@@ -14,7 +14,10 @@ from contracts.utils.Formulas import (
     formulas_deuterium_mine,
     formulas_metal_building,
     formulas_crystal_building,
-    formulas_deuterium_building)
+    formulas_deuterium_building,
+    formulas_solar_plant,
+    _consumption,
+    _consumption_deuterium)
 from contracts.utils.Math64x61 import Math64x61_mul
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 from contracts.token.erc20.interfaces.IERC20 import IERC20
@@ -126,7 +129,6 @@ func PlanetFactory_generate_planet{
     PlanetFactory_planets.write(new_planet_id, planet)
     PlanetFactory_number_of_planets.write(last_id+1)
     planet_genereted.emit(new_planet_id)
-    
     # Transfer resources ERC20 tokens to caller.
     _update_resources_erc20(to=address, 
                             metal_amount=500, 
@@ -154,14 +156,20 @@ func PlanetFactory_collect_resources{
         }(caller : felt):
     alloc_locals
     let (planet_id) = PlanetFactory_planet_to_owner.read(caller)
-    let (local planet) = PlanetFactory_planets.read(planet_id)
+    let (planet) = PlanetFactory_planets.read(planet_id)
     let time_start = planet.timer
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal
     let deuterium_level = planet.mines.deuterium
+    # Calculate amount of resources produced.
     let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
     let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
     let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
+    # Calculate energy requirerments.
+    let (energy_for_metal) = _consumption(metal_level)
+    let (energy_for_crystal) = _consumption(crystal_level)
+    let (energy_for_deuterium) = _consumption_deuterium(deuterium_level)
+    let total_energy_required = energy_for_metal + energy_for_crystal + energy_for_deuterium
     let (time_now) = get_block_timestamp()
     let updated_planet = Planet(
                             MineLevels(metal=1,crystal=1,deuterium=1),
