@@ -178,11 +178,14 @@ func PlanetFactory_collect_resources{
     let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     # If energy available < than energy required scale down amount produced.
     if enough_energy == FALSE:
-        let (actual_metal, actual_crystal, actual_deuterium) = formulas_production_scaler(net_metal=metal_produced,
-                                                                                        net_crystal=crystal_produced,
-                                                                                        net_deuterium=deuterium_produced,
-                                                                                        energy_required=total_energy_required,
-                                                                                        energy_available=energy_available)
+        let (actual_metal, 
+            actual_crystal, 
+            actual_deuterium) = formulas_production_scaler(
+                                                        net_metal=metal_produced,
+                                                        net_crystal=crystal_produced,
+                                                        net_deuterium=deuterium_produced,
+                                                        energy_required=total_energy_required,
+                                                        energy_available=energy_available)
         let (time_now) = get_block_timestamp()
         let updated_planet = Planet(
                                 MineLevels(metal=1,crystal=1,deuterium=1),
