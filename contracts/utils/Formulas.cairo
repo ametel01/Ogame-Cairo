@@ -142,6 +142,24 @@ func formulas_solar_plant{
     return(production=prod_scaled)
 end
 
+func formulas_production_scaler{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(
+        net_metal : felt,
+        net_crystal : felt,
+        net_deuterium : felt,
+        energy_required : felt,
+        energy_available : felt
+        ) -> (actual_metal : felt, actual_crystal : felt, actual_deuterium : felt):
+    alloc_locals
+    let (metal) = _production_limiter(net_metal, energy_required, energy_available)
+    let (crystal) = _production_limiter(net_crystal, energy_required, energy_available)
+    let (deuterium) = _production_limiter(net_deuterium, energy_required, energy_available)
+    return(actual_metal=metal, actual_crystal=crystal, actual_deuterium=deuterium)
+end
+
 func _consumption{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
@@ -177,11 +195,11 @@ func _production_limiter{
         }(
         production : felt, 
         energy_required : felt, 
-        energy_available : felt) -> (consumption : felt):
+        energy_available : felt) -> (production : felt):
     let (fact1,_) = unsigned_div_rem(energy_available, energy_required)
     let fact2 = fact1 * 100
     let fact3 = fact2 * production
     let (res,_) = unsigned_div_rem(fact3, 100)
-    return(consumption=res)
+    return(production=res)
 end
     

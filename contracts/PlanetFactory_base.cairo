@@ -3,6 +3,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
+from starkware.cairo.common.math_cmp import is_le
 from starkware.starknet.common.syscalls import (get_caller_address, 
     get_block_timestamp, 
     get_contract_address)
@@ -17,7 +18,9 @@ from contracts.utils.Formulas import (
     formulas_deuterium_building,
     formulas_solar_plant,
     _consumption,
-    _consumption_deuterium)
+    _consumption_deuterium,
+    _production_limiter,
+    formulas_production_scaler)
 from contracts.utils.Math64x61 import Math64x61_mul
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 from contracts.token.erc20.interfaces.IERC20 import IERC20
@@ -161,10 +164,6 @@ func PlanetFactory_collect_resources{
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal
     let deuterium_level = planet.mines.deuterium
-    # Calculate amount of resources produced.
-    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
-    let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
-    let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
     # Calculate energy requirerments.
     let (energy_required_metal) = _consumption(metal_level)
     let (energy_required_crystal) = _consumption(crystal_level)
@@ -172,19 +171,46 @@ func PlanetFactory_collect_resources{
     let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
     let solar_plant_level = planet.energy.solar_plant_level
     let energy_available = formulas_solar_plant(solar_plant_level)
-    let (time_now) = get_block_timestamp()
-    let updated_planet = Planet(
-                            MineLevels(metal=1,crystal=1,deuterium=1),
-                            MineStorage(metal=planet.storage.metal + metal_produced,
-                                    crystal=planet.storage.crystal + crystal_produced,
-                                    deuterium=planet.storage.deuterium + deuterium_produced),
-                            timer=time_now)
-    PlanetFactory_planets.write(planet_id, updated_planet)
-    # Update ERC20 contract for resources
-    _update_resources_erc20(to=caller, 
-                            metal_amount=metal_produced, 
-                            crystal_amount=crystal_produced,
-                            deuterium_amount=deuterium_produced)
+    let enough_energy = is_le(total_energy_required,energy_available)
+    # Calculate amount of resources produced.
+    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
+    let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
+    let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
+    # If energy available < than energy required scale down amount produced.
+    if enough_energy == FALSE:
+        let (actual_metal, actual_crystal, actual_deuterium) = formulas_production_scaler(net_metal=metal_produced,
+                                                                                        net_crystal=crystal_produced,
+                                                                                        net_deuterium=deuterium_produced,
+                                                                                        energy_required=total_energy_required,
+                                                                                        energy_available=energy_available)
+        let (time_now) = get_block_timestamp()
+        let updated_planet = Planet(
+                                MineLevels(metal=1,crystal=1,deuterium=1),
+                                MineStorage(metal=planet.storage.metal + actual_metal,
+                                        crystal=planet.storage.crystal + actual_crystal,
+                                        deuterium=planet.storage.deuterium + actual_deuterium),
+                                timer=time_now)
+        PlanetFactory_planets.write(planet_id, updated_planet)
+        # Update ERC20 contract for resources
+        _update_resources_erc20(to=caller, 
+                                metal_amount=actual_metal, 
+                                crystal_amount=actual_crystal,
+                                deuterium_amount=actual_deuterium)
+    else:
+        let (time_now) = get_block_timestamp()
+        let updated_planet = Planet(
+                                MineLevels(metal=1,crystal=1,deuterium=1),
+                                MineStorage(metal=planet.storage.metal + metal_produced,
+                                        crystal=planet.storage.crystal + crystal_produced,
+                                        deuterium=planet.storage.deuterium + deuterium_produced),
+                                timer=time_now)
+        PlanetFactory_planets.write(planet_id, updated_planet)
+        # Update ERC20 contract for resources
+        _update_resources_erc20(to=caller, 
+                                metal_amount=metal_produced, 
+                                crystal_amount=crystal_produced,
+                                deuterium_amount=deuterium_produced)
+    end                                
     return()
 end
 
