@@ -169,9 +169,10 @@ func PlanetFactory_collect_resources{
     let (energy_required_crystal) = _consumption(crystal_level)
     let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
     let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
-    let solar_plant_level = planet.energy.solar_plant_level
-    let energy_available = formulas_solar_plant(solar_plant_level)
-    let enough_energy = is_le(total_energy_required,energy_available)
+    let solar_plant_level = planet.energy.solar_plant
+    let (energy_available) = formulas_solar_plant(solar_plant_level)
+    
+    let (enough_energy) = is_le(total_energy_required,energy_available)
     # Calculate amount of resources produced.
     let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
     let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
@@ -180,8 +181,7 @@ func PlanetFactory_collect_resources{
     if enough_energy == FALSE:
         let (actual_metal, 
             actual_crystal, 
-            actual_deuterium) = formulas_production_scaler(
-                                                        net_metal=metal_produced,
+            actual_deuterium) = formulas_production_scaler(net_metal=metal_produced,
                                                         net_crystal=crystal_produced,
                                                         net_deuterium=deuterium_produced,
                                                         energy_required=total_energy_required,
@@ -192,6 +192,7 @@ func PlanetFactory_collect_resources{
                                 MineStorage(metal=planet.storage.metal + actual_metal,
                                         crystal=planet.storage.crystal + actual_crystal,
                                         deuterium=planet.storage.deuterium + actual_deuterium),
+                                Energy(solar_plant=1),
                                 timer=time_now)
         PlanetFactory_planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
@@ -206,6 +207,7 @@ func PlanetFactory_collect_resources{
                                 MineStorage(metal=planet.storage.metal + metal_produced,
                                         crystal=planet.storage.crystal + crystal_produced,
                                         deuterium=planet.storage.deuterium + deuterium_produced),
+                                Energy(solar_plant=planet.energy.solar_plant),
                                 timer=time_now)
         PlanetFactory_planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
@@ -239,6 +241,7 @@ func PlanetFactory_upgrade_metal_mine{
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
+                        Energy(solar_plant=planet.energy.solar_plant),
                         timer=planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
@@ -267,6 +270,7 @@ func PlanetFactory_upgrade_crystal_mine{
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium=planet.storage.deuterium),
+                        Energy(solar_plant=planet.energy.solar_plant),
                         timer = planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)
@@ -295,6 +299,7 @@ func PlanetFactory_upgrade_deuterium_mine{
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
+                        Energy(solar_plant=planet.energy.solar_plant),
                         timer = planet.timer)             
     PlanetFactory_planets.write(planet_id, new_planet)
     structure_updated.emit(metal_required, crystal_required, 0)

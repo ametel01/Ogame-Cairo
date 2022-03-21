@@ -1,13 +1,12 @@
 import pytest
-from starkware.starknet.compiler.compile import get_selector_from_name
 from utils.helpers import (
     assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS)
-from conftest import (crystal, deuterium, metal, owner, user1, user_one)
+from conftest import user1
 
 
 @pytest.mark.asyncio
 async def test_account(deploy_game_v1):
-    (_, game, erc721, metal, crystal, deuterium, user_one) = deploy_game_v1
+    (_, _, erc721, metal, crystal, deuterium, user_one) = deploy_game_v1
 
     # Assert user is the owner of the NFT generated.
     data = await user1.send_transaction(user_one,

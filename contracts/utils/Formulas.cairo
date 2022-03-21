@@ -14,7 +14,7 @@ const Math64x61_ONE = 1 * Math64x61_FRACT_PART
 # Production #
 ##############
 
-# Prod per second = (6 x Level x 11^Level)
+# Prod per second = 30 * Level * 11**Level / 10**Level * 10000 / 3600 * 10000
 func formulas_metal_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
@@ -23,11 +23,10 @@ func formulas_metal_mine{
     alloc_locals
     let (time_now) = get_block_timestamp()
     let time_elapsed = time_now - last_timestamp
-    let first_part = 6 * mine_level#Math64x61_mul(6, mine_level)
-    let (second_part) = Math64x61_pow(11,mine_level)
-    let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
-    let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
+    let (metal_hour) = _resources_production_formula(30, mine_level)
+    let (prod_second, _) = unsigned_div_rem(metal_hour, 3600) #91
+    let fact8 = prod_second * time_elapsed  
+    let (prod_scaled,_) = unsigned_div_rem(fact8, 10000)#32
     return(metal_produced=prod_scaled)
 end 
 
@@ -39,11 +38,10 @@ func formulas_crystal_mine{
     alloc_locals
     let (time_now) = get_block_timestamp()
     let time_elapsed = time_now - last_timestamp
-    let first_part = 4 * mine_level#Math64x61_mul(6, mine_level)
-    let (second_part) = Math64x61_pow(11,mine_level)
-    let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
-    let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
+    let (crystal_hour) = _resources_production_formula(20, mine_level)
+    let (fact7, _) = unsigned_div_rem(crystal_hour, 3600)
+    let fact8 = fact7 * time_elapsed  
+    let (prod_scaled,_) = unsigned_div_rem(fact8, 10000)
     return(crystal_produced=prod_scaled)
 end 
 
@@ -54,12 +52,11 @@ func formulas_deuterium_mine{
         }(last_timestamp : felt, mine_level : felt) -> (deuterium_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    let  time_elapsed = time_now - last_timestamp
-    let first_part = 2 * mine_level#Math64x61_mul(6, mine_level)
-    let (second_part) = Math64x61_pow(11,mine_level)
-    let prod_per_second = first_part * second_part#Math64x61_mul(first_part, second_part)
-    let amount_produced = prod_per_second * time_elapsed #Math64x61_mul(prod_per_second,time_elapsed)
-    let (prod_scaled,_) = unsigned_div_rem(amount_produced, 10000)
+    let time_elapsed = time_now - last_timestamp
+    let (deuterium_hour) = _resources_production_formula(10, mine_level)
+    let (fact7, _) = unsigned_div_rem(deuterium_hour, 3600)
+    let fact8 = fact7 * time_elapsed  
+    let (prod_scaled,_) = unsigned_div_rem(fact8, 10000)
     return(deuterium_produced=prod_scaled)
 end 
 
@@ -135,11 +132,8 @@ func formulas_solar_plant{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(plant_level : felt) -> (production : felt):
-    let first_part = 4 * plant_level#Math64x61_mul(6, mine_level)
-    let (second_part) = Math64x61_pow(11,plant_level)
-    let production = first_part * second_part#Math64x61_mul(first_part, second_part)
-    let (prod_scaled,_) = unsigned_div_rem(production, 1000)
-    return(production=prod_scaled)
+    let (production) = _solar_production_formula(plant_level)
+    return(production=production)
 end
 
 func formulas_production_scaler{
@@ -154,9 +148,15 @@ func formulas_production_scaler{
         energy_available : felt
         ) -> (actual_metal : felt, actual_crystal : felt, actual_deuterium : felt):
     alloc_locals
-    let (metal) = _production_limiter(net_metal, energy_required, energy_available)
-    let (crystal) = _production_limiter(net_crystal, energy_required, energy_available)
-    let (deuterium) = _production_limiter(net_deuterium, energy_required, energy_available)
+    let (metal) = _production_limiter(production=net_metal, 
+                                energy_required=energy_required, 
+                                energy_available=energy_available)
+    let (crystal) = _production_limiter(production=net_crystal, 
+                                energy_required=energy_required, 
+                                energy_available=energy_available)
+    let (deuterium) = _production_limiter(production=net_deuterium, 
+                                energy_required=energy_required, 
+                                energy_available=energy_available)
     return(actual_metal=metal, actual_crystal=crystal, actual_deuterium=deuterium)
 end
 
@@ -195,11 +195,39 @@ func _production_limiter{
         }(
         production : felt, 
         energy_required : felt, 
-        energy_available : felt) -> (production : felt):
-    let (fact1,_) = unsigned_div_rem(energy_available, energy_required)
-    let fact2 = fact1 * 100
-    let fact3 = fact2 * production
-    let (res,_) = unsigned_div_rem(fact3, 100)
+        energy_available : felt) -> (production : felt):      
+    let fact0 = energy_available * 100
+    let (fact1,_) = unsigned_div_rem(fact0, energy_required)
+    let fact2 = fact1 * production
+    let (res,_) = unsigned_div_rem(fact2, 100)
     return(production=res)
 end
-    
+
+func _resources_production_formula{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(mine_factor : felt, mine_level : felt) -> (production_hour):
+    alloc_locals
+    let fact1 = mine_factor * mine_level
+    let (fact2) = Math64x61_pow(11,mine_level)
+    let fact3 = fact1 * fact2
+    let (fact4) = Math64x61_pow(10, mine_level)
+    let (fact5, _) = unsigned_div_rem(fact3, fact4)
+    let fact6 = fact5 * 10000
+    return(production_hour=fact6)
+end
+
+func _solar_production_formula{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(plant_level : felt) -> (production_hour):
+    alloc_locals
+    let fact1 = 20 * plant_level
+    let (fact2) = Math64x61_pow(11,plant_level)
+    let fact3 = fact1 * fact2
+    let (fact4) = Math64x61_pow(10, plant_level)
+    let (fact5, _) = unsigned_div_rem(fact3, fact4)
+    return(production_hour=fact5)
+end
