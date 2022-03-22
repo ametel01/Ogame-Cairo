@@ -65,17 +65,19 @@ func formulas_metal_building{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(metal_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    alloc_locals
     let base_metal = 60
     let base_crystal = 15
-    let exponent = metal_mine_level - 1
+    let exponent = metal_mine_level
     if exponent == 0:
         return(metal_cost=base_metal, crystal_cost=base_crystal)
     else: 
         let (second_fact) = pow(15, exponent)
-        let metal_cost = base_metal * second_fact
-        let crystal_cost = base_crystal * second_fact
-        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
-        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        local metal_cost = base_metal * second_fact
+        local crystal_cost = base_crystal * second_fact
+        let (local exp2) = pow(10, metal_mine_level)
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, exp2)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, exp2)
         return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
     end
 end
@@ -85,17 +87,19 @@ func formulas_crystal_building{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(crystal_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    alloc_locals
     let base_metal = 48
     let base_crystal = 24
-    let exponent = crystal_mine_level - 1
+    let exponent = crystal_mine_level
     if exponent == 0:
         return(metal_cost=base_metal, crystal_cost=base_crystal)
     else: 
         let (second_fact) = pow(16, exponent)
-        let metal_cost = base_metal * second_fact
-        let crystal_cost = base_crystal * second_fact
-        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
-        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        local metal_cost = base_metal * second_fact
+        local crystal_cost = base_crystal * second_fact
+        let (local exp2) = pow(10, crystal_mine_level)
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, exp2)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, exp2)
         return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
     end
 end
@@ -105,17 +109,19 @@ func formulas_deuterium_building{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }(deuterium_mine_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    alloc_locals
     let base_metal = 225
     let base_crystal = 75
-    let exponent = deuterium_mine_level - 1
+    let exponent = deuterium_mine_level
     if exponent == 0:
         return(metal_cost=base_metal, crystal_cost=base_crystal)
     else: 
         let (second_fact) = pow(15, exponent)
-        let metal_cost = base_metal * second_fact
-        let crystal_cost = base_crystal * second_fact
-        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
-        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        local metal_cost = base_metal * second_fact
+        local crystal_cost = base_crystal * second_fact
+        let (local exp2) = pow(10, deuterium_mine_level)
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, exp2)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, exp2)
         return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
     end
 end
@@ -166,13 +172,13 @@ func formulas_production_scaler{
         energy_available : felt
         ) -> (actual_metal : felt, actual_crystal : felt, actual_deuterium : felt):
     alloc_locals
-    let (metal) = _production_limiter(production=net_metal, 
+    let (local metal) = _production_limiter(production=net_metal, 
                                 energy_required=energy_required, 
                                 energy_available=energy_available)
-    let (crystal) = _production_limiter(production=net_crystal, 
+    let (local crystal) = _production_limiter(production=net_crystal, 
                                 energy_required=energy_required, 
                                 energy_available=energy_available)
-    let (deuterium) = _production_limiter(production=net_deuterium, 
+    let (local deuterium) = _production_limiter(production=net_deuterium, 
                                 energy_required=energy_required, 
                                 energy_available=energy_available)
     return(actual_metal=metal, actual_crystal=crystal, actual_deuterium=deuterium)
