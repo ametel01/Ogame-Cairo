@@ -172,16 +172,21 @@ func formulas_production_scaler{
         energy_available : felt
         ) -> (actual_metal : felt, actual_crystal : felt, actual_deuterium : felt):
     alloc_locals
-    let (local metal) = _production_limiter(production=net_metal, 
-                                energy_required=energy_required, 
-                                energy_available=energy_available)
-    let (local crystal) = _production_limiter(production=net_crystal, 
-                                energy_required=energy_required, 
-                                energy_available=energy_available)
-    let (local deuterium) = _production_limiter(production=net_deuterium, 
-                                energy_required=energy_required, 
-                                energy_available=energy_available)
-    return(actual_metal=metal, actual_crystal=crystal, actual_deuterium=deuterium)
+    let (enough_energy, _) = unsigned_div_rem(energy_available, energy_required)
+    if enough_energy == FALSE:
+        let (local metal) = _production_limiter(production=net_metal, 
+                                    energy_required=energy_required, 
+                                    energy_available=energy_available)
+        let (local crystal) = _production_limiter(production=net_crystal, 
+                                    energy_required=energy_required, 
+                                    energy_available=energy_available)
+        let (local deuterium) = _production_limiter(production=net_deuterium, 
+                                    energy_required=energy_required, 
+                                    energy_available=energy_available)
+        return(actual_metal=metal, actual_crystal=crystal, actual_deuterium=deuterium)
+    else:
+        return(net_metal,net_crystal,net_deuterium)
+    end
 end
 
 func _consumption{
@@ -192,7 +197,7 @@ func _consumption{
     alloc_locals
     let fact1 = 10 * mine_level
     let (fact2) = pow(11, mine_level)
-    let fact3 = fact1 * fact2
+    local fact3 = fact1 * fact2
     let (fact4) = pow(10, mine_level)
     let (res, _) = unsigned_div_rem(fact3, fact4)
     return(consumption=res)
@@ -206,7 +211,7 @@ func _consumption_deuterium{
     alloc_locals
     let fact1 = 20 * mine_level
     let (fact2) = pow(11, mine_level)
-    let fact3 = fact1 * fact2
+    local fact3 = fact1 * fact2
     let (fact4) = pow(10, mine_level)
     let (res, _) = unsigned_div_rem(fact3, fact4)
     return(consumption=res)

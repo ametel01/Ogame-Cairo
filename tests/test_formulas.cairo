@@ -10,6 +10,8 @@ from contracts.utils.Formulas import (
     formulas_crystal_building,
     formulas_deuterium_building,
     formulas_production_scaler,
+    _consumption,
+    _consumption_deuterium,
 )
 
 @external
@@ -158,7 +160,7 @@ func test_production_scaler{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    let (metal, crystal, deuterium) = formulas_production_scaler(1000, 500, 250, 100, 1250)
+    let (metal, crystal, deuterium) = formulas_production_scaler(1000, 500, 250, 100, 150)
     let expected = (1000, 500, 250)
     assert (metal, crystal, deuterium) = expected
 
@@ -166,8 +168,24 @@ func test_production_scaler{
     let expected = (330, 165, 82)
     assert (metal, crystal, deuterium) = expected
 
-    let (metal, crystal, deuterium) = formulas_production_scaler(1000, 1500, 250, 100, 50)
+    let (metal, crystal, deuterium) = formulas_production_scaler(1000, 500, 250, 100, 50)
     let expected = (500, 250, 125)
     assert (metal, crystal, deuterium) = expected
+    return()
+end
+
+@external
+func test_mine_consumption{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    let (metal_crystal_cons) = _consumption(2)
+    let expected = 24
+    assert (metal_crystal_cons) = expected
+
+    let (deut_cons) = _consumption_deuterium(2)
+    let expected = 48
+    assert (deut_cons) = expected
     return()
 end
