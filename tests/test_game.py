@@ -60,32 +60,56 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [])
-    assert_equals(data.result.response, [785, 490, 195])
+    assert_equals(data.result.response, [696, 431, 164])
 
     # Assert tokens have been tranferred on ERC20 accounts.
     data = await user1.send_transaction(user_one,
                                         metal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [785, 0])
+    assert_equals(data.result.response, [696, 0])
 
     data = await user1.send_transaction(user_one,
                                         crystal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [490, 0])
+    assert_equals(data.result.response, [431, 0])
 
     data = await user1.send_transaction(user_one,
                                         deuterium.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [195, 0])
+    assert_equals(data.result.response, [164, 0])
 
 
 @pytest.mark.asyncio
-async def test_mines_upgrade(deploy_game_v1):
+async def test_mines_upgrade(starknet, deploy_game_v1):
     (_, ogame, _, _, _, _, user_one) = deploy_game_v1
 
+    # Equivalent of 12 hours pass.
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS*10)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'upgrade_solar_plant',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'upgrade_solar_plant',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'upgrade_solar_plant',
+                                 [])
+
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'upgrade_metal_mine',
@@ -96,7 +120,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [2, 1, 1, 1])
+    assert_equals(data.result.response, [2, 1, 1, 4])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -108,7 +132,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 1, 1, 1])
+    assert_equals(data.result.response, [3, 1, 1, 4])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -119,7 +143,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 1, 1])
+    assert_equals(data.result.response, [3, 2, 1, 4])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -131,4 +155,4 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 2, 1])
+    assert_equals(data.result.response, [3, 2, 2, 4])

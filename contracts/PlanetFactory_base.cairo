@@ -317,7 +317,7 @@ func PlanetFactory_upgrade_solar_plant{
     assert_le(metal_required, metal_available)
     assert_le(crystal_required, crystal_available)
     let new_planet = Planet(
-                        MineLevels(metal=current_plant_level,
+                        MineLevels(metal=planet.mines.metal,
                                     crystal=planet.mines.crystal,
                                     deuterium=planet.mines.deuterium),
                         MineStorage(metal=metal_available - metal_required,
