@@ -3,6 +3,7 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
+from starkware.cairo.common.pow import pow
 from contracts.utils.Math64x61 import Math64x61_pow, Math64x61_div
 from contracts.utils.constants import TRUE, FALSE
 
@@ -22,7 +23,7 @@ func formulas_metal_mine{
         }(last_timestamp : felt, mine_level : felt) -> (metal_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    let time_elapsed = time_now - last_timestamp
+    local time_elapsed = time_now - last_timestamp
     let (metal_hour) = _resources_production_formula(30, mine_level)
     let (prod_second, _) = unsigned_div_rem(metal_hour, 3600) #91
     let fact8 = prod_second * time_elapsed  
@@ -37,7 +38,7 @@ func formulas_crystal_mine{
         }(last_timestamp : felt, mine_level : felt) -> (crystal_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    let time_elapsed = time_now - last_timestamp
+    local time_elapsed = time_now - last_timestamp
     let (crystal_hour) = _resources_production_formula(20, mine_level)
     let (fact7, _) = unsigned_div_rem(crystal_hour, 3600)
     let fact8 = fact7 * time_elapsed  
@@ -52,7 +53,7 @@ func formulas_deuterium_mine{
         }(last_timestamp : felt, mine_level : felt) -> (deuterium_produced : felt):
     alloc_locals
     let (time_now) = get_block_timestamp()
-    let time_elapsed = time_now - last_timestamp
+    local time_elapsed = time_now - last_timestamp
     let (deuterium_hour) = _resources_production_formula(10, mine_level)
     let (fact7, _) = unsigned_div_rem(deuterium_hour, 3600)
     let fact8 = fact7 * time_elapsed  
@@ -112,6 +113,26 @@ func formulas_deuterium_building{
     let base_metal = 225
     let base_crystal = 75
     let exponent = deuterium_mine_level - 1
+    if exponent == 0:
+        return(metal_cost=base_metal, crystal_cost=base_crystal)
+    else: 
+        let (second_fact) = Math64x61_pow(15, exponent)
+        let metal_cost = base_metal * second_fact
+        let crystal_cost = base_crystal * second_fact
+        let (metal_scaled,_) = unsigned_div_rem(metal_cost, 10)
+        let (crystal_scaled,_) = unsigned_div_rem(crystal_cost, 10)
+        return(metal_cost=metal_scaled, crystal_cost=crystal_scaled)
+    end
+end
+
+func formulas_solar_plant_building{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }(solar_plant_level : felt) -> (metal_cost : felt, crystal_cost : felt):
+    let base_metal = 75
+    let base_crystal =30
+    let exponent = solar_plant_level - 1
     if exponent == 0:
         return(metal_cost=base_metal, crystal_cost=base_crystal)
     else: 
@@ -210,9 +231,9 @@ func _resources_production_formula{
         }(mine_factor : felt, mine_level : felt) -> (production_hour):
     alloc_locals
     let fact1 = mine_factor * mine_level
-    let (fact2) = Math64x61_pow(11,mine_level)
-    let fact3 = fact1 * fact2
-    let (fact4) = Math64x61_pow(10, mine_level)
+    let (fact2) = pow(11,mine_level)
+    local fact3 = fact1 * fact2
+    let (fact4) = pow(10, mine_level)
     let (fact5, _) = unsigned_div_rem(fact3, fact4)
     let fact6 = fact5 * 10000
     return(production_hour=fact6)
@@ -225,9 +246,9 @@ func _solar_production_formula{
         }(plant_level : felt) -> (production_hour):
     alloc_locals
     let fact1 = 20 * plant_level
-    let (fact2) = Math64x61_pow(11,plant_level)
-    let fact3 = fact1 * fact2
-    let (fact4) = Math64x61_pow(10, plant_level)
+    let (local fact2) = pow(11, plant_level)
+    local fact3 = fact1 * fact2
+    let (fact4) = pow(10, plant_level)
     let (fact5, _) = unsigned_div_rem(fact3, fact4)
     return(production_hour=fact5)
 end

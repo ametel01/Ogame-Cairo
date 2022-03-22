@@ -96,7 +96,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [2, 1, 1])
+    assert_equals(data.result.response, [2, 1, 1, 1])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -108,7 +108,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 1, 1])
+    assert_equals(data.result.response, [3, 1, 1, 1])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -119,7 +119,7 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 1])
+    assert_equals(data.result.response, [3, 2, 1, 1])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -131,4 +131,4 @@ async def test_mines_upgrade(deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 2])
+    assert_equals(data.result.response, [3, 2, 2, 1])

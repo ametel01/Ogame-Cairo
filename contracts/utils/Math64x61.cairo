@@ -48,7 +48,7 @@ end
 # Both values may be signed (i.e. also allows for division by negative b)
 func Math64x61_div {range_check_ptr} (x: felt, y: felt) -> (res: felt):
     alloc_locals
-    let (div) = abs_value(y)
+    let (local div) = abs_value(y)
     let (div_sign) = sign(y)
     tempvar product = x * Math64x61_FRACT_PART
     let (res_u, _) = signed_div_rem(product, div, Math64x61_BOUND)
@@ -73,7 +73,7 @@ func Math64x61_pow {range_check_ptr} (x: felt, y: felt) -> (res: felt):
         return Math64x61_div(Math64x61_ONE, num)
     end
 
-    let (half_exp, rem) = unsigned_div_rem(exp_val, 2)
+    let (half_exp, local rem) = unsigned_div_rem(exp_val, 2)
     let (half_pow) = Math64x61_pow(x, half_exp)
     let (res_p) = Math64x61_mul(half_pow, half_pow)
 

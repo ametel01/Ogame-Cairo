@@ -17,6 +17,7 @@ from contracts.utils.Formulas import (
     formulas_crystal_building,
     formulas_deuterium_building,
     formulas_solar_plant,
+    formulas_solar_plant_building,
     _consumption,
     _consumption_deuterium,
     _production_limiter,
@@ -52,6 +53,12 @@ struct Planet:
     member storage : MineStorage
     member energy : Energy
     member timer : felt
+end
+
+struct Cost:
+    member metal : felt
+    member crystal : felt
+    member deuterium : felt
 end
 
 ###########
@@ -112,7 +119,7 @@ func PlanetFactory_generate_planet{
         }():
     alloc_locals
     let (time_now) = get_block_timestamp()
-    let (local address) = get_caller_address()
+    let (address) = get_caller_address()
     assert_not_zero(address)
     # One address can only have one planet at this stage.
     let (has_already_planet) = PlanetFactory_planet_to_owner.read(address)
@@ -123,8 +130,8 @@ func PlanetFactory_generate_planet{
         Energy(solar_plant=1),
         timer=time_now)
     # Transfer ERC721 to caller
-    let (local erc721_address) = erc721_token_address.read()
-    let (local last_id) = PlanetFactory_number_of_planets.read()
+    let (erc721_address) = erc721_token_address.read()
+    let (last_id) = PlanetFactory_number_of_planets.read()
     let new_planet_id = Uint256(last_id+1, 0)
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, address, new_planet_id)
@@ -139,18 +146,6 @@ func PlanetFactory_generate_planet{
                             deuterium_amount=100)
     return()
 end
-
-# func _gen_rand_id{
-#         syscall_ptr : felt*,
-#         pedersen_ptr : HashBuiltin*,
-#         range_check_ptr,
-#         }() -> (id : Uint256):
-#     alloc_locals
-#     let (time_now) = get_block_timestamp()
-#     let (_, new_planet_id) = unsigned_div_rem(time_now, 10)
-#     let id = Uint256(new_planet_id, 0)
-#     return(id)
-# end
 
 func PlanetFactory_collect_resources{
         syscall_ptr : felt*,
@@ -227,7 +222,7 @@ func PlanetFactory_upgrade_metal_mine{
     alloc_locals
     let (address) = get_caller_address()
     let (planet_id) = PlanetFactory_planet_to_owner.read(address)
-    let (local planet) = PlanetFactory_planets.read(planet_id)
+    let (planet) = PlanetFactory_planets.read(planet_id)
     let current_mine_level = planet.mines.metal
     let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
     let metal_available = planet.storage.metal
@@ -306,6 +301,35 @@ func PlanetFactory_upgrade_deuterium_mine{
     return()
 end
 
+func PlanetFactory_upgrade_solar_plant{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    alloc_locals
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (local planet) = PlanetFactory_planets.read(planet_id)
+    let current_plant_level = planet.energy.solar_plant
+    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_plant_level)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    assert_le(metal_required, metal_available)
+    assert_le(crystal_required, crystal_available)
+    let new_planet = Planet(
+                        MineLevels(metal=current_plant_level,
+                                    crystal=planet.mines.crystal,
+                                    deuterium=planet.mines.deuterium),
+                        MineStorage(metal=metal_available - metal_required,
+                                    crystal=crystal_available - crystal_required,
+                                    deuterium = planet.storage.deuterium),
+                        Energy(solar_plant=planet.energy.solar_plant+1),
+                        timer=planet.timer)             
+    PlanetFactory_planets.write(planet_id, new_planet)
+    structure_updated.emit(metal_required, crystal_required, 0)
+    return()
+end
+
 # Updates the ERC20 resources contract
 func _update_resources_erc20{
         syscall_ptr : felt*,
@@ -323,5 +347,33 @@ func _update_resources_erc20{
     IERC20.transfer(deuterium_address, to, deuterium)
     return()
 end
+
+func get_upgrades_cost{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (up_metal : Cost, 
+                up_crystal : Cost, 
+                up_deuturium : Cost, 
+                up_solar : Cost):
+    alloc_locals 
+    let (address) = get_caller_address()
+    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
+    let (planet) = PlanetFactory_planets.read(planet_id)
+    let metal_level = planet.mines.metal
+    let crystal_level = planet.mines.crystal
+    let deuterium_level = planet.mines.deuterium
+    let solar_plant_level = planet.energy.solar_plant
+    let (m_metal, m_crystal) = formulas_metal_building(metal_level)
+    let (c_metal, c_crystal) = formulas_crystal_building(crystal_level)
+    let (d_metal, d_crystal) = formulas_deuterium_building(deuterium_level)
+    let (s_metal, s_crystal) = formulas_solar_plant_building(solar_plant_level)
+    return(up_metal=Cost(metal=m_metal,crystal=m_crystal,deuterium=0),
+        up_crystal=Cost(metal=c_metal,crystal=c_crystal,deuterium=0),
+        up_deuturium=Cost(metal=d_metal,crystal=d_crystal,deuterium=0),
+        up_solar=Cost(metal=s_metal,crystal=s_crystal,deuterium=0))
+end
+    
+    
 
     
