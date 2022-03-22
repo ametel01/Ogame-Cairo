@@ -5,6 +5,10 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from contracts.utils.Formulas import (
     formulas_solar_plant,
     _resources_production_formula,
+    formulas_solar_plant_building,
+    formulas_metal_building,
+    formulas_crystal_building,
+    formulas_deuterium_building,
 )
 
 @external
@@ -67,3 +71,22 @@ func test_solar_plant_production{
     return()
 end
 
+@external
+func test_solar_plant_building_cost{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }() -> ():
+    let (metal, crystal) = formulas_solar_plant_building(1)
+    let expected = (75, 30)
+    assert (metal, crystal) = expected
+
+    let (metal, crystal) = formulas_solar_plant_building(9)
+    let expected = (2883, 1153) 
+    assert (metal, crystal) = expected
+    
+    let (metal, crystal) = formulas_solar_plant_building(24)
+    let expected = (1262558, 505023)
+    assert (metal, crystal) = expected
+    return()
+end
