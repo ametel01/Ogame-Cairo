@@ -12,6 +12,7 @@ from contracts.utils.Formulas import (
     formulas_production_scaler,
     _consumption,
     _consumption_deuterium,
+    formulas_buildings_production_time,
 )
 
 @external
@@ -187,5 +188,25 @@ func test_mine_consumption{
     let (deut_cons) = _consumption_deuterium(2)
     let expected = 48
     assert (deut_cons) = expected
+    return()
+end
+
+@external
+func test_buildings_production_time{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    let (prod_time) = formulas_buildings_production_time(60, 15, 0)
+    let expected = 108
+    assert prod_time = expected
+
+    let (prod_time) = formulas_buildings_production_time(5189, 1297, 0)
+    let expected = 9338
+    assert prod_time = expected
+
+    let (prod_time) = formulas_buildings_production_time(5189, 1297, 9)
+    let expected = 932
+    assert prod_time = expected
     return()
 end
