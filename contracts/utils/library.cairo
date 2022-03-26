@@ -93,6 +93,12 @@ end
 func erc20_deuterium_address() -> (address : felt):
 end
 
+# @dev Stores the timestamp of the end of the timelock for buildings upgrades.
+# @params The address of the player.
+@storage_var
+func buildings_timelock(address : felt) -> (time_unlocked : felt):
+end
+
 ##########################################################################################
 #                                               Events                                   #
 ##########################################################################################
