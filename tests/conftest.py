@@ -10,7 +10,7 @@ from starkware.starknet.testing.contract import StarknetContract
 from starkware.starknet.business_logic.state import BlockInfo
 from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
-CONTRACT_FILE = os.path.join("contracts", "PlanetFactory.cairo")
+CONTRACT_FILE = os.path.join("contracts", "Ogame.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
 ERC721_FILE = os.path.join("contracts", "token", "erc721",
                            "ERC721.cairo")

@@ -3,38 +3,40 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
-from contracts.PlanetFactory_base import (
+from starkware.cairo.common.uint256 import Uint256
+from contracts.PlanetManager import (
+    get_upgrades_cost,
+    _generate_planet,
+    _upgrade_metal_mine,
+    _upgrade_crystal_mine,
+    _upgrade_deuterium_mine,
+    _upgrade_solar_plant,
+    )
+from contracts.ResourcesManager import (
+    _collect_resources,
+    )
+from contracts.utils.library import (
     Planet, 
     Cost,
-    PlanetFactory_number_of_planets, 
-    PlanetFactory_planets,
-    PlanetFactory_planet_to_owner,
-    PlanetFactory_collect_resources,
-    PlanetFactory_generate_planet,
-    PlanetFactory_upgrade_metal_mine,
-    PlanetFactory_upgrade_crystal_mine,
-    PlanetFactory_upgrade_deuterium_mine,
-    PlanetFactory_upgrade_solar_plant,
+    _number_of_planets, 
+    _planets,
+    _planet_to_owner,
     erc721_token_address,
-    erc721_owner_address,
     erc20_metal_address,
     erc20_crystal_address,
     erc20_deuterium_address,
-    get_upgrades_cost,
 )
 from contracts.utils.Formulas import (
     formulas_metal_building, 
     formulas_crystal_building,
     formulas_deuterium_building
 )
-
 from contracts.utils.Ownable import (
     Ownable_initializer,
     Ownable_only_owner
 )
 
-from contracts.token.erc721.interfaces.IERC721 import IERC721
-from starkware.cairo.common.uint256 import Uint256
+
 
 ###########
 # Getters #
@@ -46,7 +48,7 @@ func number_of_planets{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
         }() -> (n_planets : felt):
-    let (n) = PlanetFactory_number_of_planets.read()
+    let (n) = _number_of_planets.read()
     return(n_planets=n)
 end
 
@@ -57,8 +59,8 @@ func get_planet{
         range_check_ptr
         }() -> (planet : Planet):
     let (address) = get_caller_address()
-    let (planet_id) = PlanetFactory_planet_to_owner.read(address)
-    let (planet) = PlanetFactory_planets.read(planet_id)
+    let (planet_id) = _planet_to_owner.read(address)
+    let (planet) = _planets.read(planet_id)
     return(planet=planet)
 end
 
@@ -69,7 +71,7 @@ func get_my_planet{
         range_check_ptr
         }() -> (planet_id : Uint256):
     let (address) = get_caller_address()
-    let (id) = PlanetFactory_planet_to_owner.read(address)
+    let (id) = _planet_to_owner.read(address)
     return(planet_id=id)
 end
 
@@ -90,8 +92,8 @@ func get_structures_levels{
         range_check_ptr
         }() -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt, solar_plant : felt):
     let (address) = get_caller_address()
-    let (id) = PlanetFactory_planet_to_owner.read(address)
-    let (planet) = PlanetFactory_planets.read(id)
+    let (id) = _planet_to_owner.read(address)
+    let (planet) = _planets.read(id)
     let metal = planet.mines.metal 
     let crystal = planet.mines.crystal 
     let deuterium = planet.mines.deuterium
@@ -106,8 +108,8 @@ func resources_available{
         range_check_ptr
         }() -> (metal : felt, crystal : felt, deuterium : felt):
     let (address) = get_caller_address()
-    let (id) = PlanetFactory_planet_to_owner.read(address)
-    let (planet) = PlanetFactory_planets.read(id)
+    let (id) = _planet_to_owner.read(address)
+    let (planet) = _planets.read(id)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
     let deuterium_available = planet.storage.deuterium
@@ -162,7 +164,7 @@ func generate_planet{
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
         }():
-    PlanetFactory_generate_planet()
+    _generate_planet()
     return()
 end
 
@@ -174,8 +176,8 @@ func collect_resources{
         }():
     let (address) = get_caller_address()
     assert_not_zero(address)
-    let (id) = PlanetFactory_planet_to_owner.read(address)
-    PlanetFactory_collect_resources(address)
+    let (id) = _planet_to_owner.read(address)
+    _collect_resources(address)
     return()
 end
 
@@ -185,7 +187,7 @@ func upgrade_metal_mine{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    PlanetFactory_upgrade_metal_mine()
+    _upgrade_metal_mine()
     return()
 end
 
@@ -195,7 +197,7 @@ func upgrade_crystal_mine{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    PlanetFactory_upgrade_crystal_mine()
+    _upgrade_crystal_mine()
     return()
 end
 
@@ -205,7 +207,7 @@ func upgrade_deuterium_mine{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    PlanetFactory_upgrade_deuterium_mine()
+    _upgrade_deuterium_mine()
     return()
 end
 
@@ -215,6 +217,6 @@ func upgrade_solar_plant{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
-    PlanetFactory_upgrade_solar_plant()
+    _upgrade_solar_plant()
     return()
 end
