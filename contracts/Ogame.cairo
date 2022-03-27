@@ -11,6 +11,9 @@ from contracts.PlanetManager import (
     _upgrade_crystal_mine,
     _upgrade_deuterium_mine,
     _upgrade_solar_plant,
+    _start_metal_upgrade,
+    _end_metal_upgrade,
+
     )
 from contracts.ResourcesManager import (
     _collect_resources,
@@ -179,10 +182,20 @@ func collect_resources{
     let (id) = _planet_to_owner.read(address)
     _collect_resources(address)
     return()
+end`
+
+@external
+func metal_upgrade_start{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    _start_metal_upgrade()
+    return()
 end
 
 @external
-func upgrade_metal_mine{
+func metal_upgrade_end{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr

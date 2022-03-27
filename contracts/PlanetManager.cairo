@@ -1,16 +1,11 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.hash import hash2
-from starkware.cairo.common.math import assert_not_zero, assert_le, unsigned_div_rem
-from starkware.cairo.common.math_cmp import is_le
 from starkware.starknet.common.syscalls import (
-    get_caller_address, 
-    get_block_timestamp, 
-    get_contract_address
+    get_block_timestamp,
+    get_contract_address,
     )
-from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_unsigned_div_rem
-from contracts.utils.constants import TRUE, FALSE
+
 from contracts.utils.Formulas import (
     formulas_metal_mine, 
     formulas_crystal_mine, 
@@ -23,14 +18,11 @@ from contracts.utils.Formulas import (
     _consumption,
     _consumption_deuterium,
     _production_limiter,
-    formulas_production_scaler)
-from contracts.utils.Math64x61 import Math64x61_mul
-from contracts.token.erc721.interfaces.IERC721 import IERC721
-from contracts.token.erc20.interfaces.IERC20 import IERC20
-########### NEW IMPORTS #################################
-from contracts.ResourcesManager import (
-    _update_resources_erc20,
+    formulas_production_scaler,
+    formulas_buildings_production_time,
     )
+########### NEW IMPORTS #################################
+
 from contracts.utils.library import (
     Cost,
     _planet_to_owner,
@@ -43,7 +35,10 @@ from contracts.utils.library import (
     erc721_token_address,
     planet_genereted,
     structure_updated,
-
+    buildings_timelock,
+    )
+from contracts.PlanetManager import (
+    _update_resources_erc20,
     )
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
@@ -151,7 +146,30 @@ func _collect_resources{
     return()
 end
 
-func _upgrade_metal_mine{
+func _start_metal_upgrade{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    let (address) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(address)
+    let (planet) = _planets.read(planet_id)
+    let current_mine_level = planet.mines.metal
+    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
+    let (time_unlocked) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    with_attr error_message("Not enough resources"):
+        assert_le(metal_required, metal_available)
+        assert_le(crystal_required, crystal_available)
+    end
+    _update_resources_erc20(
+        to=
+    buildings_timelock.write(address, time_unlocked)
+    return()
+end
+
+func _end_metal_upgrade{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -160,12 +178,6 @@ func _upgrade_metal_mine{
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
-    let current_mine_level = planet.mines.metal
-    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
-    assert_le(metal_required, metal_available)
-    assert_le(crystal_required, crystal_available)
     let new_planet = Planet(
                         MineLevels(metal=current_mine_level + 1,
                                     crystal=planet.mines.crystal,
