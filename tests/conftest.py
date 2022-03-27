@@ -73,24 +73,24 @@ async def erc721(starknet, minter):
 async def metal(starknet, game):
     return await starknet.deploy(
         source=ERC20_FILE,
-        constructor_calldata=[469853561196, 22314920797099084, 0, MAX_UINT, 0,
-                              game.contract_address, owner.public_key])
+        constructor_calldata=[469853561196, 22314920797099084, 0, 0, 0,
+                              game.contract_address, game.contract_address])
 
 
 @ pytest_asyncio.fixture
 async def crystal(starknet, game):
     return await starknet.deploy(
         source=ERC20_FILE,
-        constructor_calldata=[27991888647971180, 5712619723889529932, 0, MAX_UINT, 0,
-                              game.contract_address, owner.public_key])
+        constructor_calldata=[27991888647971180, 5712619723889529932, 0, 0, 0,
+                              game.contract_address, game.contract_address])
 
 
 @ pytest_asyncio.fixture
 async def deuterium(starknet, game):
     return await starknet.deploy(
         source=ERC20_FILE,
-        constructor_calldata=[1851985284920121062765, 22314920796505429, 0, MAX_UINT, 0,
-                              game.contract_address, owner.public_key])
+        constructor_calldata=[1851985284920121062765, 22314920796505429, 0, 0, 0,
+                              game.contract_address, game.contract_address])
 
 
 @pytest_asyncio.fixture

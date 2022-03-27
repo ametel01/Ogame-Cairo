@@ -4,20 +4,19 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
-from contracts.PlanetManager import (
+from contracts.StructuresManager import (
     get_upgrades_cost,
     _generate_planet,
-    _upgrade_metal_mine,
     _upgrade_crystal_mine,
     _upgrade_deuterium_mine,
     _upgrade_solar_plant,
     _start_metal_upgrade,
     _end_metal_upgrade,
-
-    )
+    _get_planet,
+)
 from contracts.ResourcesManager import (
     _collect_resources,
-    )
+)
 from contracts.utils.library import (
     Planet, 
     Cost,
@@ -166,7 +165,7 @@ func generate_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }():
+    }():
     _generate_planet()
     return()
 end
@@ -176,31 +175,31 @@ func collect_resources{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }():
+    }():
     let (address) = get_caller_address()
     assert_not_zero(address)
     let (id) = _planet_to_owner.read(address)
     _collect_resources(address)
     return()
-end`
+end
 
 @external
 func metal_upgrade_start{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
+    }():
     _start_metal_upgrade()
     return()
 end
 
 @external
-func metal_upgrade_end{
+func metal_upgrade_complete{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
-    _upgrade_metal_mine()
+    }():
+    _end_metal_upgrade()
     return()
 end
 
@@ -209,7 +208,7 @@ func upgrade_crystal_mine{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
+    }():
     _upgrade_crystal_mine()
     return()
 end

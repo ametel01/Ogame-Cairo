@@ -54,7 +54,7 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
             timer=time_now)
         _planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
-        _update_resources_erc20(
+        _receive_resources_erc20(
             to=caller,
             metal_amount=actual_metal,
             crystal_amount=actual_crystal,
@@ -70,7 +70,7 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
             timer=time_now)
         _planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
-        _update_resources_erc20(
+        _receive_resources_erc20(
             to=caller,
             metal_amount=metal_produced,
             crystal_amount=crystal_produced,
@@ -80,16 +80,36 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
 end
 
 # Updates the ERC20 resources contract
-func _update_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        to : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt):
+func _receive_resources_erc20{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(to : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt):
     let (metal_address) = erc20_metal_address.read()
     let (crystal_address) = erc20_crystal_address.read()
     let (deuterium_address) = erc20_deuterium_address.read()
     let metal = Uint256(metal_amount, 0)
     let crystal = Uint256(crystal_amount, 0)
     let deuterium = Uint256(deuterium_amount, 0)
-    IERC20.transfer(metal_address, to, metal)
-    IERC20.transfer(crystal_address, to, crystal)
-    IERC20.transfer(deuterium_address, to, deuterium)
+    IERC20.mint(metal_address, to, metal)
+    IERC20.mint(crystal_address, to, crystal)
+    IERC20.mint(deuterium_address, to, deuterium)
+    return ()
+end
+
+func _pay_resources_erc20{
+        syscall_ptr : felt*, 
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(address : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt):
+    let (metal_address) = erc20_metal_address.read()
+    let (crystal_address) = erc20_crystal_address.read()
+    let (deuterium_address) = erc20_deuterium_address.read()
+    let metal = Uint256(metal_amount, 0)
+    let crystal = Uint256(crystal_amount, 0)
+    let deuterium = Uint256(deuterium_amount, 0)
+    IERC20.burn(metal_address, address, metal)
+    IERC20.burn(crystal_address, address, crystal)
+    IERC20.burn(deuterium_address, address, deuterium)
     return ()
 end

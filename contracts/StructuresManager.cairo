@@ -1,9 +1,23 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.math import (
+    assert_not_zero,
+    assert_le,
+    )
+from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.math_cmp import is_le
+from contracts.utils.constants import FALSE    
+from contracts.token.erc721.interfaces.IERC721 import IERC721
+#from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.ResourcesManager import (
+    _receive_resources_erc20,
+    _pay_resources_erc20,
+)
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_contract_address,
+    get_caller_address,
     )
 
 from contracts.utils.Formulas import (
@@ -37,9 +51,7 @@ from contracts.utils.library import (
     structure_updated,
     buildings_timelock,
     )
-from contracts.PlanetManager import (
-    _update_resources_erc20,
-    )
+
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a 
@@ -72,77 +84,10 @@ func _generate_planet{
     _number_of_planets.write(last_id+1)
     planet_genereted.emit(new_planet_id)
     # Transfer resources ERC20 tokens to caller.
-    _update_resources_erc20(to=address, 
+    _receive_resources_erc20(to=address, 
                             metal_amount=500, 
                             crystal_amount=300,
                             deuterium_amount=100)
-    return()
-end
-
-func _collect_resources{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*, 
-        range_check_ptr
-        }(caller : felt):
-    alloc_locals
-    let (planet_id) = _planet_to_owner.read(caller)
-    let (planet) = _planets.read(planet_id)
-    let time_start = planet.timer
-    let metal_level = planet.mines.metal
-    let crystal_level = planet.mines.crystal
-    let deuterium_level = planet.mines.deuterium
-    # Calculate energy requirerments.
-    let (energy_required_metal) = _consumption(metal_level)
-    let (energy_required_crystal) = _consumption(crystal_level)
-    let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
-    let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
-    let solar_plant_level = planet.energy.solar_plant
-    let (energy_available) = formulas_solar_plant(solar_plant_level)
-    
-    let (enough_energy) = is_le(total_energy_required,energy_available)
-    # Calculate amount of resources produced.
-    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
-    let (crystal_produced) = formulas_crystal_mine(last_timestamp=time_start, mine_level=crystal_level)
-    let (deuterium_produced) = formulas_deuterium_mine(last_timestamp=time_start, mine_level=deuterium_level)
-    # If energy available < than energy required scale down amount produced.
-    if enough_energy == FALSE:
-        let (actual_metal, 
-            actual_crystal, 
-            actual_deuterium) = formulas_production_scaler(net_metal=metal_produced,
-                                                        net_crystal=crystal_produced,
-                                                        net_deuterium=deuterium_produced,
-                                                        energy_required=total_energy_required,
-                                                        energy_available=energy_available)
-        let (time_now) = get_block_timestamp()
-        let updated_planet = Planet(
-                                MineLevels(metal=1,crystal=1,deuterium=1),
-                                MineStorage(metal=planet.storage.metal + actual_metal,
-                                        crystal=planet.storage.crystal + actual_crystal,
-                                        deuterium=planet.storage.deuterium + actual_deuterium),
-                                Energy(solar_plant=1),
-                                timer=time_now)
-        _planets.write(planet_id, updated_planet)
-        # Update ERC20 contract for resources
-        _update_resources_erc20(to=caller, 
-                                metal_amount=actual_metal, 
-                                crystal_amount=actual_crystal,
-                                deuterium_amount=actual_deuterium)
-    else:
-        let (time_now) = get_block_timestamp()
-        let updated_planet = Planet(
-                                MineLevels(metal=1,crystal=1,deuterium=1),
-                                MineStorage(metal=planet.storage.metal + metal_produced,
-                                        crystal=planet.storage.crystal + crystal_produced,
-                                        deuterium=planet.storage.deuterium + deuterium_produced),
-                                Energy(solar_plant=planet.energy.solar_plant),
-                                timer=time_now)
-        _planets.write(planet_id, updated_planet)
-        # Update ERC20 contract for resources
-        _update_resources_erc20(to=caller, 
-                                metal_amount=metal_produced, 
-                                crystal_amount=crystal_produced,
-                                deuterium_amount=deuterium_produced)
-    end                                
     return()
 end
 
@@ -151,20 +96,22 @@ func _start_metal_upgrade{
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
         }():
+    alloc_locals
     let (address) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(address)
-    let (planet) = _planets.read(planet_id)
+    let (contract) = get_contract_address()
+    let (local planet) = _get_planet()
     let current_mine_level = planet.mines.metal
     let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
-    let (time_unlocked) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
     with_attr error_message("Not enough resources"):
         assert_le(metal_required, metal_available)
         assert_le(crystal_required, crystal_available)
     end
-    _update_resources_erc20(
-        to=
+    _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
+    let (time_now) = get_block_timestamp()
+    let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
     return()
 end
@@ -178,6 +125,15 @@ func _end_metal_upgrade{
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
+    let (timelock_end) = buildings_timelock.read(address)
+    let (time_now) = get_block_timestamp()
+    with_attr error_message("Timelock not yet expired"):
+        is_le(timelock_end, time_now)
+    end
+    let current_mine_level = planet.mines.metal
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
     let new_planet = Planet(
                         MineLevels(metal=current_mine_level + 1,
                                     crystal=planet.mines.crystal,
@@ -305,6 +261,13 @@ func get_upgrades_cost{
         up_solar=Cost(metal=s_metal,crystal=s_crystal,deuterium=0))
 end
     
-    
-
-    
+func _get_planet{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (planet : Planet):
+    let (address) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(address)
+    let (res) = _planets.read(planet_id)
+    return(planet=res)
+end
