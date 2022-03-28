@@ -46,11 +46,11 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
             energy_available=energy_available)
         let (time_now) = get_block_timestamp()
         let updated_planet = Planet(
-            MineLevels(metal=1, crystal=1, deuterium=1),
+            MineLevels(metal=planet.mines.metal, crystal=planet.mines.crystal, deuterium=planet.mines.deuterium),
             MineStorage(metal=planet.storage.metal + actual_metal,
             crystal=planet.storage.crystal + actual_crystal,
             deuterium=planet.storage.deuterium + actual_deuterium),
-            Energy(solar_plant=1),
+            Energy(solar_plant=planet.energy.solar_plant),
             timer=time_now)
         _planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
@@ -62,7 +62,7 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
     else:
         let (time_now) = get_block_timestamp()
         let updated_planet = Planet(
-            MineLevels(metal=1, crystal=1, deuterium=1),
+            MineLevels(metal=planet.mines.metal, crystal=planet.mines.crystal, deuterium=planet.mines.deuterium),
             MineStorage(metal=planet.storage.metal + metal_produced,
             crystal=planet.storage.crystal + crystal_produced,
             deuterium=planet.storage.deuterium + deuterium_produced),

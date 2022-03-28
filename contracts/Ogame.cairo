@@ -227,6 +227,26 @@ func crystal_upgrade_complete{
 end
 
 @external
+func deuterium_upgrade_start{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }():
+    _start_deuterium_upgrade()
+    return()
+end
+
+@external
+func deuterium_upgrade_complete{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }():
+    _end_deuterium_upgrade()
+    return()
+end
+
+@external
 func solar_plant_upgrade_start{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 

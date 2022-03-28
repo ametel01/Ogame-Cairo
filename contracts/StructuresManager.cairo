@@ -138,9 +138,9 @@ func _end_metal_upgrade{
     let current_mine_level = planet.mines.metal
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
-    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_mine_level)
+    let (metal_required, crystal_required) = formulas_metal_building(current_mine_level)
     let new_planet = Planet(
-                        MineLevels(metal=current_mine_level + 1,
+                        MineLevels(metal=planet.mines.metal + 1,
                                     crystal=planet.mines.crystal,
                                     deuterium=planet.mines.deuterium),
                         MineStorage(metal=metal_available - metal_required,
@@ -203,7 +203,7 @@ func _end_crystal_upgrade{
     let crystal_available = planet.storage.crystal
     let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
     let new_planet = Planet(
-                        MineLevels(metal=current_mine_level,
+                        MineLevels(metal=planet.mines.metal,
                                     crystal=planet.mines.crystal + 1,
                                     deuterium=planet.mines.deuterium),
                         MineStorage(metal=metal_available - metal_required,
@@ -266,7 +266,7 @@ func _end_deuterium_upgrade{
     let crystal_available = planet.storage.crystal
     let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
     let new_planet = Planet(
-                        MineLevels(metal=current_mine_level,
+                        MineLevels(metal=planet.mines.metal,
                                     crystal=planet.mines.crystal,
                                     deuterium=planet.mines.deuterium + 1),
                         MineStorage(metal=metal_available - metal_required,

@@ -1,6 +1,6 @@
 import pytest
 from utils.helpers import (
-    assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS)
+    assert_equals, update_starknet_block, TIME_ELAPS_SIX_HOURS, TIME_ELAPS_ONE_HOUR)
 from conftest import user1
 
 
@@ -86,36 +86,76 @@ async def test_collect_resources(starknet, deploy_game_v1):
 async def test_mines_upgrade(starknet, deploy_game_v1):
     (_, ogame, _, _, _, _, user_one) = deploy_game_v1
 
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_start',
+                                 [])
+
     # Equivalent of 12 hours pass.
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS*10)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_complete',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_start',
+                                 [])
+
+    # Equivalent of 12 hours pass.
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*2)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_complete',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*3)
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_complete',
+                                 [])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'collect_resources',
                                  [])
 
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'upgrade_solar_plant',
-                                 [])
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'upgrade_solar_plant',
-                                 [])
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'upgrade_solar_plant',
-                                 [])
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'upgrade_metal_mine',
-                                 [])
-
+    
     # Assert metal mine level is increasead.
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'get_structures_levels',
+                                        [])
+    assert_equals(data.result.response, [1, 1, 1, 4])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*25)
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
+                                 [])
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*26)
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_complete',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*27)
+    #Assert metal mine level is increasead.
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
@@ -124,33 +164,55 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
-                                 'upgrade_metal_mine',
+                                 'crystal_upgrade_start',
                                  [])
-
-    # Assert metal mine level is increasead.
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'get_structures_levels',
-                                        [])
-    assert_equals(data.result.response, [3, 1, 1, 4])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*28)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
-                                 'upgrade_crystal_mine',
+                                 'crystal_upgrade_complete',
                                  [])
 
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 1, 4])
+    assert_equals(data.result.response, [2, 2, 1, 4])
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
+                                 [])
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'deuterium_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*29)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
-                                 'upgrade_deuterium_mine',
+                                 'deuterium_upgrade_complete',
                                  [])
 
     # Assert deuterium mine level is increasead.
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'get_structures_levels',
+                                        [])
+    assert_equals(data.result.response, [2, 2, 2, 4])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*30)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_complete',
+                                 [])
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
