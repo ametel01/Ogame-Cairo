@@ -98,6 +98,10 @@ func _start_metal_upgrade{
         }():
     alloc_locals
     let (address) = get_caller_address()
+    let (current_timelock) = buildings_timelock.read(address)
+    with_attr error_message("Building que is busy"):
+        assert current_timelock = 0
+    end
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.metal
@@ -145,11 +149,41 @@ func _end_metal_upgrade{
                         Energy(solar_plant=planet.energy.solar_plant),
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
+    reset_timelock(address)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
 end
 
-func _upgrade_crystal_mine{
+func _start_crystal_upgrade{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    alloc_locals
+    let (address) = get_caller_address()
+    let (current_timelock) = buildings_timelock.read(address)
+    with_attr error_message("Building que is busy"):
+        assert current_timelock = 0
+    end
+    let (contract) = get_contract_address()
+    let (local planet) = _get_planet()
+    let current_mine_level = planet.mines.crystal
+    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
+    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    with_attr error_message("Not enough resources"):
+        assert_le(metal_required, metal_available)
+        assert_le(crystal_required, crystal_available)
+    end
+    _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
+    let (time_now) = get_block_timestamp()
+    let time_unlocked = time_now + building_time
+    buildings_timelock.write(address, time_unlocked)
+    return()
+end
+
+func _end_crystal_upgrade{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -157,28 +191,62 @@ func _upgrade_crystal_mine{
     alloc_locals
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
-    let (local planet) = _planets.read(planet_id)
+    let (planet) = _planets.read(planet_id)
+    let (timelock_end) = buildings_timelock.read(address)
+    let (time_now) = get_block_timestamp()
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
     let current_mine_level = planet.mines.crystal
-    let (metal_required, crystal_required) = formulas_crystal_building(crystal_mine_level=current_mine_level)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
-    assert_le(metal_required, metal_available)
-    assert_le(crystal_required, crystal_available)
+    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
     let new_planet = Planet(
-                        MineLevels(metal=planet.mines.metal,
+                        MineLevels(metal=current_mine_level,
                                     crystal=planet.mines.crystal + 1,
                                     deuterium=planet.mines.deuterium),
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
-                                    deuterium=planet.storage.deuterium),
+                                    deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant),
-                        timer = planet.timer)             
+                        timer=planet.timer)             
     _planets.write(planet_id, new_planet)
+    reset_timelock(address)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
 end
 
-func _upgrade_deuterium_mine{
+func _start_deuterium_upgrade{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    alloc_locals
+    let (address) = get_caller_address()
+    let (current_timelock) = buildings_timelock.read(address)
+    with_attr error_message("Building que is busy"):
+        assert current_timelock = 0
+    end
+    let (contract) = get_contract_address()
+    let (local planet) = _get_planet()
+    let current_mine_level = planet.mines.deuterium
+    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
+    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    with_attr error_message("Not enough resources"):
+        assert_le(metal_required, metal_available)
+        assert_le(crystal_required, crystal_available)
+    end
+    _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
+    let (time_now) = get_block_timestamp()
+    let time_unlocked = time_now + building_time
+    buildings_timelock.write(address, time_unlocked)
+    return()
+end
+
+func _end_deuterium_upgrade{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -186,28 +254,62 @@ func _upgrade_deuterium_mine{
     alloc_locals
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
-    let (local planet) = _planets.read(planet_id)
+    let (planet) = _planets.read(planet_id)
+    let (timelock_end) = buildings_timelock.read(address)
+    let (time_now) = get_block_timestamp()
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
     let current_mine_level = planet.mines.deuterium
-    let (metal_required, crystal_required) = formulas_deuterium_building(deuterium_mine_level=current_mine_level)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
-    assert_le(metal_required, metal_available)
-    assert_le(crystal_required, crystal_available)
+    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
     let new_planet = Planet(
-                        MineLevels(metal=planet.mines.metal,
+                        MineLevels(metal=current_mine_level,
                                     crystal=planet.mines.crystal,
                                     deuterium=planet.mines.deuterium + 1),
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant),
-                        timer = planet.timer)             
+                        timer=planet.timer)             
     _planets.write(planet_id, new_planet)
+    reset_timelock(address)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
 end
 
-func _upgrade_solar_plant{
+func _start_solar_plant_upgrade{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    alloc_locals
+    let (address) = get_caller_address()
+    let (current_timelock) = buildings_timelock.read(address)
+    with_attr error_message("Building que is busy"):
+        assert current_timelock = 0
+    end
+    let (contract) = get_contract_address()
+    let (local planet) = _get_planet()
+    let current_plant_level = planet.energy.solar_plant
+    let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
+    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    with_attr error_message("Not enough resources"):
+        assert_le(metal_required, metal_available)
+        assert_le(crystal_required, crystal_available)
+    end
+    _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
+    let (time_now) = get_block_timestamp()
+    let time_unlocked = time_now + building_time
+    buildings_timelock.write(address, time_unlocked)
+    return()
+end
+
+func _end_solar_plant_upgrade{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
@@ -215,13 +317,17 @@ func _upgrade_solar_plant{
     alloc_locals
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
-    let (local planet) = _planets.read(planet_id)
+    let (planet) = _planets.read(planet_id)
+    let (timelock_end) = buildings_timelock.read(address)
+    let (time_now) = get_block_timestamp()
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
     let current_plant_level = planet.energy.solar_plant
-    let (metal_required, crystal_required) = formulas_metal_building(metal_mine_level=current_plant_level)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
-    assert_le(metal_required, metal_available)
-    assert_le(crystal_required, crystal_available)
+    let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
     let new_planet = Planet(
                         MineLevels(metal=planet.mines.metal,
                                     crystal=planet.mines.crystal,
@@ -229,9 +335,10 @@ func _upgrade_solar_plant{
                         MineStorage(metal=metal_available - metal_required,
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
-                        Energy(solar_plant=planet.energy.solar_plant+1),
+                        Energy(solar_plant=planet.energy.solar_plant + 1),
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
+    reset_timelock(address)
     structure_updated.emit(metal_required, crystal_required, 0)
     return()
 end
@@ -271,4 +378,13 @@ func _get_planet{
     let (planet_id) = _planet_to_owner.read(address)
     let (res) = _planets.read(planet_id)
     return(planet=res)
+end
+
+func reset_timelock{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(address : felt):
+    buildings_timelock.write(address, 0)
+    return()
 end

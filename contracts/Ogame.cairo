@@ -7,11 +7,14 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.StructuresManager import (
     get_upgrades_cost,
     _generate_planet,
-    _upgrade_crystal_mine,
-    _upgrade_deuterium_mine,
-    _upgrade_solar_plant,
     _start_metal_upgrade,
     _end_metal_upgrade,
+    _start_crystal_upgrade,
+    _end_crystal_upgrade,
+    _start_deuterium_upgrade,
+    _end_deuterium_upgrade,
+    _start_solar_plant_upgrade,
+    _end_solar_plant_upgrade,
     _get_planet,
 )
 from contracts.ResourcesManager import (
@@ -204,31 +207,41 @@ func metal_upgrade_complete{
 end
 
 @external
-func upgrade_crystal_mine{
+func crystal_upgrade_start{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
     }():
-    _upgrade_crystal_mine()
+    _start_crystal_upgrade()
     return()
 end
 
 @external
-func upgrade_deuterium_mine{
+func crystal_upgrade_complete{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
-    _upgrade_deuterium_mine()
+    }():
+    _end_crystal_upgrade()
     return()
 end
 
 @external
-func upgrade_solar_plant{
+func solar_plant_upgrade_start{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }():
-    _upgrade_solar_plant()
+    }():
+    _start_solar_plant_upgrade()
+    return()
+end
+
+@external
+func solar_plant_upgrade_complete{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }():
+    _end_solar_plant_upgrade()
     return()
 end

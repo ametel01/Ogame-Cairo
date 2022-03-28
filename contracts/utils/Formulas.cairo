@@ -278,3 +278,4 @@ func formulas_buildings_production_time{
     let (res, _) = unsigned_div_rem(fact6, 1000)
     return(time_required=res)
 end
+
