@@ -14,7 +14,7 @@ OGame is a browser-based, money-management and space-war themed massively multip
 2. Integration of ERC721: planets will be NFTs. :heavy_check_mark:
 3. Integration of ERC20: resources will be tokenized. :heavy_check_mark:
 4. Add energy production requirements for mines. :heavy_check_mark:
-5. Add time constraints for buildings upgrades.
+5. Add time constraints for buildings upgrades. :heavy_check_mark:
 6. Implementation of Robot Factory.
 7. Add research lab.
 8. Add technologies.
@@ -56,7 +56,7 @@ nile deploy PlanetFactory --network goerli [erc721.contract_address] [owner]
 7. Deploy metal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 469853561196 22314920797099084 0 340282366920938463463374607431768211455 0 [game.contract_address] [owner.contract_address]
+nile deploy ERC20_Mintable --network goerli 469853561196 22314920797099084 0 0340282366920938463463374607431768211455 0 [game.contract_address] [owner.contract_address]
 ```
 
 8. Deploy crystal token:

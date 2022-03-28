@@ -136,7 +136,7 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [1, 1, 1, 4])
+    assert_equals(data.result.response, [1, 1, 1, 4, 0])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*25)
     await user1.send_transaction(user_one,
@@ -160,7 +160,7 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [2, 1, 1, 4])
+    assert_equals(data.result.response, [2, 1, 1, 4, 0])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -178,7 +178,7 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [2, 2, 1, 4])
+    assert_equals(data.result.response, [2, 2, 1, 4, 0])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'collect_resources',
@@ -200,7 +200,7 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [2, 2, 2, 4])
+    assert_equals(data.result.response, [2, 2, 2, 4, 0])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -217,4 +217,4 @@ async def test_mines_upgrade(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [])
-    assert_equals(data.result.response, [3, 2, 2, 4])
+    assert_equals(data.result.response, [3, 2, 2, 4, 0])

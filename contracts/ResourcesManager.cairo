@@ -6,7 +6,7 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.library import (
-    _planet_to_owner, _planets, Planet, MineLevels, MineStorage, Energy, erc20_metal_address,
+    _planet_to_owner, _planets, Planet, MineLevels, MineStorage, Energy, Facilities, erc20_metal_address,
     erc20_crystal_address, erc20_deuterium_address, FALSE)
 from contracts.utils.Formulas import (
     _consumption, _consumption_deuterium, formulas_metal_mine, formulas_crystal_mine,
@@ -51,6 +51,7 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
             crystal=planet.storage.crystal + actual_crystal,
             deuterium=planet.storage.deuterium + actual_deuterium),
             Energy(solar_plant=planet.energy.solar_plant),
+            Facilities(robot_factory=planet.facilities.robot_factory),        
             timer=time_now)
         _planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources
@@ -67,6 +68,7 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
             crystal=planet.storage.crystal + crystal_produced,
             deuterium=planet.storage.deuterium + deuterium_produced),
             Energy(solar_plant=planet.energy.solar_plant),
+            Facilities(robot_factory=planet.facilities.robot_factory),        
             timer=time_now)
         _planets.write(planet_id, updated_planet)
         # Update ERC20 contract for resources

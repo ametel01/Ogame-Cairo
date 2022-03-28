@@ -148,6 +148,25 @@ func formulas_solar_plant_building{
     end
 end
 
+func formulas_robot_factory_building{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+    }(factory_level : felt) -> (metal_cost : felt, crystal_cost : felt, deuterium_cost : felt):
+    let base_metal = 400
+    let base_crystal = 120
+    let base_deuterium = 200
+    if factory_level == 0:
+        return(base_metal, base_crystal, base_deuterium)
+    else:
+        let (fact0) = pow(2, factory_level+1)
+        let metal = base_metal * fact0
+        let crystal = base_crystal * fact0
+        let deuterium = base_deuterium * fact0
+        return(metal, crystal, deuterium)
+    end
+end
+
 ##########
 # Energy #
 ##########
@@ -155,7 +174,7 @@ func formulas_solar_plant{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*, 
         range_check_ptr
-        }(plant_level : felt) -> (production : felt):
+    }(plant_level : felt) -> (production : felt):
     let (production) = _solar_production_formula(plant_level)
     return(production=production)
 end

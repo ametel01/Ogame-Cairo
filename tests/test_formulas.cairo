@@ -13,6 +13,7 @@ from contracts.utils.Formulas import (
     _consumption,
     _consumption_deuterium,
     formulas_buildings_production_time,
+    formulas_robot_factory_building,
 )
 
 @external
@@ -154,6 +155,27 @@ func test_solar_plant_building_cost{
     assert (metal, crystal) = expected
     return()
 end
+
+@external
+func test_robot_factory_building_cost{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*, 
+        range_check_ptr
+        }():
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(0)
+    let expected = (400, 120, 200)
+    assert (metal, crystal, deuterium) = expected
+
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(9)
+    let expected = (409600, 122880, 204800) 
+    assert (metal, crystal, deuterium) = expected
+    
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(24)
+    let expected = (13421772800, 4026531840, 6710886400)
+    assert (metal, crystal, deuterium) = expected
+    return()
+end
+
 
 @external
 func test_production_scaler{

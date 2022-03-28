@@ -52,7 +52,7 @@ func number_of_planets{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (n_planets : felt):
+    }() -> (n_planets : felt):
     let (n) = _number_of_planets.read()
     return(n_planets=n)
 end
@@ -62,7 +62,7 @@ func get_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (planet : Planet):
+    }() -> (planet : Planet):
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
@@ -74,7 +74,7 @@ func get_my_planet{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (planet_id : Uint256):
+    }() -> (planet_id : Uint256):
     let (address) = get_caller_address()
     let (id) = _planet_to_owner.read(address)
     return(planet_id=id)
@@ -85,7 +85,7 @@ func erc721_address{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (res : felt):
+    }() -> (res : felt):
     let (res) = erc721_token_address.read()
     return(res)
 end
@@ -95,7 +95,12 @@ func get_structures_levels{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal_mine : felt, crystal_mine : felt, deuterium_mine : felt, solar_plant : felt):
+    }() -> (
+        metal_mine : felt, 
+        crystal_mine : felt, 
+        deuterium_mine : felt, 
+        solar_plant : felt,
+        robot_factory : felt):
     let (address) = get_caller_address()
     let (id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(id)
@@ -103,7 +108,14 @@ func get_structures_levels{
     let crystal = planet.mines.crystal 
     let deuterium = planet.mines.deuterium
     let solar_plant = planet.energy.solar_plant
-    return(metal_mine=metal, crystal_mine=crystal, deuterium_mine=deuterium, solar_plant=solar_plant)
+    let robot_factory = planet.facilities.robot_factory
+    return(
+        metal_mine=metal, 
+        crystal_mine=crystal, 
+        deuterium_mine=deuterium, 
+        solar_plant=solar_plant, 
+        robot_factory=robot_factory
+    )
 end
 
 @view
@@ -111,7 +123,7 @@ func resources_available{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal : felt, crystal : felt, deuterium : felt):
+    }() -> (metal : felt, crystal : felt, deuterium : felt):
     let (address) = get_caller_address()
     let (id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(id)
@@ -126,7 +138,7 @@ func get_structures_upgrade_cost{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }() -> (metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost):
+    }() -> (metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost):
     let (metal, crystal, deuterium, solar_plant) = get_upgrades_cost()
     return(metal, crystal, deuterium, solar_plant)
 end
@@ -140,7 +152,7 @@ func constructor{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(erc721_address : felt, owner : felt):
+    }(erc721_address : felt, owner : felt):
     erc721_token_address.write(erc721_address)
     Ownable_initializer(owner)
     return()
@@ -155,7 +167,7 @@ func erc20_addresses{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-        }(metal_token : felt, crystal_token : felt, deuterium_token : felt):
+    }(metal_token : felt, crystal_token : felt, deuterium_token : felt):
     Ownable_only_owner()
     erc20_metal_address.write(metal_token)
     erc20_crystal_address.write(crystal_token)

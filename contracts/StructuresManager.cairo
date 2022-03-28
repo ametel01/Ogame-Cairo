@@ -18,7 +18,7 @@ from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_contract_address,
     get_caller_address,
-    )
+)
 
 from contracts.utils.Formulas import (
     formulas_metal_mine, 
@@ -34,7 +34,7 @@ from contracts.utils.Formulas import (
     _production_limiter,
     formulas_production_scaler,
     formulas_buildings_production_time,
-    )
+)
 ########### NEW IMPORTS #################################
 
 from contracts.utils.library import (
@@ -46,11 +46,14 @@ from contracts.utils.library import (
     MineLevels,
     MineStorage,
     Energy,
+    Facilities,
     erc721_token_address,
     planet_genereted,
     structure_updated,
     buildings_timelock,
-    )
+    _get_planet,
+    reset_timelock,
+)
 
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
@@ -72,6 +75,7 @@ func _generate_planet{
         MineLevels(metal=1, crystal=1, deuterium=1),
         MineStorage(metal=500, crystal=300,deuterium=100),
         Energy(solar_plant=1),
+        Facilities(robot_factory=0),        
         timer=time_now)
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
@@ -147,6 +151,7 @@ func _end_metal_upgrade{
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant),
+                        Facilities(robot_factory=0),
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -210,6 +215,7 @@ func _end_crystal_upgrade{
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant),
+                        Facilities(robot_factory=0),
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -273,6 +279,7 @@ func _end_deuterium_upgrade{
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant),
+                        Facilities(robot_factory=0),        
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -336,6 +343,7 @@ func _end_solar_plant_upgrade{
                                     crystal=crystal_available - crystal_required,
                                     deuterium = planet.storage.deuterium),
                         Energy(solar_plant=planet.energy.solar_plant + 1),
+                        Facilities(robot_factory=0),
                         timer=planet.timer)             
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -369,22 +377,3 @@ func get_upgrades_cost{
         up_solar=Cost(metal=s_metal,crystal=s_crystal,deuterium=0))
 end
     
-func _get_planet{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-        }() -> (planet : Planet):
-    let (address) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(address)
-    let (res) = _planets.read(planet_id)
-    return(planet=res)
-end
-
-func reset_timelock{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(address : felt):
-    buildings_timelock.write(address, 0)
-    return()
-end

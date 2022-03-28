@@ -1,6 +1,12 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.starknet.common.syscalls import (
+    get_block_timestamp,
+    get_contract_address,
+    get_caller_address,
+)
 
 
 ##########################################################################################
@@ -37,6 +43,7 @@ struct Planet:
     member mines : MineLevels
     member storage : MineStorage
     member energy : Energy
+    member facilities : Facilities
     member timer : felt
 end
 
@@ -119,3 +126,27 @@ end
 
 const TRUE = 1
 const FALSE = 0
+
+##########################################################################################
+#                                               Functions                                #
+##########################################################################################
+
+func _get_planet{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+        }() -> (planet : Planet):
+    let (address) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(address)
+    let (res) = _planets.read(planet_id)
+    return(planet=res)
+end
+
+func reset_timelock{
+        syscall_ptr : felt*,
+        pedersen_ptr : HashBuiltin*,
+        range_check_ptr
+    }(address : felt):
+    buildings_timelock.write(address, 0)
+    return()
+end
