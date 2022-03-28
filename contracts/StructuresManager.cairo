@@ -4,10 +4,10 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import (
     assert_not_zero,
     assert_le,
-    )
+)
 from starkware.cairo.common.uint256 import Uint256
+from contracts.utils.constants import FALSE, TRUE    
 from starkware.cairo.common.math_cmp import is_le
-from contracts.utils.constants import FALSE    
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 #from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import (
@@ -127,8 +127,9 @@ func _end_metal_upgrade{
     let (planet) = _planets.read(planet_id)
     let (timelock_end) = buildings_timelock.read(address)
     let (time_now) = get_block_timestamp()
+    let (waited_enough) = is_le(timelock_end, time_now)
     with_attr error_message("Timelock not yet expired"):
-        is_le(timelock_end, time_now)
+        assert waited_enough = TRUE
     end
     let current_mine_level = planet.mines.metal
     let metal_available = planet.storage.metal
