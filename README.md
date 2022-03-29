@@ -56,19 +56,19 @@ nile deploy PlanetFactory --network goerli [erc721.contract_address] [owner]
 7. Deploy metal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 469853561196 22314920797099084 0 0340282366920938463463374607431768211455 0 [game.contract_address] [owner.contract_address]
+nile deploy ERC20_Mintable --network goerli 469853561196 22314920797099084 0 0 0 [game.contract_address] [contract_addres]
 ```
 
 8. Deploy crystal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 27991888647971180 5712619723889529932 0 340282366920938463463374607431768211455 0 [game.contract_address] [owner.contract_address]
+nile deploy ERC20_Mintable --network goerli 27991888647971180 5712619723889529932 0 0 0 [gamecontract_address] [contract_addres]
 ```
 
 9. Deploy deuterium token
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 1851985284920121062765 22314920796505429 0 340282366920938463463374607431768211455 0 [game.contract_address] [owner.contract_address]
+nile deploy ERC20_Mintable --network goerli 1851985284920121062765 22314920796505429 0 0 0[gamecontract_address] [contract_addres]
 ```
 
 10. Invoke erc20_addresses on PlanetFactory with resources token addresses as params.
