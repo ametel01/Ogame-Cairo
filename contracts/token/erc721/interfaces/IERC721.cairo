@@ -9,37 +9,31 @@ from contracts.utils.IERC165 import IERC165
 
 @contract_interface
 namespace IERC721:
-    func balanceOf(owner: felt) -> (balance: Uint256):
+    func balanceOf(owner : felt) -> (balance : Uint256):
     end
 
-    func ownerOf(tokenId: Uint256) -> (owner: felt):
+    func ownerOf(tokenId : Uint256) -> (owner : felt):
     end
 
     func safeTransferFrom(
-            _from: felt, 
-            to: felt, 
-            tokenId: Uint256, 
-            data_len: felt,
-            data: felt*
-        ):
+            _from : felt, to : felt, tokenId : Uint256, data_len : felt, data : felt*):
     end
 
-    func transferFrom(_from: felt, to: felt, tokenId: Uint256):
+    func transferFrom(_from : felt, to : felt, tokenId : Uint256):
     end
 
-    func approve(approved: felt, tokenId: Uint256):
+    func approve(approved : felt, tokenId : Uint256):
     end
 
-    func setApprovalForAll(operator: felt, approved: felt):
+    func setApprovalForAll(operator : felt, approved : felt):
     end
 
-    func getApproved(tokenId: Uint256) -> (approved: felt):
+    func getApproved(tokenId : Uint256) -> (approved : felt):
     end
 
-    func isApprovedForAll(owner: felt, operator: felt) -> (isApproved: felt):
+    func isApprovedForAll(owner : felt, operator : felt) -> (isApproved : felt):
     end
 
-    func mint(to: felt, token_id: Uint256):
+    func mint(to : felt, token_id : Uint256):
     end
-
 end

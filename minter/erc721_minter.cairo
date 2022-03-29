@@ -17,62 +17,48 @@ end
 func admim() -> (address : felt):
 end
 
-
 # @args: address -> the erc721 address, owner -> the token contract owner
 @constructor
-func constructor{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(admin_address : felt):
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        admin_address : felt):
     let (owner) = get_contract_address()
     erc721_owner.write(owner)
     admim.write(admin_address)
-    return()
+    return ()
 end
 
 @external
-func setNFTaddress{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(address : felt):
+func setNFTaddress{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt):
     let (caller) = get_caller_address()
     let (admin) = admim.read()
     assert caller = admin
     erc721_address.write(address)
-    return()
+    return ()
 end
 
 @external
-func setNFTapproval{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(operator : felt, approved : felt):
+func setNFTapproval{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        operator : felt, approved : felt):
     let (caller) = get_caller_address()
     let (admin) = admim.read()
     assert caller = admin
     let (erc721) = erc721_address.read()
     IERC721.setApprovalForAll(erc721, operator, approved)
-    return()
+    return ()
 end
 
 @external
-func mintAll{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(n : felt, token_id : Uint256):
+func mintAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        n : felt, token_id : Uint256):
     alloc_locals
     let (owner) = erc721_owner.read()
     let (erc721) = erc721_address.read()
     if n == 0:
-        return()
+        return ()
     end
-    let (next_id, _) = uint256_add(token_id, Uint256(1,0))
-    mintAll(n-1, next_id)
+    let (next_id, _) = uint256_add(token_id, Uint256(1, 0))
+    mintAll(n - 1, next_id)
     IERC721.mint(erc721, owner, token_id)
-    return()
+    return ()
 end
-

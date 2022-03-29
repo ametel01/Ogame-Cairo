@@ -3,11 +3,7 @@
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
-    get_block_timestamp,
-    get_contract_address,
-    get_caller_address,
-)
-
+    get_block_timestamp, get_contract_address, get_caller_address)
 
 ##########################################################################################
 #                                               Structs                                  #
@@ -30,7 +26,7 @@ end
 # @dev Stores the energy available.
 struct Energy:
     member solar_plant : felt
-    #member satellites : felt
+    # member satellites : felt
 end
 
 # @dev Stores the level of the facilities.
@@ -110,7 +106,7 @@ end
 #                                               Events                                   #
 ##########################################################################################
 
-# @dev Emits the planet_id when a player get assigned an nft. 
+# @dev Emits the planet_id when a player get assigned an nft.
 @event
 func planet_genereted(planet_id : Uint256):
 end
@@ -131,22 +127,16 @@ const FALSE = 0
 #                                               Functions                                #
 ##########################################################################################
 
-func _get_planet{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-        }() -> (planet : Planet):
+func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        planet : Planet):
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (res) = _planets.read(planet_id)
-    return(planet=res)
+    return (planet=res)
 end
 
-func reset_timelock{
-        syscall_ptr : felt*,
-        pedersen_ptr : HashBuiltin*,
-        range_check_ptr
-    }(address : felt):
+func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt):
     buildings_timelock.write(address, 0)
-    return()
+    return ()
 end
