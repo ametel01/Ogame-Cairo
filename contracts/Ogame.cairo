@@ -8,7 +8,7 @@ from contracts.StructuresManager import (
     get_upgrades_cost, _generate_planet, _start_metal_upgrade, _end_metal_upgrade,
     _start_crystal_upgrade, _end_crystal_upgrade, _start_deuterium_upgrade, _end_deuterium_upgrade,
     _start_solar_plant_upgrade, _end_solar_plant_upgrade, _get_planet)
-from contracts.ResourcesManager import _collect_resources
+from contracts.ResourcesManager import _collect_resources, _get_net_energy
 from contracts.utils.library import (
     Planet, Cost, _number_of_planets, _planets, _planet_to_owner, erc721_token_address,
     erc20_metal_address, erc20_crystal_address, erc20_deuterium_address)
@@ -73,14 +73,20 @@ end
 
 @view
 func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        metal : felt, crystal : felt, deuterium : felt):
+        metal : felt, crystal : felt, deuterium : felt, energy : felt):
+    alloc_locals
     let (address) = get_caller_address()
     let (id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(id)
     let metal_available = planet.storage.metal
     let crystal_available = planet.storage.crystal
     let deuterium_available = planet.storage.deuterium
-    return (metal=metal_available, crystal=crystal_available, deuterium=deuterium_available)
+    let metal = planet.mines.metal
+    let crystal = planet.mines.crystal
+    let deuterium = planet.mines.deuterium
+    let solar_plant = planet.energy.solar_plant
+    let (energy_available) = _get_net_energy(metal, crystal, deuterium, solar_plant)
+    return (metal_available, crystal_available, deuterium_available, energy_available)
 end
 
 @view

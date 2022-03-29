@@ -131,11 +131,11 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
-    %{
-        print("metal ", ids.metal_required)
-        print("crystal ", ids.crystal_required)
-        print("time ", ids.building_time)
-    %}
+    # %{
+    #     print("metal ", ids.metal_required)
+    #     print("crystal ", ids.crystal_required)
+    #     print("time ", ids.building_time)
+    # %}
     buildings_timelock.write(address, time_unlocked)
     return (time_unlocked)
 end
