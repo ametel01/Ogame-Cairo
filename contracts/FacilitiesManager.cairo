@@ -14,7 +14,7 @@ from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
 func _start_robot_factory_upgrade{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (current_timelock) = buildings_timelock.read(address)
@@ -40,7 +40,7 @@ func _start_robot_factory_upgrade{
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
-    return ()
+    return (time_unlocked)
 end
 
 func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

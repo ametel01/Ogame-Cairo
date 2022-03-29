@@ -120,6 +120,11 @@ func _get_net_energy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     let (deuterium_consumption) = _consumption_deuterium(deuterium_level)
     let total_energy_required = metal_consumption + crystal_consumption + deuterium_consumption
     let (energy_available) = _solar_production_formula(solar_plant_level)
-    let res = energy_available - total_energy_required
+    let (not_negative_energy) = is_le(total_energy_required, energy_available)
+    if not_negative_energy == FALSE:
+        return (0)
+    else:
+        let res = energy_available - total_energy_required
+    end
     return (res)
 end

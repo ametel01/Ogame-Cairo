@@ -4,6 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
+from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.StructuresManager import (
     get_upgrades_cost, _generate_planet, _start_metal_upgrade, _end_metal_upgrade,
     _start_crystal_upgrade, _end_crystal_upgrade, _start_deuterium_upgrade, _end_deuterium_upgrade,
@@ -138,9 +139,9 @@ func collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 end
 
 @external
-func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _start_metal_upgrade()
-    return ()
+func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
+    let (time_finish) = _start_metal_upgrade()
+    return (time_finish)
 end
 
 @external
@@ -150,9 +151,10 @@ func metal_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 @external
-func crystal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _start_crystal_upgrade()
-    return ()
+func crystal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        end_time : felt):
+    let (time_finish) = _start_crystal_upgrade()
+    return (time_finish)
 end
 
 @external
@@ -162,9 +164,10 @@ func crystal_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
 end
 
 @external
-func deuterium_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _start_deuterium_upgrade()
-    return ()
+func deuterium_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (end_time : felt):
+    let (time_finish) = _start_deuterium_upgrade()
+    return (time_finish)
 end
 
 @external
@@ -175,14 +178,29 @@ func deuterium_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
 end
 
 @external
-func solar_plant_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _start_solar_plant_upgrade()
-    return ()
+func solar_plant_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (end_time : felt):
+    let (time_finish) = _start_solar_plant_upgrade()
+    return (time_finish)
 end
 
 @external
 func solar_plant_upgrade_complete{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     _end_solar_plant_upgrade()
+    return ()
+end
+
+@external
+func robot_factory_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (end_time : felt):
+    let (time_finish) = _start_robot_factory_upgrade()
+    return (time_finish)
+end
+
+@external
+func robot_factory_upgrade_complete{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    _end_robot_factory_upgrade()
     return ()
 end

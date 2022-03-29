@@ -101,7 +101,7 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         crystal=crystal_available - crystal_required,
         deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=0),
+        Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -163,7 +163,7 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         crystal=crystal_available - crystal_required,
         deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=0),
+        Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -220,7 +220,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         crystal=crystal_available - crystal_required,
         deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=0),
+        Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -277,7 +277,7 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         crystal=crystal_available - crystal_required,
         deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
-        Facilities(robot_factory=0),
+        Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
