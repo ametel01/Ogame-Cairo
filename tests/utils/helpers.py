@@ -17,3 +17,6 @@ def update_starknet_block(starknet, block_number=1, block_timestamp=TIME_ELAPS_O
 
 def reset_starknet_block(starknet):
     update_starknet_block(starknet=starknet)
+
+def get_block_timestamp(starknet_state):
+    return starknet_state.state.block_info.block_timestamp

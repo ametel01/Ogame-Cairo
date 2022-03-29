@@ -6,18 +6,14 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.constants import FALSE, TRUE
 from starkware.cairo.common.math_cmp import is_le
 from contracts.token.erc721.interfaces.IERC721 import IERC721
-# from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _receive_resources_erc20, _pay_resources_erc20
 from starkware.starknet.common.syscalls import (
     get_block_timestamp, get_contract_address, get_caller_address)
-
 from contracts.utils.Formulas import (
     formulas_metal_mine, formulas_crystal_mine, formulas_deuterium_mine, formulas_metal_building,
     formulas_crystal_building, formulas_deuterium_building, formulas_solar_plant,
     formulas_solar_plant_building, _consumption, _consumption_deuterium, _production_limiter,
     formulas_production_scaler, formulas_buildings_production_time)
-# ########## NEW IMPORTS #################################
-
 from contracts.utils.library import (
     Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
     Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
@@ -55,7 +51,8 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     return ()
 end
 
-func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (current_timelock) = buildings_timelock.read(address)
@@ -78,7 +75,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
-    return ()
+    return (time_unlocked)
 end
 
 func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
@@ -112,7 +109,8 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
     return ()
 end
 
-func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (current_timelock) = buildings_timelock.read(address)
@@ -133,8 +131,13 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
+    %{
+        print("metal ", ids.metal_required)
+        print("crystal ", ids.crystal_required)
+        print("time ", ids.building_time)
+    %}
     buildings_timelock.write(address, time_unlocked)
-    return ()
+    return (time_unlocked)
 end
 
 func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
@@ -168,7 +171,8 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     return ()
 end
 
-func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ) -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (current_timelock) = buildings_timelock.read(address)
@@ -190,7 +194,7 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
-    return ()
+    return (time_unlocked)
 end
 
 func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
@@ -225,7 +229,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ):
+        ) -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
     let (current_timelock) = buildings_timelock.read(address)
@@ -247,7 +251,7 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
-    return ()
+    return (time_unlocked)
 end
 
 func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():

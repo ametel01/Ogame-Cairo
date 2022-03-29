@@ -72,6 +72,6 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
-    structure_updated.emit(metal_required, crystal_required, 0)
+    structure_updated.emit(metal_required, crystal_required, deuterium_required)
     return ()
 end
