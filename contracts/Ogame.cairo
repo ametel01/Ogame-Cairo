@@ -9,10 +9,11 @@ from contracts.StructuresManager import (
     get_upgrades_cost, _generate_planet, _start_metal_upgrade, _end_metal_upgrade,
     _start_crystal_upgrade, _end_crystal_upgrade, _start_deuterium_upgrade, _end_deuterium_upgrade,
     _start_solar_plant_upgrade, _end_solar_plant_upgrade, _get_planet)
-from contracts.ResourcesManager import _collect_resources, _get_net_energy
+from contracts.ResourcesManager import (
+    _collect_resources, _get_net_energy, _calculate_available_resources)
 from contracts.utils.library import (
     Planet, Cost, _number_of_planets, _planets, _planet_to_owner, erc721_token_address,
-    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address)
+    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, buildings_timelock)
 from contracts.utils.Formulas import (
     formulas_metal_building, formulas_crystal_building, formulas_deuterium_building)
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
@@ -29,21 +30,27 @@ func number_of_planets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 end
 
 @view
-func get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        planet : Planet):
-    let (address) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(address)
-    let (planet) = _planets.read(planet_id)
-    return (planet=planet)
+func owner_of{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt) -> (planet_id : Uint256):
+    let (id) = _planet_to_owner.read(address)
+    return (id)
 end
 
-@view
-func get_my_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        planet_id : Uint256):
-    let (address) = get_caller_address()
-    let (id) = _planet_to_owner.read(address)
-    return (planet_id=id)
-end
+# @view
+# func get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+#         your_address : felt) -> (planet : Planet):
+#     let (planet_id) = _planet_to_owner.read(your_address)
+#     let (planet) = _planets.read(planet_id)
+#     return (planet=planet)
+# end
+
+# @view
+# func get_my_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+#         planet_id : Uint256):
+#     let (address) = get_caller_address()
+#     let (id) = _planet_to_owner.read(address)
+#     return (planet_id=id)
+# end
 
 @view
 func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
@@ -53,11 +60,11 @@ func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @view
-func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        your_address : felt) -> (
         metal_mine : felt, crystal_mine : felt, deuterium_mine : felt, solar_plant : felt,
         robot_factory : felt):
-    let (address) = get_caller_address()
-    let (id) = _planet_to_owner.read(address)
+    let (id) = _planet_to_owner.read(your_address)
     let (planet) = _planets.read(id)
     let metal = planet.mines.metal
     let crystal = planet.mines.crystal
@@ -73,15 +80,13 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
 end
 
 @view
-func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        metal : felt, crystal : felt, deuterium : felt, energy : felt):
+func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        your_address : felt) -> (metal : felt, crystal : felt, deuterium : felt, energy : felt):
     alloc_locals
-    let (address) = get_caller_address()
-    let (id) = _planet_to_owner.read(address)
+    let (id) = _planet_to_owner.read(your_address)
     let (planet) = _planets.read(id)
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
-    let deuterium_available = planet.storage.deuterium
+    let (metal_available, crystal_available, deuterium_available) = _calculate_available_resources(
+        your_address)
     let metal = planet.mines.metal
     let crystal = planet.mines.crystal
     let deuterium = planet.mines.deuterium
@@ -92,9 +97,17 @@ end
 
 @view
 func get_structures_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> (metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost):
-    let (metal, crystal, deuterium, solar_plant) = get_upgrades_cost()
+        your_address : felt) -> (
+        metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost):
+    let (metal, crystal, deuterium, solar_plant) = get_upgrades_cost(your_address)
     return (metal, crystal, deuterium, solar_plant)
+end
+
+@view
+func build_time_completion{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        your_address : felt) -> (timestamp : felt):
+    let (time_end) = buildings_timelock.read(your_address)
+    return (time_end)
 end
 
 ###############
@@ -139,7 +152,8 @@ func collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 end
 
 @external
-func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
+func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        end_time : felt):
     let (time_finish) = _start_metal_upgrade()
     return (time_finish)
 end

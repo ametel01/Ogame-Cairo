@@ -32,13 +32,13 @@ This will most likely keep me busy for a while. The rest of the roadmap is yet t
 1. Deploy minter contract:
 
 ```sh
-nile deploy erc721_minter --network goerli
+nile deploy erc721_minter --network goerli [owner.contract_address]
 ```
 
 2. Deploy ERC721:
 
 ```sh
-nile deploy --network goerli ERC721 791039710910145679710511411110 79717710 [minter.contract_address] 3 2816098579549735819157383278158273522421215323109110700804876579202095 727713669677773499424935395146774672965422722660995087308605307047208038 167058432561934416655812751101829711222203357542195
+nile deploy --network goerli ERC721 0x6f67616d6556302e31 0x4f474d302e31 [minter.contract_address] 3 0x68747470733a2f2f676174657761792e70696e6174612e 0x636c6f75642f697066732f516d56696a7632465a547841706e4e54 0x356250384355356466724e573336733239784a566a636b6b736e36733733
 ```
 
 3. On minter contract invoke setNftAddress with ERC721 as parameter.
@@ -46,29 +46,29 @@ nile deploy --network goerli ERC721 791039710910145679710511411110 79717710 [min
 4. Deploy main game contract:
 
 ```sh
-nile deploy PlanetFactory --network goerli [erc721.contract_address] [owner]
+nile deploy Ogame --network goerli [erc721.contract_address] [owner]
 ```
 
-5. On minter invoke setNftApproval with PlanetFactory as operator.
+5. On minter invoke setNftApproval with Ogame.contract_address as operator.
 
 6. Invoke mint_all function on erc721_minter contract with parameters n = 150 and token_id.low starting from 1. Minting more >= 200 planets in a single transaction triggers MAX NUMBER OF STEPS error from Starknet.
 
 7. Deploy metal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 469853561196 22314920797099084 0 0 0 [game.contract_address] [contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d65206d6574616c2076302e31 0x4f674d455476302e31 0 0 0 [game.contract_address] [game.contract_addres]
 ```
 
 8. Deploy crystal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 27991888647971180 5712619723889529932 0 0 0 [gamecontract_address] [contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d65206372797374616c2076302e31 0x4f6743525976302e31 0 0 0 [game.contract_address] [game.contract_addres]
 ```
 
 9. Deploy deuterium token
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 1851985284920121062765 22314920796505429 0 0 0[gamecontract_address] [contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d652064657574657269756d2076302e31 0x4f6744455576302e31 0 0 0 [game.contract_address] [game.contract_addres]
 ```
 
-10. Invoke erc20_addresses on PlanetFactory with resources token addresses as params.
+10. Invoke erc20_addresses on Ogame contract with resources token addresses as params.

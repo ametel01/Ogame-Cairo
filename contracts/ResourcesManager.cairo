@@ -13,6 +13,51 @@ from contracts.utils.Formulas import (
     formulas_deuterium_mine, formulas_solar_plant, formulas_production_scaler,
     _solar_production_formula)
 
+func _calculate_available_resources{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(caller : felt) -> (
+        metal : felt, crystal : felt, deuterium : felt):
+    alloc_locals
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (planet) = _planets.read(planet_id)
+    let time_start = planet.timer
+    let metal_level = planet.mines.metal
+    let crystal_level = planet.mines.crystal
+    let deuterium_level = planet.mines.deuterium
+    # Calculate energy requirerments.
+    let (energy_required_metal) = _consumption(metal_level)
+    let (energy_required_crystal) = _consumption(crystal_level)
+    let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
+    let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
+    let solar_plant_level = planet.energy.solar_plant
+    let (energy_available) = formulas_solar_plant(solar_plant_level)
+
+    let (enough_energy) = is_le(total_energy_required, energy_available)
+    # Calculate amount of resources produced.
+    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
+    let (crystal_produced) = formulas_crystal_mine(
+        last_timestamp=time_start, mine_level=crystal_level)
+    let (deuterium_produced) = formulas_deuterium_mine(
+        last_timestamp=time_start, mine_level=deuterium_level)
+    # If energy available < than energy required scale down amount produced.
+    if enough_energy == FALSE:
+        let (actual_metal, actual_crystal, actual_deuterium) = formulas_production_scaler(
+            net_metal=metal_produced,
+            net_crystal=crystal_produced,
+            net_deuterium=deuterium_produced,
+            energy_required=total_energy_required,
+            energy_available=energy_available)
+        let metal = planet.storage.metal + actual_metal
+        let crystal = planet.storage.crystal + actual_crystal
+        let deuterium = planet.storage.deuterium + actual_deuterium
+        return (metal, crystal, deuterium)
+    else:
+        let metal = planet.storage.metal + metal_produced
+        let crystal = planet.storage.crystal + crystal_produced
+        let deuterium = planet.storage.deuterium + deuterium_produced
+        return (metal, crystal, deuterium)
+    end
+end
+
 func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         caller : felt):
     alloc_locals
@@ -88,9 +133,9 @@ func _receive_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (metal_address) = erc20_metal_address.read()
     let (crystal_address) = erc20_crystal_address.read()
     let (deuterium_address) = erc20_deuterium_address.read()
-    let metal = Uint256(metal_amount, 0)
-    let crystal = Uint256(crystal_amount, 0)
-    let deuterium = Uint256(deuterium_amount, 0)
+    let metal = Uint256(0, metal_amount)
+    let crystal = Uint256(0, crystal_amount)
+    let deuterium = Uint256(0, deuterium_amount)
     IERC20.mint(metal_address, to, metal)
     IERC20.mint(crystal_address, to, crystal)
     IERC20.mint(deuterium_address, to, deuterium)
@@ -102,9 +147,9 @@ func _pay_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_address) = erc20_metal_address.read()
     let (crystal_address) = erc20_crystal_address.read()
     let (deuterium_address) = erc20_deuterium_address.read()
-    let metal = Uint256(metal_amount, 0)
-    let crystal = Uint256(crystal_amount, 0)
-    let deuterium = Uint256(deuterium_amount, 0)
+    let metal = Uint256(0, metal_amount)
+    let crystal = Uint256(0, crystal_amount)
+    let deuterium = Uint256(0, deuterium_amount)
     IERC20.burn(metal_address, address, metal)
     IERC20.burn(crystal_address, address, crystal)
     IERC20.burn(deuterium_address, address, deuterium)

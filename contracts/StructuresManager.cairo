@@ -26,7 +26,6 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     alloc_locals
     let (time_now) = get_block_timestamp()
     let (address) = get_caller_address()
-    assert_not_zero(address)
     # One address can only have one planet at this stage.
     let (has_already_planet) = _planet_to_owner.read(address)
     assert has_already_planet = Uint256(0, 0)
@@ -39,7 +38,8 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
-    let new_planet_id = Uint256(last_id + 1, 0)
+    let new_id = last_id + 1
+    let new_planet_id = Uint256(0, new_id)
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, address, new_planet_id)
     _planet_to_owner.write(address, new_planet_id)
@@ -285,10 +285,10 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     return ()
 end
 
-func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt) -> (
         up_metal : Cost, up_crystal : Cost, up_deuturium : Cost, up_solar : Cost):
     alloc_locals
-    let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
     let metal_level = planet.mines.metal

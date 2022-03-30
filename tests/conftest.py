@@ -16,7 +16,7 @@ ERC721_FILE = os.path.join("contracts", "token", "erc721",
                            "ERC721.cairo")
 ERC20_FILE = os.path.join("contracts", "token", "erc20",
                           "ERC20_Mintable.cairo")
-MINTER_FILE = os.path.join("minter", "erc721_minter.cairo")
+MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
