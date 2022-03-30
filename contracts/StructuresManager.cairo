@@ -39,7 +39,7 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
     let new_id = last_id + 1
-    let new_planet_id = Uint256(0, new_id)
+    let new_planet_id = Uint256(new_id,0)
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, address, new_planet_id)
     _planet_to_owner.write(address, new_planet_id)
