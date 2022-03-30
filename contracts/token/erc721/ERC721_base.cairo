@@ -205,7 +205,7 @@ func ERC721_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_p
     let (balance : Uint256) = ERC721_balances.read(to)
     # Overflow is not possible because token_ids are checked for duplicate ids with `_exists()`
     # thus, each token is guaranteed to be a unique uint256
-    let (new_balance : Uint256, _) = uint256_add(balance, Uint256(1, 0))
+    let (new_balance : Uint256, _) = uint256_add(balance, Uint256(1 * 10 ** 18, 0))
     ERC721_balances.write(to, new_balance)
 
     # low + high felts = uint256
@@ -226,7 +226,7 @@ func ERC721_burn{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_p
 
     # Decrease owner balance
     let (balance : Uint256) = ERC721_balances.read(owner)
-    let (new_balance) = uint256_sub(balance, Uint256(1, 0))
+    let (new_balance) = uint256_sub(balance, Uint256(1 * 10 ** 18, 0))
     ERC721_balances.write(owner, new_balance)
 
     # Delete owner
