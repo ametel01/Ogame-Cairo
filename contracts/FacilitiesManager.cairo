@@ -9,7 +9,7 @@ from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.library import (
     Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
     Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
-    _get_planet, reset_timelock, TRUE)
+    building_qued, _get_planet, reset_timelock, reset_building_que, TRUE)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
@@ -40,6 +40,7 @@ func _start_robot_factory_upgrade{
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(address, time_unlocked)
+    building_qued.write(address, 5, TRUE)
     return (time_unlocked)
 end
 
@@ -47,6 +48,8 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         ):
     alloc_locals
     let (address) = get_caller_address()
+    let (is_qued) = building_qued.read(address, 5)
+    assert is_qued = TRUE
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
     let (timelock_end) = buildings_timelock.read(address)
@@ -72,6 +75,7 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
+    reset_building_que(address, 5)
     structure_updated.emit(metal_required, crystal_required, deuterium_required)
     return ()
 end

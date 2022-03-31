@@ -102,6 +102,12 @@ end
 func buildings_timelock(address : felt) -> (time_unlocked : felt):
 end
 
+# @dev Stores the que status for a specific building. IDs:
+# 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory
+@storage_var
+func building_qued(address : felt, id : felt) -> (is_qued : felt):
+end
+
 ##########################################################################################
 #                                               Events                                   #
 ##########################################################################################
@@ -138,5 +144,11 @@ end
 func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         address : felt):
     buildings_timelock.write(address, 0)
+    return ()
+end
+
+func reset_building_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt, id : felt):
+    building_qued.write(address, id, FALSE)
     return ()
 end
