@@ -5,6 +5,7 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
 from starkware.cairo.common.pow import pow
 from contracts.utils.constants import TRUE, FALSE
+from contracts.utils.library import _players_spent_resources
 
 ##############
 # Production #
@@ -245,4 +246,12 @@ func formulas_buildings_production_time{
     let fact6 = fact5 * 3600
     let (res, _) = unsigned_div_rem(fact6, 1000)
     return (time_required=res)
+end
+
+func formulas_calculate_player_points{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(address : felt) -> (
+        points : felt):
+    let (total_spent) = _players_spent_resources.read(address)
+    let (points, _) = unsigned_div_rem(total_spent, 1000)
+    return (points)
 end

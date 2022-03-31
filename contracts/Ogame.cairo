@@ -15,7 +15,8 @@ from contracts.utils.library import (
     Planet, Cost, _number_of_planets, _planets, _planet_to_owner, erc721_token_address,
     erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, buildings_timelock)
 from contracts.utils.Formulas import (
-    formulas_metal_building, formulas_crystal_building, formulas_deuterium_building)
+    formulas_metal_building, formulas_crystal_building, formulas_deuterium_building,
+    formulas_calculate_player_points)
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 
 ###########
@@ -35,22 +36,6 @@ func owner_of{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     let (id) = _planet_to_owner.read(address)
     return (id)
 end
-
-# @view
-# func get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-#         your_address : felt) -> (planet : Planet):
-#     let (planet_id) = _planet_to_owner.read(your_address)
-#     let (planet) = _planets.read(planet_id)
-#     return (planet=planet)
-# end
-
-# @view
-# func get_my_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-#         planet_id : Uint256):
-#     let (address) = get_caller_address()
-#     let (id) = _planet_to_owner.read(address)
-#     return (planet_id=id)
-# end
 
 @view
 func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
@@ -98,9 +83,10 @@ end
 @view
 func get_structures_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         your_address : felt) -> (
-        metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost):
-    let (metal, crystal, deuterium, solar_plant) = get_upgrades_cost(your_address)
-    return (metal, crystal, deuterium, solar_plant)
+        metal_mine : Cost, crystal_mine : Cost, deuterium_mine : Cost, solar_plant : Cost,
+        robot_factory : Cost):
+    let (metal, crystal, deuterium, solar_plant, robot_factory) = get_upgrades_cost(your_address)
+    return (metal, crystal, deuterium, solar_plant, robot_factory)
 end
 
 @view
@@ -108,6 +94,13 @@ func build_time_completion{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         your_address : felt) -> (timestamp : felt):
     let (time_end) = buildings_timelock.read(your_address)
     return (time_end)
+end
+
+@view
+func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        your_address : felt) -> (points : felt):
+    let (points) = formulas_calculate_player_points(your_address)
+    return (points)
 end
 
 ###############

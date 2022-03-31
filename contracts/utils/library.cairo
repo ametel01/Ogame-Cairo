@@ -71,6 +71,10 @@ end
 func _planet_to_owner(address : felt) -> (planet_id : Uint256):
 end
 
+@storage_var
+func _players_spent_resources(address : felt) -> (spent_resources : felt):
+end
+
 # @dev Returns the address of the game's ERC721 contract.
 @storage_var
 func erc721_token_address() -> (address : felt):
