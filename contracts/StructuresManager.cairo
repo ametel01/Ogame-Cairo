@@ -18,7 +18,7 @@ from contracts.utils.Formulas import (
 from contracts.utils.library import (
     Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
     Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
-    _get_planet, reset_timelock, building_qued, reset_building_que)
+    _get_planet, reset_timelock, building_qued, reset_building_que, _players_spent_resources)
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a
@@ -72,6 +72,9 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         assert_le(metal_required, metal_available)
         assert_le(crystal_required, crystal_available)
     end
+    let (spent_so_far) = _players_spent_resources.read(address)
+    let new_total_spent = spent_so_far + metal_required + crystal_required
+    _players_spent_resources.write(address, new_total_spent)
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
@@ -133,6 +136,9 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         assert_le(metal_required, metal_available)
         assert_le(crystal_required, crystal_available)
     end
+    let (spent_so_far) = _players_spent_resources.read(address)
+    let new_total_spent = spent_so_far + metal_required + crystal_required
+    _players_spent_resources.write(address, new_total_spent)
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
@@ -194,6 +200,9 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         assert_le(metal_required, metal_available)
         assert_le(crystal_required, crystal_available)
     end
+    let (spent_so_far) = _players_spent_resources.read(address)
+    let new_total_spent = spent_so_far + metal_required + crystal_required
+    _players_spent_resources.write(address, new_total_spent)
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
@@ -255,6 +264,9 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         assert_le(metal_required, metal_available)
         assert_le(crystal_required, crystal_available)
     end
+    let (spent_so_far) = _players_spent_resources.read(address)
+    let new_total_spent = spent_so_far + metal_required + crystal_required
+    _players_spent_resources.write(address, new_total_spent)
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
