@@ -69,7 +69,7 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         deuterium=planet.mines.deuterium),
         MineStorage(metal=metal_available - metal_required,
         crystal=crystal_available - crystal_required,
-        deuterium=planet.storage.deuterium),
+        deuterium=planet.storage.deuterium - deuterium_required),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory + 1),
         timer=planet.timer)
