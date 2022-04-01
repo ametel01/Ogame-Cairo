@@ -49,7 +49,9 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     alloc_locals
     let (address) = get_caller_address()
     let (is_qued) = building_qued.read(address, 5)
-    assert is_qued = TRUE
+    with_attr error_message("Tryed to complete the wrong structure"):
+        assert is_qued = TRUE
+    end
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
     let (timelock_end) = buildings_timelock.read(address)
