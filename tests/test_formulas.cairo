@@ -136,11 +136,15 @@ func test_robot_factory_building_cost{
     let expected = (400, 120, 200)
     assert (metal, crystal, deuterium) = expected
 
-    let (metal, crystal, deuterium) = formulas_robot_factory_building(9)
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(1)
+    let expected = (800, 240, 400)
+    assert (metal, crystal, deuterium) = expected
+
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(10)
     let expected = (409600, 122880, 204800)
     assert (metal, crystal, deuterium) = expected
 
-    let (metal, crystal, deuterium) = formulas_robot_factory_building(24)
+    let (metal, crystal, deuterium) = formulas_robot_factory_building(25)
     let expected = (13421772800, 4026531840, 6710886400)
     assert (metal, crystal, deuterium) = expected
     return ()

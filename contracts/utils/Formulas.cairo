@@ -138,7 +138,7 @@ func formulas_robot_factory_building{
     if factory_level == 0:
         return (base_metal, base_crystal, base_deuterium)
     else:
-        let (fact0) = pow(2, factory_level + 1)
+        let (fact0) = pow(2, factory_level)
         let metal = base_metal * fact0
         let crystal = base_crystal * fact0
         let deuterium = base_deuterium * fact0
