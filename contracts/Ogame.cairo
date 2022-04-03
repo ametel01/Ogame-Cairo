@@ -66,7 +66,8 @@ end
 
 @view
 func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        your_address : felt) -> (metal : felt, crystal : felt, deuterium : felt, energy : felt):
+        your_address : felt) -> (
+        metal : Uint256, crystal : Uint256, deuterium : Uint256, energy : felt):
     alloc_locals
     let (id) = _planet_to_owner.read(your_address)
     let (planet) = _planets.read(id)
