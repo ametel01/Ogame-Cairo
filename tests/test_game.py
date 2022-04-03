@@ -28,19 +28,19 @@ async def test_account(deploy_game_v1):
                                         metal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [500, 0])
+    assert_equals(data.result.response, [5000, 0])
 
     data = await user1.send_transaction(user_one,
                                         crystal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [300, 0])
+    assert_equals(data.result.response, [3000, 0])
 
     data = await user1.send_transaction(user_one,
                                         deuterium.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [100, 0])
+    assert_equals(data.result.response, [1000, 0])
 
 
 @pytest.mark.asyncio
@@ -60,27 +60,27 @@ async def test_collect_resources(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
-                                        [])
-    assert_equals(data.result.response, [696, 431, 164, 0])
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [6960, 0, 4310, 0, 1640, 0, 0])
 
     # Assert tokens have been tranferred on ERC20 accounts.
     data = await user1.send_transaction(user_one,
                                         metal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [696, 0])
+    assert_equals(data.result.response, [6960, 0])
 
     data = await user1.send_transaction(user_one,
                                         crystal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [431, 0])
+    assert_equals(data.result.response, [4310, 0])
 
     data = await user1.send_transaction(user_one,
                                         deuterium.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [164, 0])
+    assert_equals(data.result.response, [1640, 0])
 
 
 @pytest.mark.asyncio
@@ -90,7 +90,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [1, 1, 1, 1, 0])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -140,7 +140,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [1, 1, 1, 4, 0])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*25)
@@ -151,8 +151,8 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
-                                        [])
-    assert_equals(data.result.response, [822, 650, 369, 73])                             
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [8220, 0, 6500, 0, 3690, 0, 73])                             
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'metal_upgrade_start',
@@ -170,7 +170,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [2, 1, 1, 4, 0])
 
     response = await user1.send_transaction(user_one,
@@ -188,7 +188,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [2, 2, 1, 4, 0])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -197,8 +197,8 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
-                                        [])
-    assert_equals(data.result.response, [872, 733, 401, 47]) 
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [8720, 0, 7330, 0, 4010, 0, 47]) 
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'robot_factory_upgrade_start',
@@ -214,7 +214,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [2, 2, 1, 4, 1])
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -233,7 +233,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [2, 2, 2, 4, 1])
 
     await user1.send_transaction(user_one,
@@ -250,7 +250,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'get_structures_levels',
-                                        [])
+                                        [user_one.contract_address])
     assert_equals(data.result.response, [3, 2, 2, 4, 1])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -259,6 +259,6 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
-                                        [])
-    assert_equals(data.result.response, [356, 611, 472, 6]) 
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [3560,0, 6110,0, 2720,0, 6]) 
 
