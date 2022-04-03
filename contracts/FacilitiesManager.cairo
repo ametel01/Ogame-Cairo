@@ -3,13 +3,16 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
     get_block_timestamp, get_contract_address, get_caller_address)
+from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.math import assert_not_zero, assert_le
+from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.library import (
-    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
-    Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
-    building_qued, _get_planet, reset_timelock, reset_building_que, TRUE)
+    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, Energy, Facilities,
+    erc721_token_address, planet_genereted, structure_updated, buildings_timelock, building_qued,
+    _get_planet, reset_timelock, reset_building_que, erc20_metal_address, erc20_crystal_address,
+    erc20_deuterium_address, TRUE)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
@@ -28,13 +31,19 @@ func _start_robot_factory_upgrade{
         current_factory_level)
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, deuterium_required)
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
-    let deuterium_available = planet.storage.deuterium
+    let (metal_address) = erc20_metal_address.read()
+    let (metal_available) = IERC20.balanceOf(metal_address, address)
+    let (crystal_address) = erc20_crystal_address.read()
+    let (crystal_available) = IERC20.balanceOf(crystal_address, address)
+    let (deuterim_address) = erc20_deuterium_address.read()
+    let (deuterim_available) = IERC20.balanceOf(deuterim_address, address)
+    let (enough_metal) = uint256_le(Uint256(metal_required, 0), metal_available)
+    let (enough_crystal) = uint256_le(Uint256(crystal_required, 0), crystal_available)
+    let (enough_deuturium) = uint256_le(Uint256(deuterium_required, 0), deuterim_available)
     with_attr error_message("Not enough resources"):
-        assert_le(metal_required, metal_available)
-        assert_le(crystal_required, crystal_available)
-        assert_le(deuterium_required, deuterium_available)
+        assert enough_metal = TRUE
+        assert enough_crystal = TRUE
+        assert enough_deuturium = TRUE
     end
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_required)
     let (time_now) = get_block_timestamp()
@@ -61,20 +70,14 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         assert waited_enough = TRUE
     end
     let current_factory_level = planet.facilities.robot_factory
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
     let (metal_required, crystal_required, deuterium_required) = formulas_robot_factory_building(
         current_factory_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=metal_available - metal_required,
-        crystal=crystal_available - crystal_required,
-        deuterium=planet.storage.deuterium - deuterium_required),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=planet.facilities.robot_factory + 1),
-        timer=planet.timer)
+        Facilities(robot_factory=planet.facilities.robot_factory + 1))
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 5)
