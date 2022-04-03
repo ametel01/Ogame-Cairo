@@ -17,11 +17,11 @@ struct MineLevels:
 end
 
 # @dev Stores the amount of resources available for each resource.
-struct MineStorage:
-    member metal : felt
-    member crystal : felt
-    member deuterium : felt
-end
+# struct MineStorage:
+#     member metal : felt
+#     member crystal : felt
+#     member deuterium : felt
+# end
 
 # @dev Stores the energy available.
 struct Energy:
@@ -37,10 +37,10 @@ end
 # @dev The main planet struct.
 struct Planet:
     member mines : MineLevels
-    member storage : MineStorage
+    # member storage : MineStorage
     member energy : Energy
     member facilities : Facilities
-    member timer : felt
+    # member timer : felt
 end
 
 # @dev Used to handle costs.
@@ -110,6 +110,10 @@ end
 # 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory
 @storage_var
 func building_qued(address : felt, id : felt) -> (is_qued : felt):
+end
+
+@storage_var
+func resources_timer(planet_id : Uint256) -> (timestamp : felt):
 end
 
 ##########################################################################################
