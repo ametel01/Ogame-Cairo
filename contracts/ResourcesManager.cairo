@@ -3,7 +3,8 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
 from starkware.starknet.common.syscalls import get_block_timestamp
-from starkware.cairo.common.uint256 import Uint256, uint256_add
+from starkware.cairo.common.uint256 import Uint256
+from contracts.utils.Safemath import uint256_checked_add
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.library import (
     _planet_to_owner, _planets, Planet, MineLevels, Energy, Facilities, erc20_metal_address,
@@ -51,14 +52,14 @@ func _calculate_available_resources{
             deuterium_produced,
             total_energy_required,
             energy_available)
-        let (metal, _) = uint256_add(metal_available, Uint256(actual_metal, 0))
-        let (crystal, _) = uint256_add(crystal_available, Uint256(actual_crystal, 0))
-        let (deuterium, _) = uint256_add(deuterium_available, Uint256(actual_deuterium, 0))
+        let (metal) = uint256_checked_add(metal_available, Uint256(actual_metal, 0))
+        let (crystal) = uint256_checked_add(crystal_available, Uint256(actual_crystal, 0))
+        let (deuterium) = uint256_checked_add(deuterium_available, Uint256(actual_deuterium, 0))
         return (metal, crystal, deuterium)
     else:
-        let (metal, _) = uint256_add(metal_available, Uint256(metal_produced, 0))
-        let (crystal, _) = uint256_add(crystal_available, Uint256(crystal_produced, 0))
-        let (deuterium, _) = uint256_add(deuterium_available, Uint256(deuterium_produced, 0))
+        let (metal) = uint256_checked_add(metal_available, Uint256(metal_produced, 0))
+        let (crystal) = uint256_checked_add(crystal_available, Uint256(crystal_produced, 0))
+        let (deuterium) = uint256_checked_add(deuterium_available, Uint256(deuterium_produced, 0))
         return (metal, crystal, deuterium)
     end
 end

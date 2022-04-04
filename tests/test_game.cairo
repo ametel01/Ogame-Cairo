@@ -6,9 +6,7 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import get_caller_address
 
 from pytest_cairo.contract_index import contracts
-from pytest_cairo.helpers import (
-    deploy_contract, impersonate, set_block_timestamp,
-)
+from pytest_cairo.helpers import deploy_contract, impersonate, set_block_timestamp
 
 from contracts.interfaces.IOgame import IOgame
 from contracts.minter.interfaces.Ierc721_minter import Ierc721_minter
@@ -19,18 +17,12 @@ const ADMIN_ADDRESS = 1
 const USER_1_ADDRESS = 2
 const USER_2_ADDRESS = 3
 
-const MAX_UINT = 2**128-1  # conftest.MAX_UINT
+const MAX_UINT = 2 ** 128 - 1  # conftest.MAX_UINT
 const TIME_ELAPS_ONE_HOUR = 3600  # conftest.TIME_ELAPS_ONE_HOUR
 const TIME_ELAPS_SIX_HOURS = 21600  # conftest.TIME_ELAPS_SIX_HOURS
 
-
 @external
-func test_game{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*, 
-    range_check_ptr
-}():
-
+func test_game{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     # deploy_game_v1 fixture
 
     impersonate(ADMIN_ADDRESS)
@@ -79,7 +71,7 @@ func test_game{
     assert calldata[5] = game_address
     assert calldata[6] = game_address
     let (crystal_adress) = deploy_contract(contracts.token.erc20.ERC20_Mintable, 7, calldata)
-    
+
     let (calldata : felt*) = alloc()
     assert calldata[0] = 1851985284920121062765
     assert calldata[1] = 22314920796505429
@@ -90,12 +82,7 @@ func test_game{
     assert calldata[6] = game_address
     let (deuterium_adress) = deploy_contract(contracts.token.erc20.ERC20_Mintable, 7, calldata)
 
-    IOgame.erc20_addresses(
-        game_address,
-        metal_adress,
-        crystal_adress,
-        deuterium_adress,
-    )
+    IOgame.erc20_addresses(game_address, metal_adress, crystal_adress, deuterium_adress)
 
     impersonate(USER_1_ADDRESS)
     IOgame.generate_planet(game_address)
@@ -127,7 +114,7 @@ func test_game{
     set_block_timestamp(TIME_ELAPS_SIX_HOURS * 2)
 
     IOgame.collect_resources(game_address)
-    
+
     let actual_f = IOgame.resources_available(game_address, USER_1_ADDRESS)
     assert actual_f.metal = 696
     assert actual_f.crystal = 431
@@ -158,7 +145,7 @@ func test_game{
     IOgame.solar_plant_upgrade_start(game_address)
     set_block_timestamp(TIME_ELAPS_SIX_HOURS * 2 + TIME_ELAPS_ONE_HOUR)
     IOgame.solar_plant_upgrade_complete(game_address)
-    
+
     IOgame.solar_plant_upgrade_start(game_address)
     set_block_timestamp(TIME_ELAPS_SIX_HOURS * 2 + TIME_ELAPS_ONE_HOUR * 2)
     IOgame.solar_plant_upgrade_complete(game_address)
