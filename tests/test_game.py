@@ -262,3 +262,4 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         [user_one.contract_address])
     assert_equals(data.result.response, [3560,0, 6110,0, 2720,0, 6]) 
 
+    
