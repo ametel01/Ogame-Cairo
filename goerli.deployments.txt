@@ -16,8 +16,3 @@ Crystal:
 Deuterium:
 
 
-
-
-0x01a298ad8ffdc95a66c25043d23e09594ac133d608188b0d90f012b3c0406066:artifacts/abis/erc721_minter.json
-0x058bc3ca7dfb0edf59e1fe3bbeceacd623e5ba7b390db277331f3fbdccc2c58f:artifacts/abis/ERC721.json
-0x02dd0344cb03a7288d48d7f584118804097b688d46e9c99ac1d9dbbf55ac8b95:artifacts/abis/Ogame.json
