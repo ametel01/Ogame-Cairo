@@ -1,20 +1,19 @@
 # SPDX-License-Identifier: MIT
-# OpenZeppelin Cairo Contracts v0.1.0 (token/erc20/ERC20_Mintable.cairo)
+# OpenZeppelin Contracts for Cairo v0.1.0 (token/erc20/ERC20_Mintable.cairo)
 
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
-from starkware.starknet.common.syscalls import get_caller_address
 
-from contracts.token.erc20.ERC20_base import (
+from openzeppelin.token.erc20.library import (
     ERC20_name, ERC20_symbol, ERC20_totalSupply, ERC20_decimals, ERC20_balanceOf, ERC20_allowance,
     ERC20_initializer, ERC20_approve, ERC20_increaseAllowance, ERC20_decreaseAllowance,
     ERC20_transfer, ERC20_transferFrom, ERC20_mint, ERC20_burn)
 
-from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
+from openzeppelin.access.ownable import Ownable_initializer, Ownable_only_owner
 
-from contracts.utils.constants import TRUE
+from openzeppelin.utils.constants import TRUE
 
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -59,8 +58,6 @@ end
 @view
 func balanceOf{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         account : felt) -> (balance : Uint256):
-    # let (caller) = get_caller_address()
-    # assert account = caller
     let (balance : Uint256) = ERC20_balanceOf(account)
     return (balance)
 end

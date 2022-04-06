@@ -1,7 +1,5 @@
 import pytest
 import os
-import re
-
 import pytest_asyncio
 from utils.Signer import Signer
 
