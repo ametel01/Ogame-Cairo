@@ -45,6 +45,27 @@ func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @view
+func metal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        res : felt):
+    let (res) = erc20_metal_address.read()
+    return (res)
+end
+
+@view
+func crystal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        res : felt):
+    let (res) = erc20_crystal_address.read()
+    return (res)
+end
+
+@view
+func deuterium0_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        res : felt):
+    let (res) = erc20_deuterium_address.read()
+    return (res)
+end
+
+@view
 func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         your_address : felt) -> (
         metal_mine : felt, crystal_mine : felt, deuterium_mine : felt, solar_plant : felt,
