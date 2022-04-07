@@ -19,9 +19,9 @@ from contracts.utils.Formulas import (
     formulas_calculate_player_points)
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 
-###########
-# Getters #
-###########
+#########################################################################################
+#                                       Getters                                         #
+#########################################################################################
 
 @view
 func number_of_planets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
@@ -104,9 +104,9 @@ func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
     return (points)
 end
 
-###############
-# Constructor #
-###############
+#########################################################################################
+#                                   Constructor                                         #
+#########################################################################################
 
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -116,9 +116,9 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     return ()
 end
 
-#############
-# Externals #
-#############
+##########################################################################################
+#                                      Externals                                         #
+##########################################################################################
 
 @external
 func erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

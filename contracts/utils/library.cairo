@@ -50,8 +50,31 @@ struct Cost:
     member deuterium : felt
 end
 
+# @dev Used to represent the civil ships.
+struct CivilShips:
+    member cargo : felt
+    member recycler : felt
+    member espyonage_probe : felt
+    member solar_satellite : felt
+end
+
+# @dev Used to represent the combat ships.
+struct CombatShips:
+    member light_fighter : felt
+    member heavy_fighter : felt
+    member cruiser : felt
+    member battle_ship : felt
+    member death_star : felt
+end
+
+# @dev Temporary struct to represent a fleet.
+struct Fleet:
+    member civil : CivilShips
+    member combat : CombatShips
+end
+
 ##########################################################################################
-#                                               Storage                                  #
+#                                       Storage                                          #
 ##########################################################################################
 
 # @dev Returns the total number of planets present in the universe.
