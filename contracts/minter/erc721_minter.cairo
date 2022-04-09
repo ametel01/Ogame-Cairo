@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.uint256 import Uint256, uint256_add
+
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 
@@ -20,16 +21,17 @@ end
 # @args: address -> the erc721 address, owner -> the token contract owner
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        admin_address : felt):
-    let (owner) = get_contract_address()
-    erc721_owner.write(owner)
+    admin_address : felt
+):
+    erc721_owner.write(admin_address)
     admim.write(admin_address)
     return ()
 end
 
 @external
 func setNFTaddress{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        address : felt):
+    address : felt
+):
     let (caller) = get_caller_address()
     let (admin) = admim.read()
     assert caller = admin
@@ -39,7 +41,8 @@ end
 
 @external
 func setNFTapproval{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        operator : felt, approved : felt):
+    operator : felt, approved : felt
+):
     let (caller) = get_caller_address()
     let (admin) = admim.read()
     assert caller = admin
@@ -50,7 +53,8 @@ end
 
 @external
 func mintAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        n : felt, token_id : Uint256):
+    n : felt, token_id : Uint256
+):
     alloc_locals
     let (owner) = erc721_owner.read()
     let (erc721) = erc721_address.read()

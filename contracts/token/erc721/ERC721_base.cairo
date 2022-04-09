@@ -61,7 +61,8 @@ end
 #
 
 func ERC721_initializer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        name : felt, symbol : felt):
+    name : felt, symbol : felt
+):
     ERC721_name_.write(name)
     ERC721_symbol_.write(symbol)
     # register IERC721
@@ -74,26 +75,30 @@ end
 #
 
 func ERC721_name{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        name : felt):
+    name : felt
+):
     let (name) = ERC721_name_.read()
     return (name)
 end
 
 func ERC721_symbol{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        symbol : felt):
+    symbol : felt
+):
     let (symbol) = ERC721_symbol_.read()
     return (symbol)
 end
 
 func ERC721_balanceOf{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt) -> (balance : Uint256):
+    owner : felt
+) -> (balance : Uint256):
     let (balance : Uint256) = ERC721_balances.read(owner)
     assert_not_zero(owner)
     return (balance)
 end
 
 func ERC721_ownerOf{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        token_id : Uint256) -> (owner : felt):
+    token_id : Uint256
+) -> (owner : felt):
     let (owner) = ERC721_owners.read(token_id)
     # Ensuring the query is not for nonexistent token
     assert_not_zero(owner)
@@ -101,7 +106,8 @@ func ERC721_ownerOf{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 func ERC721_getApproved{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        token_id : Uint256) -> (approved : felt):
+    token_id : Uint256
+) -> (approved : felt):
     let (exists) = _exists(token_id)
     assert exists = 1
 
@@ -110,7 +116,8 @@ func ERC721_getApproved{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
 end
 
 func ERC721_isApprovedForAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt, operator : felt) -> (is_approved : felt):
+    owner : felt, operator : felt
+) -> (is_approved : felt):
     let (is_approved) = ERC721_operator_approvals.read(owner=owner, operator=operator)
     return (is_approved)
 end
@@ -120,7 +127,8 @@ end
 #
 
 func ERC721_approve{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        to : felt, token_id : Uint256):
+    to : felt, token_id : Uint256
+):
     # Checks caller is not zero address
     let (caller) = get_caller_address()
     assert_not_zero(caller)
@@ -143,7 +151,8 @@ func ERC721_approve{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_chec
 end
 
 func ERC721_setApprovalForAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        operator : felt, approved : felt):
+    operator : felt, approved : felt
+):
     # Ensures caller is neither zero address nor operator
     let (caller) = get_caller_address()
     assert_not_zero(caller)
@@ -160,7 +169,8 @@ func ERC721_setApprovalForAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
 end
 
 func ERC721_transferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        _from : felt, to : felt, token_id : Uint256):
+    _from : felt, to : felt, token_id : Uint256
+):
     alloc_locals
 
     let (caller) = get_caller_address()
@@ -177,7 +187,8 @@ func ERC721_transferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range
 end
 
 func ERC721_safeTransferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*):
+    _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*
+):
     alloc_locals
 
     let (caller) = get_caller_address()
@@ -195,7 +206,8 @@ end
 
 # This function has been modified to allow the minter contract to work.
 func ERC721_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        to : felt, token_id : Uint256):
+    to : felt, token_id : Uint256
+):
     assert_not_zero(to)
 
     # Ensures token_id is unique
@@ -205,7 +217,7 @@ func ERC721_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_p
     let (balance : Uint256) = ERC721_balances.read(to)
     # Overflow is not possible because token_ids are checked for duplicate ids with `_exists()`
     # thus, each token is guaranteed to be a unique uint256
-    let (new_balance : Uint256, _) = uint256_add(balance, Uint256(1 * 10 ** 18, 0))
+    let (new_balance : Uint256, _) = uint256_add(balance, Uint256(1, 0))
     ERC721_balances.write(to, new_balance)
 
     # low + high felts = uint256
@@ -217,7 +229,8 @@ func ERC721_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_p
 end
 
 func ERC721_burn{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        token_id : Uint256):
+    token_id : Uint256
+):
     alloc_locals
     let (local owner) = ERC721_ownerOf(token_id)
 
@@ -238,7 +251,8 @@ func ERC721_burn{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_p
 end
 
 func ERC721_safeMint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        to : felt, token_id : Uint256, data_len : felt, data : felt*):
+    to : felt, token_id : Uint256, data_len : felt, data : felt*
+):
     ERC721_mint(to, token_id)
     _check_onERC721Received(0, to, token_id, data_len, data)
     return ()
@@ -249,14 +263,16 @@ end
 #
 
 func _approve{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        owner : felt, to : felt, token_id : Uint256):
+    owner : felt, to : felt, token_id : Uint256
+):
     ERC721_token_approvals.write(token_id, to)
     Approve.emit(owner=owner, approved=to, tokenId=token_id)
     return ()
 end
 
 func _is_approved_or_owner{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-        spender : felt, token_id : Uint256) -> (res : felt):
+    spender : felt, token_id : Uint256
+) -> (res : felt):
     alloc_locals
 
     let (exists) = _exists(token_id)
@@ -281,7 +297,8 @@ func _is_approved_or_owner{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, ran
 end
 
 func _exists{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        token_id : Uint256) -> (res : felt):
+    token_id : Uint256
+) -> (res : felt):
     let (res) = ERC721_owners.read(token_id)
 
     if res == 0:
@@ -292,7 +309,8 @@ func _exists{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
 end
 
 func _transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        _from : felt, to : felt, token_id : Uint256):
+    _from : felt, to : felt, token_id : Uint256
+):
     # ownerOf ensures '_from' is not the zero address
     let (_ownerOf) = ERC721_ownerOf(token_id)
     assert _ownerOf = _from
@@ -322,7 +340,8 @@ func _transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 end
 
 func _safe_transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*):
+    _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*
+):
     _transfer(_from, to, token_id)
 
     let (success) = _check_onERC721Received(_from, to, token_id, data_len, data)
@@ -331,8 +350,8 @@ func _safe_transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 func _check_onERC721Received{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*) -> (
-        success : felt):
+    _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*
+) -> (success : felt):
     # We need to consider how to differentiate between EOA and contracts
     # and insert a conditional to know when to use the proceeding check
     let (caller) = get_caller_address()

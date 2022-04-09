@@ -3,11 +3,11 @@ https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73
 0x636c6f75642f697066732f516d56696a7632465a547841706e4e54
 0x356250384355356466724e573336733239784a566a636b6b736e36733733
 
-Minter for NFT:
+Minter for NFT:0x02487ca893dd694350bf444b98b5de86b50ae3bf639e33408411bf0c99cecf6f
 
-Planets ERC721:
+Planets ERC721:0x02f83279c65ccb5a04aa3c9e82790d008d1f3aaedbb445d9c4b0fe31f01f800d
 
-Ogame: 
+Ogame:0x0564375150e03728497ddf123bacad7f346826af74b3604bb918480c9f1b4778
 
 Metal:
 
@@ -15,4 +15,8 @@ Crystal:
 
 Deuterium:
 
-
+OA2:    Contract address:   0x01f8bff995a60a3bdf917e7367020748ad87e9a670b231b483948f67890d2685
+        Public key:         0x03e99e92846343695b99c1e7c8573ccf6e9f94cd2f7e23f89cb7be9002c1ce9b
+USER:   Contract address:       0x05950964b30c12b5c8a8885056313dc668b54efd7aedf62abd06737a62708563
+        Public key:             0x073ef97c5508cb52a1c95d0c66f4c5999245d8f3469b31dd3548edab462bf55e
+ 

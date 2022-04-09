@@ -13,7 +13,8 @@ from contracts.ResourcesManager import (
     _collect_resources, _get_net_energy, _calculate_available_resources)
 from contracts.utils.library import (
     Planet, Cost, _number_of_planets, _planets, _planet_to_owner, erc721_token_address,
-    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, buildings_timelock)
+    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, buildings_timelock,
+    building_qued)
 from contracts.utils.Formulas import (
     formulas_metal_building, formulas_crystal_building, formulas_deuterium_building,
     formulas_calculate_player_points)
