@@ -36,6 +36,7 @@ from contracts.utils.library import (
     _planets,
     Planet,
     MineLevels,
+    MineStorage,
     Energy,
     Facilities,
     erc721_token_address,
@@ -63,8 +64,9 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     let (has_already_planet) = _planet_to_owner.read(caller)
     assert has_already_planet = Uint256(0, 0)
     let planet = Planet(
-        MineLevels(metal=1, crystal=1, deuterium=1),
-        Energy(solar_plant=1),
+        MineLevels(metal=0, crystal=0, deuterium=0),
+        MineStorage(metal=500, crystal=300, deuterium=100),
+        Energy(solar_plant=0),
         Facilities(robot_factory=0),
     )
     # Transfer ERC721 to caller
@@ -141,6 +143,7 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         MineLevels(metal=planet.mines.metal + 1,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
+        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
     )
@@ -206,6 +209,7 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal + 1,
         deuterium=planet.mines.deuterium),
+        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
     )
@@ -271,6 +275,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium + 1),
+        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
     )
@@ -336,6 +341,7 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
+        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
         Facilities(robot_factory=planet.facilities.robot_factory),
     )
