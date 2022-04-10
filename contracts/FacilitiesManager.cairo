@@ -9,10 +9,10 @@ from starkware.cairo.common.math import assert_not_zero, assert_le
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.library import (
-    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, Energy, Facilities,
-    erc721_token_address, planet_genereted, structure_updated, buildings_timelock, building_qued,
-    _get_planet, reset_timelock, reset_building_que, erc20_metal_address, erc20_crystal_address,
-    erc20_deuterium_address, TRUE)
+    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
+    Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
+    building_qued, _get_planet, reset_timelock, reset_building_que, erc20_metal_address,
+    erc20_crystal_address, erc20_deuterium_address, TRUE)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
@@ -76,6 +76,7 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
+        MineStorage(metal=planet.storage.metal, crystal=planet.storage.crystal, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory + 1))
     _planets.write(planet_id, new_planet)
