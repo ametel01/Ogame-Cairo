@@ -56,19 +56,19 @@ nile deploy Ogame --network goerli [erc721.contract_address] [owner]
 7. Deploy metal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 0x6f67616d65206d6574616c2076302e31 0x4f674d455476302e31 0 0 0 [game.contract_address] [game.contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d65206d6574616c2076302e31 0x4f674d455476302e31 18 0 0 [game.contract_address] [game.contract_addres]
 ```
 
 8. Deploy crystal token:
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 0x6f67616d65206372797374616c2076302e31 0x4f6743525976302e31 0 0 0 [game.contract_address] [game.contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d65206372797374616c2076302e31 0x4f6743525976302e31 18 0 0 [game.contract_address] [game.contract_addres]
 ```
 
 9. Deploy deuterium token
 
 ```sh
-nile deploy ERC20_Mintable --network goerli 0x6f67616d652064657574657269756d2076302e31 0x4f6744455576302e31 0 0 0 [game.contract_address] [game.contract_addres]
+nile deploy ERC20_Mintable --network goerli 0x6f67616d652064657574657269756d2076302e31 0x4f6744455576302e31 18 0 0 [game.contract_address] [game.contract_addres]
 ```
 
 10. Invoke erc20_addresses on Ogame contract with resources token addresses as params.

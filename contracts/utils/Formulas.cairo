@@ -220,7 +220,7 @@ func _resources_production_formula{
     local fact3 = fact1 * fact2
     let (fact4) = pow(10, mine_level)
     let (fact5, _) = unsigned_div_rem(fact3, fact4)
-    let fact6 = fact5 * 10000
+    let fact6 = fact5
     return (production_hour=fact6)
 end
 

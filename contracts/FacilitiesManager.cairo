@@ -8,11 +8,12 @@ from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.math import assert_not_zero, assert_le
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
+from contracts.utils.constants import ROBOT_FACTORY_BUILDING_ID
 from contracts.utils.library import (
     Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
-    Facilities, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
-    building_qued, _get_planet, reset_timelock, reset_building_que, erc20_metal_address,
-    erc20_crystal_address, erc20_deuterium_address, TRUE)
+    Facilities, BuildingQue, erc721_token_address, planet_genereted, structure_updated,
+    buildings_timelock, building_qued, _get_planet, reset_timelock, reset_building_que,
+    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, TRUE)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
@@ -20,7 +21,8 @@ func _start_robot_factory_upgrade{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
-    let (current_timelock) = buildings_timelock.read(address)
+    let (cue_status) = buildings_timelock.read(address)
+    let current_timelock = cue_status.lock_end
     with_attr error_message("Building que is busy"):
         assert current_timelock = 0
     end
@@ -48,7 +50,8 @@ func _start_robot_factory_upgrade{
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_required)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
-    buildings_timelock.write(address, time_unlocked)
+    let cue_details = BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked)
+    buildings_timelock.write(address, cue_details)
     building_qued.write(address, 5, TRUE)
     return (time_unlocked)
 end
@@ -63,7 +66,8 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     end
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
-    let (timelock_end) = buildings_timelock.read(address)
+    let (cue_details) = buildings_timelock.read(address)
+    let timelock_end = cue_details.lock_end
     let (time_now) = get_block_timestamp()
     let (waited_enough) = is_le(timelock_end, time_now)
     with_attr error_message("Timelock not yet expired"):

@@ -73,6 +73,12 @@ struct Fleet:
     member combat : CombatShips
 end
 
+# @dev Stores the building on cue details
+struct BuildingQue:
+    member id : felt
+    member lock_end : felt
+end
+
 ##########################################################################################
 #                                       Storage                                          #
 ##########################################################################################
@@ -126,7 +132,7 @@ end
 # @dev Stores the timestamp of the end of the timelock for buildings upgrades.
 # @params The address of the player.
 @storage_var
-func buildings_timelock(address : felt) -> (time_unlocked : felt):
+func buildings_timelock(address : felt) -> (cued_details : BuildingQue):
 end
 
 # @dev Stores the que status for a specific building. IDs:
@@ -174,7 +180,7 @@ end
 
 func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         address : felt):
-    buildings_timelock.write(address, 0)
+    buildings_timelock.write(address, BuildingQue(0, 0))
     return ()
 end
 
