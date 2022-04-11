@@ -113,10 +113,11 @@ end
 
 @view
 func build_time_completion{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        your_address : felt) -> (timestamp : felt):
-    let (cue_details) = buildings_timelock.read(your_address)
-    let time_end = cue_details.lock_end
-    return (time_end)
+        your_address : felt) -> (building_id : felt, time_end : felt):
+    let (que_details) = buildings_timelock.read(your_address)
+    let time_end = que_details.lock_end
+    let building_id = que_details.id
+    return (building_id, time_end)
 end
 
 @view
