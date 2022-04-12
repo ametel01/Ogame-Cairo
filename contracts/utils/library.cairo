@@ -40,7 +40,7 @@ struct Planet:
     member storage : MineStorage
     member energy : Energy
     member facilities : Facilities
-    # member timer : felt
+    member timer : felt
 end
 
 # @dev Used to handle costs.

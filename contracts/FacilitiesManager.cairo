@@ -21,8 +21,8 @@ func _start_robot_factory_upgrade{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
     alloc_locals
     let (address) = get_caller_address()
-    let (cue_status) = buildings_timelock.read(address)
-    let current_timelock = cue_status.lock_end
+    let (que_details) = buildings_timelock.read(address)
+    let current_timelock = que_details.lock_end
     with_attr error_message("Building que is busy"):
         assert current_timelock = 0
     end
@@ -33,25 +33,18 @@ func _start_robot_factory_upgrade{
         current_factory_level)
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, deuterium_required)
-    let (metal_address) = erc20_metal_address.read()
-    let (metal_available) = IERC20.balanceOf(metal_address, address)
-    let (crystal_address) = erc20_crystal_address.read()
-    let (crystal_available) = IERC20.balanceOf(crystal_address, address)
-    let (deuterim_address) = erc20_deuterium_address.read()
-    let (deuterim_available) = IERC20.balanceOf(deuterim_address, address)
-    let (enough_metal) = uint256_le(Uint256(metal_required, 0), metal_available)
-    let (enough_crystal) = uint256_le(Uint256(crystal_required, 0), crystal_available)
-    let (enough_deuturium) = uint256_le(Uint256(deuterium_required, 0), deuterim_available)
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
+    let deuterium_available = planet.storage.deuterium
     with_attr error_message("Not enough resources"):
-        assert enough_metal = TRUE
-        assert enough_crystal = TRUE
-        assert enough_deuturium = TRUE
+        assert_le(metal_required, metal_available)
+        assert_le(crystal_required, crystal_available)
+        assert_le(deuterium_required, deuterium_available)
     end
     _pay_resources_erc20(address, metal_required, crystal_required, deuterium_required)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
-    let cue_details = BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked)
-    buildings_timelock.write(address, cue_details)
+    buildings_timelock.write(address, BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked))
     building_qued.write(address, 5, TRUE)
     return (time_unlocked)
 end
@@ -61,28 +54,31 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     alloc_locals
     let (address) = get_caller_address()
     let (is_qued) = building_qued.read(address, 5)
-    with_attr error_message("Tryed to complete the wrong structure"):
-        assert is_qued = TRUE
-    end
+    assert is_qued = TRUE
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
-    let (cue_details) = buildings_timelock.read(address)
-    let timelock_end = cue_details.lock_end
+    let (que_details) = buildings_timelock.read(address)
+    let timelock_end = que_details.lock_end
     let (time_now) = get_block_timestamp()
     let (waited_enough) = is_le(timelock_end, time_now)
     with_attr error_message("Timelock not yet expired"):
         assert waited_enough = TRUE
     end
     let current_factory_level = planet.facilities.robot_factory
+    let metal_available = planet.storage.metal
+    let crystal_available = planet.storage.crystal
     let (metal_required, crystal_required, deuterium_required) = formulas_robot_factory_building(
         current_factory_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=planet.storage.metal, crystal=planet.storage.crystal, deuterium=planet.storage.deuterium),
+        MineStorage(metal=metal_available - metal_required,
+        crystal=crystal_available - crystal_required,
+        deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=planet.facilities.robot_factory + 1))
+        Facilities(robot_factory=planet.facilities.robot_factory + 1),
+        timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 5)

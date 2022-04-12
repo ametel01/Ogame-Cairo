@@ -38,7 +38,8 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
         MineLevels(metal=0, crystal=0, deuterium=0),
         MineStorage(metal=500, crystal=300, deuterium=100),
         Energy(solar_plant=0),
-        Facilities(robot_factory=0))
+        Facilities(robot_factory=0),
+        timer=time_now)
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
@@ -116,7 +117,8 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         deuterium=planet.mines.deuterium),
         MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=planet.facilities.robot_factory))
+        Facilities(robot_factory=planet.facilities.robot_factory),
+        timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 1)
@@ -183,7 +185,8 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         deuterium=planet.mines.deuterium),
         MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=planet.facilities.robot_factory))
+        Facilities(robot_factory=planet.facilities.robot_factory),
+        timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 2)
@@ -250,7 +253,8 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         deuterium=planet.mines.deuterium + 1),
         MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-        Facilities(robot_factory=planet.facilities.robot_factory))
+        Facilities(robot_factory=planet.facilities.robot_factory),
+        timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 3)
@@ -318,7 +322,8 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         deuterium=planet.mines.deuterium),
         MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
-        Facilities(robot_factory=planet.facilities.robot_factory))
+        Facilities(robot_factory=planet.facilities.robot_factory),
+        timer=planet.timer)
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 4)

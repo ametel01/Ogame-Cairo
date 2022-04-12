@@ -12,6 +12,12 @@ from contracts.utils.Formulas import (
 func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         ) -> ():
     # Test for metal production scaled to 10k
+    let (actual) = _resources_production_formula(30, 0)
+    let expected = 0
+    assert actual = expected
+    let (actual) = _resources_production_formula(30, 1)
+    let expected = 33
+    assert actual = expected
     let (actual) = _resources_production_formula(30, 2)
     let expected = 72
     assert actual = expected
