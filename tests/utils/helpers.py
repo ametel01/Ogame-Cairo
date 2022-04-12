@@ -3,7 +3,7 @@ from starkware.starknet.business_logic.state import BlockInfo
 
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
-MAX_UINT = 2**128-1
+UINT_DECIMALS = 10**18
 
 
 def assert_equals(a, b):

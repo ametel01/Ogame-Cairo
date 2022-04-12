@@ -1,7 +1,7 @@
 import pytest
 from utils.helpers import (
     assert_equals, update_starknet_block, reset_starknet_block, get_block_timestamp,
-    TIME_ELAPS_SIX_HOURS, TIME_ELAPS_ONE_HOUR)
+    TIME_ELAPS_SIX_HOURS, TIME_ELAPS_ONE_HOUR, UINT_DECIMALS)
 from conftest import user1
 
 
@@ -47,6 +47,13 @@ async def test_account(deploy_game_v1):
 async def test_collect_resources(starknet, deploy_game_v1):
     (_, ogame, _, metal, crystal, deuterium, user_one) = deploy_game_v1
 
+    # Assert that the right amount of resources has accrued.
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [500*UINT_DECIMALS, 300*UINT_DECIMALS, 100*UINT_DECIMALS, 0])
+
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'solar_plant_upgrade_start',
@@ -59,6 +66,11 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'solar_plant_upgrade_complete',
                                  [])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [425*UINT_DECIMALS, 270*UINT_DECIMALS, 100*UINT_DECIMALS, 22])
 
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -71,10 +83,15 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'metal_upgrade_complete',
                                  [])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [365*UINT_DECIMALS, 255*UINT_DECIMALS, 100*UINT_DECIMALS, 11])
     
     # Equivalent of 12 hours pass.
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*3)
 
     
     # Assert that the right amount of resources has accrued.
@@ -82,7 +99,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [397, 255, 100, 11])
+    assert_equals(data.result.response, [398*UINT_DECIMALS, 255*UINT_DECIMALS, 100*UINT_DECIMALS, 0])
 
     # User collect resources.
     await user1.send_transaction(user_one,
@@ -96,11 +113,16 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                  [])
     
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*2)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*4)
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'crystal_upgrade_complete',
                                  [])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [383*UINT_DECIMALS, 255*UINT_DECIMALS, 100*UINT_DECIMALS, 0])
     
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
@@ -114,7 +136,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                  [])
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*3)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*5)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -136,7 +158,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                  [])
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*4)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*6)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -166,7 +188,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  [])
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*7)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -180,7 +202,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
 
     # Equivalent of 12 hours pass.
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*2)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*8)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -192,7 +214,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  'solar_plant_upgrade_start',
                                  [])
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*3)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*9)
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'solar_plant_upgrade_complete',
