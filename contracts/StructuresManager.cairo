@@ -19,10 +19,10 @@ from contracts.utils.Formulas import (
     _consumption_deuterium, _production_limiter, formulas_production_scaler,
     formulas_buildings_production_time)
 from contracts.utils.library import (
-    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
-    Facilities, BuildingQue, erc721_token_address, planet_genereted, structure_updated,
-    buildings_timelock, _get_planet, reset_timelock, building_qued, reset_building_que,
-    _players_spent_resources, erc20_metal_address, erc20_crystal_address)
+    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, Energy, Facilities,
+    BuildingQue, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
+    _get_planet, reset_timelock, building_qued, reset_building_que, _players_spent_resources,
+    erc20_metal_address, erc20_crystal_address)
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a
@@ -36,7 +36,6 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     assert has_already_planet = Uint256(0, 0)
     let planet = Planet(
         MineLevels(metal=0, crystal=0, deuterium=0),
-        MineStorage(metal=500, crystal=300, deuterium=100),
         Energy(solar_plant=0),
         Facilities(robot_factory=0),
         timer=time_now)
@@ -115,7 +114,6 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         MineLevels(metal=planet.mines.metal + 1,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
@@ -183,7 +181,6 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal + 1,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
@@ -251,7 +248,6 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium + 1),
-        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)
@@ -320,7 +316,6 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=planet.storage.metal - metal_required, crystal=planet.storage.crystal - crystal_required, deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
         Facilities(robot_factory=planet.facilities.robot_factory),
         timer=planet.timer)

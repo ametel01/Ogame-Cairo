@@ -16,13 +16,6 @@ struct MineLevels:
     member deuterium : felt
 end
 
-# @dev Stores the amount of resources available for each resource.
-struct MineStorage:
-    member metal : felt
-    member crystal : felt
-    member deuterium : felt
-end
-
 # @dev Stores the energy available.
 struct Energy:
     member solar_plant : felt
@@ -37,7 +30,6 @@ end
 # @dev The main planet struct.
 struct Planet:
     member mines : MineLevels
-    member storage : MineStorage
     member energy : Energy
     member facilities : Facilities
     member timer : felt

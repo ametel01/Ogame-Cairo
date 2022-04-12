@@ -7,8 +7,8 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.library import (
-    _planet_to_owner, _planets, Planet, MineLevels, MineStorage, Energy, Facilities,
-    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, resources_timer, FALSE)
+    _planet_to_owner, _planets, Planet, MineLevels, Energy, Facilities, erc20_metal_address,
+    erc20_crystal_address, erc20_deuterium_address, resources_timer, FALSE)
 from contracts.utils.Formulas import (
     _consumption, _consumption_deuterium, formulas_metal_mine, formulas_crystal_mine,
     formulas_deuterium_mine, formulas_solar_plant, formulas_production_scaler,
