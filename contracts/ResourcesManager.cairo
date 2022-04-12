@@ -6,7 +6,6 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
 from contracts.token.erc20.interfaces.IERC20 import IERC20
-from contracts.utils.constants import UINT256_DECIMALS
 from contracts.utils.library import (
     _planet_to_owner, _planets, Planet, MineLevels, MineStorage, Energy, Facilities,
     erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, resources_timer, FALSE)
@@ -55,14 +54,14 @@ func _calculate_available_resources{
             net_deuterium=deuterium_produced,
             energy_required=total_energy_required,
             energy_available=energy_available)
-        let metal = metal_available.low + actual_metal * UINT256_DECIMALS
-        let crystal = crystal_available.low + actual_crystal * UINT256_DECIMALS
-        let deuterium = deuterium_available.low + actual_deuterium * UINT256_DECIMALS
+        let metal = metal_available.low + actual_metal
+        let crystal = crystal_available.low + actual_crystal
+        let deuterium = deuterium_available.low + actual_deuterium
         return (metal, crystal, deuterium)
     else:
-        let metal = metal_available.low + metal_produced * UINT256_DECIMALS
-        let crystal = crystal_available.low + crystal_produced * UINT256_DECIMALS
-        let deuterium = deuterium_available.low + deuterium_produced * UINT256_DECIMALS
+        let metal = metal_available.low + metal_produced
+        let crystal = crystal_available.low + crystal_produced
+        let deuterium = deuterium_available.low + deuterium_produced
         return (metal, crystal, deuterium)
     end
 end
@@ -85,9 +84,9 @@ func _receive_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (metal_address) = erc20_metal_address.read()
     let (crystal_address) = erc20_crystal_address.read()
     let (deuterium_address) = erc20_deuterium_address.read()
-    let metal = Uint256(metal_amount * UINT256_DECIMALS, 0)
-    let crystal = Uint256(crystal_amount * UINT256_DECIMALS, 0)
-    let deuterium = Uint256(deuterium_amount * UINT256_DECIMALS, 0)
+    let metal = Uint256(metal_amount, 0)
+    let crystal = Uint256(crystal_amount, 0)
+    let deuterium = Uint256(deuterium_amount, 0)
     IERC20.mint(metal_address, to, metal)
     IERC20.mint(crystal_address, to, crystal)
     IERC20.mint(deuterium_address, to, deuterium)
@@ -99,9 +98,9 @@ func _pay_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_address) = erc20_metal_address.read()
     let (crystal_address) = erc20_crystal_address.read()
     let (deuterium_address) = erc20_deuterium_address.read()
-    let metal = Uint256(metal_amount * UINT256_DECIMALS, 0)
-    let crystal = Uint256(crystal_amount * UINT256_DECIMALS, 0)
-    let deuterium = Uint256(deuterium_amount * UINT256_DECIMALS, 0)
+    let metal = Uint256(metal_amount, 0)
+    let crystal = Uint256(crystal_amount, 0)
+    let deuterium = Uint256(deuterium_amount, 0)
     IERC20.burn(metal_address, address, metal)
     IERC20.burn(crystal_address, address, crystal)
     IERC20.burn(deuterium_address, address, deuterium)

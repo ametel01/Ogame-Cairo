@@ -13,15 +13,16 @@ from contracts.utils.library import (
     Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
     Facilities, BuildingQue, erc721_token_address, planet_genereted, structure_updated,
     buildings_timelock, building_qued, _get_planet, reset_timelock, reset_building_que,
-    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, TRUE)
+    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, TRUE,
+    _players_spent_resources)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
 func _start_robot_factory_upgrade{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (end_time : felt):
     alloc_locals
-    let (address) = get_caller_address()
-    let (que_details) = buildings_timelock.read(address)
+    let (caller) = get_caller_address()
+    let (que_details) = buildings_timelock.read(caller)
     let current_timelock = que_details.lock_end
     with_attr error_message("Building que is busy"):
         assert current_timelock = 0
@@ -29,23 +30,34 @@ func _start_robot_factory_upgrade{
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_factory_level = planet.facilities.robot_factory
+    # Get resources required
     let (metal_required, crystal_required, deuterium_required) = formulas_robot_factory_building(
         current_factory_level)
+    # Get time required
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, deuterium_required)
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
-    let deuterium_available = planet.storage.deuterium
+    let (metal_address) = erc20_metal_address.read()
+    let (metal_available) = IERC20.balanceOf(metal_address, caller)
+    let (crystal_address) = erc20_crystal_address.read()
+    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
+    let (deuterium_address) = erc20_deuterium_address.read()
+    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
+    let (enough_metal) = uint256_le(Uint256(metal_required, 0), metal_available)
+    let (enough_crystal) = uint256_le(Uint256(crystal_required, 0), crystal_available)
+    let (enough_deuterium) = uint256_le(Uint256(deuterium_required, 0), deuterium_available)
     with_attr error_message("Not enough resources"):
-        assert_le(metal_required, metal_available)
-        assert_le(crystal_required, crystal_available)
-        assert_le(deuterium_required, deuterium_available)
+        assert enough_metal = TRUE
+        assert enough_crystal = TRUE
+        assert enough_deuterium = TRUE
     end
-    _pay_resources_erc20(address, metal_required, crystal_required, deuterium_required)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_required + crystal_required
+    _players_spent_resources.write(caller, new_total_spent)
+    _pay_resources_erc20(caller, metal_required, crystal_required, deuterium_amount=0)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
-    buildings_timelock.write(address, BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked))
-    building_qued.write(address, 5, TRUE)
+    buildings_timelock.write(caller, BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked))
+    building_qued.write(caller, 5, TRUE)
     return (time_unlocked)
 end
 
