@@ -28,19 +28,19 @@ async def test_account(deploy_game_v1):
                                         metal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [500*10**18, 0])
+    assert_equals(data.result.response, [500, 0])
 
     data = await user1.send_transaction(user_one,
                                         crystal.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [300*10**18, 0])
+    assert_equals(data.result.response, [300, 0])
 
     data = await user1.send_transaction(user_one,
                                         deuterium.contract_address,
                                         'balanceOf',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [100*10**18, 0])
+    assert_equals(data.result.response, [100, 0])
 
 
 @pytest.mark.asyncio
@@ -244,7 +244,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [182, 173, 100, 79])                             
+    assert_equals(data.result.response, [728, 692, 400, 79])                             
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'metal_upgrade_start',
@@ -290,7 +290,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [172, 140, 100, 57]) 
+    assert_equals(data.result.response, [3074, 1426, 800, 57]) 
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'deuterium_upgrade_start',
@@ -304,7 +304,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  'deuterium_upgrade_complete',
                                  [])
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*59)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*30)
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'collect_resources',
@@ -316,7 +316,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  [])
     
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*29)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*31)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -326,66 +326,10 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [1, 1, 0, 3, 1])
+    assert_equals(data.result.response, [1, 1, 1, 3, 1])
     response = await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'deuterium_upgrade_start',
                                  [])
     
-    update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*30)
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'deuterium_upgrade_complete',
-                                 [])
-
-    # Assert deuterium mine level is increasead.
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'get_structures_levels',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [2, 2, 2, 4, 1])
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'metal_upgrade_start',
-                                 [])
-    update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*31)
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'metal_upgrade_complete',
-                                 [])
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'get_structures_levels',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [3, 2, 2, 4, 1])
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'collect_resources',
-                                 [])
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'resources_available',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [3560,0, 6110,0, 2720,0, 6]) 
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'deuterium_upgrade_start',
-                                 [])
-    update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*5)
-
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'deuterium_upgrade_complete',
-                                 [])
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'resources_available',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [553, 345, 205, 4])
+   
