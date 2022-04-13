@@ -55,14 +55,14 @@ func _calculate_available_resources{
             net_deuterium=deuterium_produced,
             energy_required=total_energy_required,
             energy_available=energy_available)
-        let metal = metal_available.low + actual_metal
-        let crystal = crystal_available.low + actual_crystal
-        let deuterium = deuterium_available.low + actual_deuterium
+        let metal = metal_available.low + actual_metal * UINT256_DECIMALS
+        let crystal = crystal_available.low + actual_crystal * UINT256_DECIMALS
+        let deuterium = deuterium_available.low + actual_deuterium * UINT256_DECIMALS
         return (metal, crystal, deuterium)
     else:
-        let metal = metal_available.low + metal_produced
-        let crystal = crystal_available.low + crystal_produced
-        let deuterium = deuterium_available.low + deuterium_produced
+        let metal = metal_available.low + metal_produced * UINT256_DECIMALS
+        let crystal = crystal_available.low + crystal_produced * UINT256_DECIMALS
+        let deuterium = deuterium_available.low + deuterium_produced * UINT256_DECIMALS
         return (metal, crystal, deuterium)
     end
 end
