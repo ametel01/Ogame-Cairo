@@ -4,7 +4,6 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
     get_block_timestamp, get_contract_address, get_caller_address)
-
 ##########################################################################################
 #                                               Structs                                  #
 ##########################################################################################
