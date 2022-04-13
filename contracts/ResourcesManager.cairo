@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math import unsigned_div_rem
 from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
@@ -15,9 +16,8 @@ from contracts.utils.Formulas import (
     formulas_deuterium_mine, formulas_solar_plant, formulas_production_scaler,
     _solar_production_formula)
 
-func _calculate_available_resources{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(caller : felt) -> (
-        metal : felt, crystal : felt, deuterium : felt):
+func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        caller : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
     let (planet_id) = _planet_to_owner.read(caller)
     let (planet) = _planets.read(planet_id)
@@ -25,14 +25,18 @@ func _calculate_available_resources{
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal
     let deuterium_level = planet.mines.deuterium
-    # Fetch erc20 contracts addresses
-    let (metal_address) = erc20_metal_address.read()
-    let (crystal_address) = erc20_crystal_address.read()
-    let (deuterium_address) = erc20_deuterium_address.read()
-    # Fetch resources available
-    let (metal_available) = IERC20.balanceOf(metal_address, caller)
-    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
-    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
+    # # Fetch erc20 contracts addresses
+    # let (metal_address) = erc20_metal_address.read()
+    # let (crystal_address) = erc20_crystal_address.read()
+    # let (deuterium_address) = erc20_deuterium_address.read()
+    # # Fetch resources available
+    # let (metal_unscaled) = IERC20.balanceOf(metal_address, caller)
+    # let (crystal_unscaled) = IERC20.balanceOf(crystal_address, caller)
+    # let (deuterium_unscaled) = IERC20.balanceOf(deuterium_address, caller)
+    # # Scale down the amounts
+    # let (metal_available, _) = unsigned_div_rem(metal_unscaled.low, UINT256_DECIMALS)
+    # let (crystal_available, _) = unsigned_div_rem(crystal_unscaled.low, UINT256_DECIMALS)
+    # let (deuterium_available, _) = unsigned_div_rem(deuterium_unscaled.low, UINT256_DECIMALS)
     # Calculate energy requirerments.
     let (energy_required_metal) = _consumption(metal_level)
     let (energy_required_crystal) = _consumption(crystal_level)
@@ -55,22 +59,41 @@ func _calculate_available_resources{
             net_deuterium=deuterium_produced,
             energy_required=total_energy_required,
             energy_available=energy_available)
-        let metal = metal_available.low + actual_metal
-        let crystal = crystal_available.low + actual_crystal
-        let deuterium = deuterium_available.low + actual_deuterium
+        let metal = actual_metal
+        let crystal = actual_crystal
+        let deuterium = actual_deuterium
         return (metal, crystal, deuterium)
     else:
-        let metal = metal_available.low + metal_produced
-        let crystal = crystal_available.low + crystal_produced
-        let deuterium = deuterium_available.low + deuterium_produced
+        let metal = metal_produced
+        let crystal = crystal_produced
+        let deuterium = deuterium_produced
         return (metal, crystal, deuterium)
     end
 end
 
+func _calculate_available_resources{
+        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(caller : felt) -> (
+        metal : felt, crystal : felt, deuterium : felt):
+    alloc_locals
+    # Fetch erc20 contracts addresses
+    let (metal_address) = erc20_metal_address.read()
+    let (crystal_address) = erc20_crystal_address.read()
+    let (deuterium_address) = erc20_deuterium_address.read()
+    # Fetch resources available
+    let (metal_unscaled) = IERC20.balanceOf(metal_address, caller)
+    let (crystal_unscaled) = IERC20.balanceOf(crystal_address, caller)
+    let (deuterium_unscaled) = IERC20.balanceOf(deuterium_address, caller)
+    # Scale down the amounts
+    let (metal_available, _) = unsigned_div_rem(metal_unscaled.low, UINT256_DECIMALS)
+    let (crystal_available, _) = unsigned_div_rem(crystal_unscaled.low, UINT256_DECIMALS)
+    let (deuterium_available, _) = unsigned_div_rem(deuterium_unscaled.low, UINT256_DECIMALS)
+    let (metal, crystal, deuterium) = _calculate_production(caller)
+    return (metal + metal_available, crystal + crystal_available, deuterium + deuterium_available)
+end
+
 func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         caller : felt):
-    let (metal_produced, crystal_produced, deuterium_produced) = _calculate_available_resources(
-        caller)
+    let (metal_produced, crystal_produced, deuterium_produced) = _calculate_production(caller)
     _receive_resources_erc20(
         to=caller,
         metal_amount=metal_produced,
