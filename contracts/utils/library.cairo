@@ -4,20 +4,12 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
     get_block_timestamp, get_contract_address, get_caller_address)
-
 ##########################################################################################
 #                                               Structs                                  #
 ##########################################################################################
 
 # @dev Stores the levels of the mines.
 struct MineLevels:
-    member metal : felt
-    member crystal : felt
-    member deuterium : felt
-end
-
-# @dev Stores the amount of resources available for each resource.
-struct MineStorage:
     member metal : felt
     member crystal : felt
     member deuterium : felt
@@ -37,7 +29,6 @@ end
 # @dev The main planet struct.
 struct Planet:
     member mines : MineLevels
-    member storage : MineStorage
     member energy : Energy
     member facilities : Facilities
     member timer : felt

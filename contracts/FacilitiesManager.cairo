@@ -10,11 +10,10 @@ from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.constants import ROBOT_FACTORY_BUILDING_ID
 from contracts.utils.library import (
-    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, MineStorage, Energy,
-    Facilities, BuildingQue, erc721_token_address, planet_genereted, structure_updated,
-    buildings_timelock, building_qued, _get_planet, reset_timelock, reset_building_que,
-    erc20_metal_address, erc20_crystal_address, erc20_deuterium_address, TRUE,
-    _players_spent_resources)
+    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, Energy, Facilities,
+    BuildingQue, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
+    building_qued, _get_planet, reset_timelock, reset_building_que, erc20_metal_address,
+    erc20_crystal_address, erc20_deuterium_address, TRUE, _players_spent_resources)
 from contracts.utils.Formulas import (
     formulas_robot_factory_building, formulas_buildings_production_time)
 
@@ -77,17 +76,12 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         assert waited_enough = TRUE
     end
     let current_factory_level = planet.facilities.robot_factory
-    let metal_available = planet.storage.metal
-    let crystal_available = planet.storage.crystal
     let (metal_required, crystal_required, deuterium_required) = formulas_robot_factory_building(
         current_factory_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
-        MineStorage(metal=metal_available - metal_required,
-        crystal=crystal_available - crystal_required,
-        deuterium=planet.storage.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory + 1),
         timer=planet.timer)
