@@ -18,7 +18,7 @@ func formulas_metal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     let (time_now) = get_block_timestamp()
     local time_elapsed = time_now - last_timestamp
     let (metal_hour) = _resources_production_formula(30, mine_level)
-    let (prod_second, _) = unsigned_div_rem(metal_hour * 10000, 3600)  # 91
+    let (prod_second, _) = unsigned_div_rem(metal_hour * 1000, 3600)  # 91
     let fact8 = prod_second * time_elapsed
     let (prod_scaled, _) = unsigned_div_rem(fact8, 10000)  # 32
     return (metal_produced=prod_scaled)

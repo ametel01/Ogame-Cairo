@@ -25,19 +25,6 @@ func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal
     let deuterium_level = planet.mines.deuterium
-    # # Fetch erc20 contracts addresses
-    # let (metal_address) = erc20_metal_address.read()
-    # let (crystal_address) = erc20_crystal_address.read()
-    # let (deuterium_address) = erc20_deuterium_address.read()
-    # # Fetch resources available
-    # let (metal_unscaled) = IERC20.balanceOf(metal_address, caller)
-    # let (crystal_unscaled) = IERC20.balanceOf(crystal_address, caller)
-    # let (deuterium_unscaled) = IERC20.balanceOf(deuterium_address, caller)
-    # # Scale down the amounts
-    # let (metal_available, _) = unsigned_div_rem(metal_unscaled.low, UINT256_DECIMALS)
-    # let (crystal_available, _) = unsigned_div_rem(crystal_unscaled.low, UINT256_DECIMALS)
-    # let (deuterium_available, _) = unsigned_div_rem(deuterium_unscaled.low, UINT256_DECIMALS)
-    # Calculate energy requirerments.
     let (energy_required_metal) = _consumption(metal_level)
     let (energy_required_crystal) = _consumption(crystal_level)
     let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
