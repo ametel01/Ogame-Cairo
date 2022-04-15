@@ -52,7 +52,8 @@ func _start_robot_factory_upgrade{
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_required + crystal_required
     _players_spent_resources.write(caller, new_total_spent)
-    _pay_resources_erc20(caller, metal_required, crystal_required, deuterium_amount=0)
+    _pay_resources_erc20(
+        caller, metal_required, crystal_required, deuterium_amount=deuterium_required)
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
     buildings_timelock.write(caller, BuildingQue(ROBOT_FACTORY_BUILDING_ID, time_unlocked))
