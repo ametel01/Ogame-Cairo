@@ -1,7 +1,8 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-
+from contracts.ResearchManager import (
+    research_lab_upgrade_cost, energy_tech_upgrade_cost, combustion_drive_upgrade_cost)
 from contracts.utils.Formulas import (
     formulas_solar_plant, _resources_production_formula, formulas_solar_plant_building,
     formulas_metal_building, formulas_crystal_building, formulas_deuterium_building,
@@ -198,5 +199,69 @@ func test_buildings_production_time{
     let (prod_time) = formulas_buildings_production_time(5189, 1297, 9)
     let expected = 932
     assert prod_time = expected
+    return ()
+end
+
+@external
+func test_research_lab_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    let (metal, crystal, deuterium) = research_lab_upgrade_cost(0)
+    let exp_met = 200
+    let exp_cryst = 400
+    let exp_deut = 200
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
+
+    let (metal, crystal, deuterium) = research_lab_upgrade_cost(9)
+    let exp_met = 102400
+    let exp_cryst = 204800
+    let exp_deut = 102400
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
+    return ()
+end
+
+@external
+func test_energy_tech_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    let (metal, crystal, deuterium) = energy_tech_upgrade_cost(0)
+    let exp_met = 0
+    let exp_cryst = 800
+    let exp_deut = 400
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
+
+    let (metal, crystal, deuterium) = energy_tech_upgrade_cost(9)
+    let exp_met = 0
+    let exp_cryst = 409600
+    let exp_deut = 204800
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
+    return ()
+end
+
+@external
+func test_combustion_drive_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        ):
+    alloc_locals
+    let (metal, crystal, deuterium) = combustion_drive_upgrade_cost(0)
+    let exp_met = 400
+    let exp_cryst = 0
+    let exp_deut = 600
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
+
+    let (metal, crystal, deuterium) = combustion_drive_upgrade_cost(9)
+    let exp_met = 204800
+    let exp_cryst = 0
+    let exp_deut = 307200
+    assert metal = exp_met
+    assert crystal = exp_cryst
+    assert deuterium = exp_deut
     return ()
 end
