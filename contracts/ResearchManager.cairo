@@ -65,7 +65,7 @@ end
 func impulse_drive(planet_id : Uint256) -> (level : felt):
 end
 
-# ##################### Formulas ##########################
+# ##################### GENERAL TECH ##########################
 func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 200
@@ -94,11 +94,110 @@ func energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     end
 end
 
+func laser_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 200
+    let base_crystal = 100
+    let base_deuterium = 0
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func armour_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 1000
+    let base_crystal = 0
+    let base_deuterium = 0
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func espionage_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 200
+    let base_crystal = 1000
+    let base_deuterium = 200
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func ion_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 1000
+    let base_crystal = 300
+    let base_deuterium = 1000
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func plasma_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 2000
+    let base_crystal = 4000
+    let base_deuterium = 1000
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func astrophysics_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 4000
+    let base_crystal = 8000
+    let base_deuterium = 4000
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+# ################################## ENGINES #########################################
 func combustion_drive_upgrade_cost{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 400
     let base_crystal = 0
+    let base_deuterium = 600
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func impulse_drive_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 2000
+    let base_crystal = 4000
     let base_deuterium = 600
     if current_level == 0:
         tempvar syscall_ptr = syscall_ptr
