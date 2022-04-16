@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/5.webp",
+    "tokenId": 440,
+    "name": "NFT_OGM #440",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 185
+        },
+        {
+            "trait_type": "temperature",
+            "value": 67
+        },
+        {
+            "trait_type": "type",
+            "value": "Ammonia planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 5
+        }
+    ]
+}
