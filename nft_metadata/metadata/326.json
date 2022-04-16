@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/11.webp",
+    "tokenId": 326,
+    "name": "NFT_OGM #326",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 195
+        },
+        {
+            "trait_type": "temperature",
+            "value": 33
+        },
+        {
+            "trait_type": "type",
+            "value": "Helium planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 11
+        }
+    ]
+}
