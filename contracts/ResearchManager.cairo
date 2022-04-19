@@ -3,7 +3,28 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.pow import pow
+from starkware.cairo.common.math_cmp import is_le
+from starkware.starknet.common.syscalls import get_caller_address
 from contracts.utils.constants import TRUE
+from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.interfaces.IOgame import IOgame
+from contracts.ResourcesManager import _pay_resources_erc20
+
+@storage_var
+func ogame_address() -> (address : felt):
+end
+
+@storage_var
+func metal_address() -> (address : felt):
+end
+
+@storage_var
+func crystal_address() -> (address : felt):
+end
+
+@storage_var
+func deuterium_address() -> (address : felt):
+end
 
 @storage_var
 func research_lab(planet_id : Uint256) -> (level : felt):
@@ -63,6 +84,17 @@ end
 
 @storage_var
 func impulse_drive(planet_id : Uint256) -> (level : felt):
+end
+
+@constructor
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    _ogame_address : felt, _metal_address : felt, _crystal_address : felt, _deuterium_address : felt
+):
+    ogame_address.write(_ogame_address)
+    metal_address.write(_metal_address)
+    crystal_address.write(_crystal_address)
+    deuterium_address.write(_deuterium_address)
+    return ()
 end
 
 # ##################### GENERAL TECH ##########################
@@ -351,8 +383,6 @@ func ion_tech_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     end
     with_attr error_message("laser tech must be at level 5"):
         assert laser_tech_level = 5
-    end
-    with_attr error_message("energy tech must be at level 4"):
         assert energy_tech_level = 4
     end
     return (TRUE)
@@ -472,4 +502,39 @@ func hyperspace_drive_requirements_check{
         assert hyperspace_tech_level = 3
     end
     return (TRUE)
+end
+
+# ######### UPGRADES FUNCS ############################
+@external
+func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    alloc_locals
+    let (caller) = get_caller_address()
+    let (_ogame_address) = ogame_address.read()
+    let (planet_id) = IOgame.owner_of(_ogame_address, caller)
+    let (current_level) = research_lab.read(planet_id)
+    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
+    let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
+        current_level
+    )
+    with_attr error_message("not enough resources"):
+        is_le(metal_required, metal_available)
+        is_le(crystal_required, crystal_available)
+        is_le(deuterium_required, deuterium_available)
+    end
+    _pay_resources_erc20(caller, metal_required, crystal_required, deuterium_required)
+    research_lab.write(planet_id, current_level + 1)
+    return ()
+end
+
+# ############################ INTERNAL FUNCS ######################################
+func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let (_metal_address) = metal_address.read()
+    let (_crystal_address) = crystal_address.read()
+    let (_deuterium_address) = deuterium_address.read()
+    let (metal_available) = IERC20.balanceOf(_metal_address, caller)
+    let (crystal_available) = IERC20.balanceOf(_crystal_address, caller)
+    let (deuterium_available) = IERC20.balanceOf(_deuterium_address, caller)
+    return (metal_available.low, crystal_available.low, deuterium_available.low)
 end
