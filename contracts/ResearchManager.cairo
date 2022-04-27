@@ -18,6 +18,14 @@ end
 func metal_address() -> (address : felt):
 end
 
+@view
+func get_metal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    address : felt
+):
+    let (address) = metal_address.read()
+    return (address)
+end
+
 @storage_var
 func crystal_address() -> (address : felt):
 end
@@ -506,7 +514,9 @@ end
 
 # ######### UPGRADES FUNCS ############################
 @external
-func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    success : felt
+):
     alloc_locals
     let (caller) = get_caller_address()
     let (_ogame_address) = ogame_address.read()
@@ -517,14 +527,43 @@ func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         current_level
     )
     with_attr error_message("not enough resources"):
-        is_le(metal_required, metal_available)
-        is_le(crystal_required, crystal_available)
-        is_le(deuterium_required, deuterium_available)
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
     end
     _pay_resources_erc20(caller, metal_required, crystal_required, deuterium_required)
     research_lab.write(planet_id, current_level + 1)
-    return ()
+    return (TRUE)
 end
+
+# @external
+# func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+#     success : felt
+# ):
+#     alloc_locals
+#     let (caller) = get_caller_address()
+#     let (_ogame_address) = ogame_address.read()
+#     let (planet_id) = IOgame.owner_of(_ogame_address, caller)
+#     let (current_level) = research_lab.read(planet_id)
+#     let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
+#     let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
+#         current_level
+#     )
+#     with_attr error_message("not enough resources"):
+#         let (enough_metal) = is_le(metal_required, metal_available)
+#         assert enough_metal = TRUE
+#         let (enough_crystal) = is_le(crystal_required, crystal_available)
+#         assert enough_crystal = TRUE
+#         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+#         assert enough_deuterium = TRUE
+#     end
+#     _pay_resources_erc20(caller, metal_required, crystal_required, deuterium_required)
+#     research_lab.write(planet_id, current_level + 1)
+#     return (TRUE)
+# end
 
 # ############################ INTERNAL FUNCS ######################################
 func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

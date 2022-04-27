@@ -1,11 +1,13 @@
+from numpy import source
 import pytest
 import os
 import pytest_asyncio
+from sympy import construct_domain
 from utils.Signer import Signer
 
 from starkware.starknet.testing.starknet import Starknet
 from starkware.starknet.testing.contract import StarknetContract
-from starkware.starknet.business_logic.state import BlockInfo
+from starkware.starknet.business_logic.state.state import BlockInfo
 from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 CONTRACT_FILE = os.path.join("contracts", "Ogame.cairo")
@@ -15,6 +17,7 @@ ERC721_FILE = os.path.join("contracts", "token", "erc721",
 ERC20_FILE = os.path.join("contracts", "token", "erc20",
                           "ERC20_Mintable.cairo")
 MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
+LAB_FILE = os.path.join("contracts", "ResearchManager.cairo")
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
@@ -96,6 +99,15 @@ async def minter(starknet, admin):
     return await starknet.deploy(
         source=MINTER_FILE,
         constructor_calldata=[admin.contract_address])
+
+@pytest_asyncio.fixture
+async def research_lab(starknet, game, metal, crystal, deuterium):
+    return await starknet.deploy(
+        source=LAB_FILE, 
+        constructor_calldata=[game.contract_address, 
+            metal.contract_address, 
+            crystal.contract_address, 
+            deuterium.contract_address])
 
 
 @pytest_asyncio.fixture
