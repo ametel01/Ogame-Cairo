@@ -100,19 +100,20 @@ async def minter(starknet, admin):
         source=MINTER_FILE,
         constructor_calldata=[admin.contract_address])
 
+
 @pytest_asyncio.fixture
 async def research_lab(starknet, game, metal, crystal, deuterium):
     return await starknet.deploy(
-        source=LAB_FILE, 
-        constructor_calldata=[game.contract_address, 
-            metal.contract_address, 
-            crystal.contract_address, 
-            deuterium.contract_address])
+        source=LAB_FILE,
+        constructor_calldata=[game.contract_address,
+                              metal.contract_address,
+                              crystal.contract_address,
+                              deuterium.contract_address])
 
 
 @pytest_asyncio.fixture
 async def deploy_game_v1(minter, erc721, game, admin, user_one,
-                         metal, crystal, deuterium):
+                         metal, crystal, deuterium, research_lab):
 
     # Submit NFT contract address to minter.
     await owner.send_transaction(admin,
