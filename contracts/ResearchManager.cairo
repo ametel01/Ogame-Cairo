@@ -4,6 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.pow import pow
 from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 from contracts.utils.constants import TRUE
 from contracts.token.erc20.interfaces.IERC20 import IERC20
@@ -519,6 +520,7 @@ func upgrade_research_lab{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
 ):
     alloc_locals
     let (caller) = get_caller_address()
+    assert_not_zero(caller)
     let (_ogame_address) = ogame_address.read()
     let (planet_id) = IOgame.owner_of(_ogame_address, caller)
     let (current_level) = research_lab.read(planet_id)
