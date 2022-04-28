@@ -140,4 +140,6 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
                                  game.contract_address,
                                  'generate_planet', [])
 
-    return(minter, game, erc721, metal, crystal, deuterium, user_one)
+    
+
+    return(minter, game, erc721, metal, crystal, deuterium, user_one, research_lab)
