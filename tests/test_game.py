@@ -354,3 +354,9 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         'get_structures_levels',
                                         [user_one.contract_address])
     assert_equals(data.result.response, [1, 1, 1, 3, 1, 1])
+
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [6894, 4636, 2186, 35])

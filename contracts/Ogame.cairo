@@ -47,7 +47,20 @@ from contracts.utils.Formulas import (
     formulas_calculate_player_points,
 )
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
-from contracts.interfaces.IResearchLab import IResearchLab
+from contracts.ResearchLab.IResearchLab import IResearchLab
+
+#########################################################################################
+#                                   Constructor                                         #
+#########################################################################################
+
+@constructor
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    erc721_address : felt, owner : felt
+):
+    erc721_token_address.write(erc721_address)
+    Ownable_initializer(owner)
+    return ()
+end
 
 #########################################################################################
 #                                       Getters                                         #
@@ -195,19 +208,6 @@ func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
 ) -> (points : felt):
     let (points) = formulas_calculate_player_points(your_address)
     return (points)
-end
-
-#########################################################################################
-#                                   Constructor                                         #
-#########################################################################################
-
-@constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    erc721_address : felt, owner : felt
-):
-    erc721_token_address.write(erc721_address)
-    Ownable_initializer(owner)
-    return ()
 end
 
 ##########################################################################################
