@@ -7,6 +7,6 @@ namespace IResearchLab:
     func _research_lab_upgrade_start(caller : felt):
     end
 
-    func _research_lab_upgrade_end(caller : felt):
+    func _research_lab_upgrade_complete(caller : felt):
     end
 end

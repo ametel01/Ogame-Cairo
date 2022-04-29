@@ -15,6 +15,15 @@ namespace IOgame:
     func erc721_address() -> (res : felt):
     end
 
+    func metal_address() -> (res : felt):
+    end
+
+    func crystal_address() -> (res : felt):
+    end
+
+    func deuterium_address() -> (res : felt):
+    end
+
     func get_structures_levels(your_address : felt) -> (
         metal_mine : felt,
         crystal_mine : felt,
@@ -81,5 +90,8 @@ namespace IOgame:
     end
 
     func robot_factory_upgrade_complete() -> ():
+    end
+
+    func lab_pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount):
     end
 end

@@ -1,5 +1,6 @@
 import pytest
 from starkware.starknet.business_logic.state.state import BlockInfo
+from conftest import starknet
 
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
@@ -19,5 +20,5 @@ def reset_starknet_block(starknet):
     update_starknet_block(starknet=starknet)
 
 
-def get_block_timestamp(starknet_state):
-    return starknet_state.state.block_info.block_timestamp
+def get_block_timestamp(starknet):
+    return starknet.state.block_info.block_timestamp

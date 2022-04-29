@@ -17,7 +17,7 @@ ERC721_FILE = os.path.join("contracts", "token", "erc721",
 ERC20_FILE = os.path.join("contracts", "token", "erc20",
                           "ERC20_Mintable.cairo")
 MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
-LAB_FILE = os.path.join("contracts", "ResearchManager.cairo")
+LAB_FILE = os.path.join("contracts", "ResearchLab.cairo")
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
@@ -105,10 +105,7 @@ async def minter(starknet, admin):
 async def research_lab(starknet, game, metal, crystal, deuterium):
     return await starknet.deploy(
         source=LAB_FILE,
-        constructor_calldata=[game.contract_address,
-                              metal.contract_address,
-                              crystal.contract_address,
-                              deuterium.contract_address])
+        constructor_calldata=[game.contract_address])
 
 
 @pytest_asyncio.fixture
@@ -135,6 +132,10 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
                                  'erc20_addresses', [metal.contract_address,
                                                      crystal.contract_address,
                                                      deuterium.contract_address])
+
+    await owner.send_transaction(admin,
+                                 game.contract_address,
+                                 'set_lab_address', [research_lab.contract_address])
 
     await user1.send_transaction(user_one,
                                  game.contract_address,

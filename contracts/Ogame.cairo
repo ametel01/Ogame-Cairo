@@ -4,6 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
+from contracts.utils.constants import TRUE
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.StructuresManager import (
     get_upgrades_cost,
@@ -22,6 +23,7 @@ from contracts.ResourcesManager import (
     _collect_resources,
     _get_net_energy,
     _calculate_available_resources,
+    _pay_resources_erc20,
 )
 from contracts.utils.library import (
     Planet,
@@ -224,13 +226,22 @@ func erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 end
 
 @external
-func facilities_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    research_lab_address : felt
+func set_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    lab_address : felt
 ):
     Ownable_only_owner()
-    _research_lab_address.write(research_lab_address)
+    _research_lab_address.write(lab_address)
     return ()
 end
+
+# @external
+# func facilities_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+#     research_lab_address : felt
+# ):
+#     Ownable_only_owner()
+#     _research_lab_address.write(research_lab_address)
+#     return ()
+# end
 
 @external
 func generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
@@ -320,5 +331,29 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
     IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    return ()
+end
+
+@external
+func research_lab_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    IResearchLab._research_lab_upgrade_complete(lab_address, caller)
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_lab_level) = _research_lab_level.read(planet_id)
+    _research_lab_level.write(planet_id, current_lab_level + 1)
+    return ()
+end
+
+@external
+func lab_pay_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    payer : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt
+):
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    assert caller = lab_address
+    _pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount)
     return ()
 end
