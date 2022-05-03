@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.math import assert_le
 from starkware.cairo.common.pow import pow
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
@@ -275,10 +276,11 @@ end
 func energy_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 1"):
-        assert research_lab_level = 1
+        assert_le(1, research_lab_level)
     end
     return (TRUE)
 end

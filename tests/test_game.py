@@ -337,17 +337,24 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     assert_equals(data.result.response, [7091, 5034, 2385, 35])
 
     await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'research_lab_upgrade_start',
-                                        [])
+                                 ogame.contract_address,
+                                 'research_lab_upgrade_start',
+                                 [])
 
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1152)
 
     await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'research_lab_upgrade_complete',
+                                 [])
+
+    data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
-                                        'research_lab_upgrade_complete',
-                                        [])
+                                        'get_tech_levels',
+                                        [1, 0])
+    assert_equals(data.result.response, [
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
@@ -360,3 +367,22 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         'resources_available',
                                         [user_one.contract_address])
     assert_equals(data.result.response, [6894, 4636, 2186, 35])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'energy_tech_upgrade_start',
+                                 [])
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1152)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'energy_tech_upgrade_complete',
+                                 [])
+
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [6894, 3836, 1786, 35])

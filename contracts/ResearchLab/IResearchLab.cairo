@@ -9,7 +9,7 @@ namespace IResearchLab:
     ):
     end
 
-    func _research_lab_upgrade_complete(caller : felt):
+    func _research_lab_upgrade_complete(caller : felt) -> (success : felt):
     end
 
     func _energy_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
@@ -17,6 +17,6 @@ namespace IResearchLab:
     ):
     end
 
-    func _energy_tech_upgrade_complete(caller : felt, current_tech_level : felt):
+    func _energy_tech_upgrade_complete(caller : felt) -> (success : felt):
     end
 end

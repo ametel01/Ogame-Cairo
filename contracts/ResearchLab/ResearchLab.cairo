@@ -90,6 +90,7 @@ func _research_lab_upgrade_complete{
     return (TRUE)
 end
 
+@external
 func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
@@ -104,11 +105,7 @@ func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (metal_required, crystal_required, deuterium_required) = energy_tech_upgrade_cost(
         current_tech_level
     )
-    let (ogame_address) = _ogame_address.read()
-    let (planet_id) = IOgame.owner_of(ogame_address, caller)
-    let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
-    let research_lab_level = tech_levels.research_lab
-    let (requirements_met) = energy_tech_requirements_check(research_lab_level)
+    let (requirements_met) = energy_tech_requirements_check(caller)
     assert requirements_met = TRUE
     with_attr error_message("not enough resources"):
         let (enough_metal) = is_le(metal_required, metal_available)
@@ -129,9 +126,10 @@ func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     return (metal_required, crystal_required, deuterium_required)
 end
 
+@external
 func _energy_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt, current_tech_level) -> (success : felt):
+}(caller : felt) -> (success : felt):
     alloc_locals
     tempvar syscall_ptr = syscall_ptr
     let (time_now) = get_block_timestamp()
