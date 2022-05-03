@@ -3,8 +3,15 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.pow import pow
-from contracts.utils.library import _research_lab_level
 from contracts.utils.constants import TRUE
+from contracts.Ogame.IOgame import IOgame
+from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Ogame.structs import TechLevels
+
+struct ResearchQue:
+    member tech_id : felt
+    member lock_end : felt
+end
 
 @storage_var
 func _ogame_address() -> (address : felt):
@@ -22,60 +29,16 @@ end
 func deuterium_address() -> (address : felt):
 end
 
+# @dev Stores the timestamp of the end of the timelock for buildings upgrades.
+# @params The address of the player.
 @storage_var
-func energy_tech(planet_id : Uint256) -> (level : felt):
+func research_timelock(address : felt) -> (cued_details : ResearchQue):
 end
 
+# @dev Stores the que status for a specific tech. IDs:
+# 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory
 @storage_var
-func computer_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func laser_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func armour_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func ion_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func espionage_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func plasma_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func weapon_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func shielding_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func hyperspace_tech(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func astrophysics(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func combustion_drive(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func hyperspace_drive(planet_id : Uint256) -> (level : felt):
-end
-
-@storage_var
-func impulse_drive(planet_id : Uint256) -> (level : felt):
+func research_qued(address : felt, id : felt) -> (is_qued : felt):
 end
 
 # ##################### GENERAL TECH COST ###########################
@@ -290,11 +253,15 @@ func hyperspace_drive_upgrade_cost{
     end
 end
 
-# ############################### TECH UPGRADE REQUIREMENTS CHECK ########################################
+# ##################################################################################
+#                                TECH UPGRADE REQUIREMENTS CHECK                   #
+####################################################################################
+
 func energy_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 1"):
         assert research_lab_level = 1
     end
@@ -303,9 +270,10 @@ end
 
 func laser_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 1"):
         assert research_lab_level = 1
     end
@@ -317,8 +285,9 @@ end
 
 func armour_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 2"):
         assert research_lab_level = 2
     end
@@ -327,10 +296,11 @@ end
 
 func astrophysics_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (impulse_drive_level) = impulse_drive.read(planet_id)
-    let (espionage_tech_level) = espionage_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let impulse_drive_level = tech_levels.impulse_drive
+    let espionage_tech_level = tech_levels.espionage_tech
     with_attr error_message("research lab must be at level 3"):
         assert research_lab_level = 3
     end
@@ -345,8 +315,9 @@ end
 
 func espionage_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 3"):
         assert research_lab_level = 3
     end
@@ -354,11 +325,12 @@ func espionage_tech_requirements_check{
 end
 
 func ion_tech_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    planet_id : Uint256
+    caller : felt
 ) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (laser_tech_level) = laser_tech.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let laser_tech_level = tech_levels.laser_tech
+    let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 4"):
         assert research_lab_level = 4
     end
@@ -371,11 +343,12 @@ end
 
 func plasma_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (laser_tech_level) = laser_tech.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
-    let (ion_tech_level) = ion_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let laser_tech_level = tech_levels.laser_tech
+    let energy_tech_level = tech_levels.energy_tech
+    let ion_tech_level = tech_levels.ion_tech
     with_attr error_message("research lab must be at level 4"):
         assert research_lab_level = 4
     end
@@ -393,8 +366,9 @@ end
 
 func weapons_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 4"):
         assert research_lab_level = 4
     end
@@ -403,9 +377,10 @@ end
 
 func shielding_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 6"):
         assert research_lab_level = 6
     end
@@ -417,10 +392,11 @@ end
 
 func hyperspace_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
-    let (shielding_tech_level) = shielding_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
+    let shielding_tech_level = tech_levels.shielding_tech
     with_attr error_message("research lab must be at level 7"):
         assert research_lab_level = 7
     end
@@ -432,12 +408,14 @@ func hyperspace_tech_requirements_check{
     end
     return (TRUE)
 end
-# ############################### ENGINES UPGRADE REQUIREMENTS CHECK #######################################
+# ###################### ENGINES SPECIFIC UPGRADE REQUIREMENTS CHECK #########################
+
 func combustion_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
 
     with_attr error_message("research lab must be at level 1"):
         assert research_lab_level = 1
@@ -451,9 +429,10 @@ end
 
 func impulse_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 2"):
         assert research_lab_level = 2
     end
@@ -465,11 +444,12 @@ end
 
 func hyperspace_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(planet_id : Uint256) -> (response : felt):
-    let (research_lab_level) = _research_lab_level.read(planet_id)
-    let (energy_tech_level) = energy_tech.read(planet_id)
-    let (shielding_tech_level) = shielding_tech.read(planet_id)
-    let (hyperspace_tech_level) = hyperspace_tech.read(planet_id)
+}(caller : felt) -> (response : felt):
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    let energy_tech_level = tech_levels.energy_tech
+    let shielding_tech_level = tech_levels.shielding_tech
+    let hyperspace_tech_level = tech_levels.hyperspace_tech
     with_attr error_message("research lab must be at level 7"):
         assert research_lab_level = 7
     end
@@ -483,4 +463,27 @@ func hyperspace_drive_requirements_check{
         assert hyperspace_tech_level = 3
     end
     return (TRUE)
+end
+
+# ############################ INTERNAL FUNCS ######################################
+func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (metal_address) = IOgame.metal_address(ogame_address)
+    let (crystal_address) = IOgame.crystal_address(ogame_address)
+    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
+    let (metal_available) = IERC20.balanceOf(metal_address, caller)
+    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
+    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
+    return (metal_available.low, crystal_available.low, deuterium_available.low)
+end
+
+func _get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (result : TechLevels):
+    let (ogame_address) = _ogame_address.read()
+    let (planet_id) = IOgame.owner_of(ogame_address, caller)
+    let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
+    return (tech_levels)
 end

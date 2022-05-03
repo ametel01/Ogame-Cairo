@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 
-from contracts.utils.library import Planet, Cost
+from contracts.Ogame.structs import Planet, Cost, TechLevels
 
 @contract_interface
 namespace IOgame:
@@ -30,6 +30,7 @@ namespace IOgame:
         deuterium_mine : felt,
         solar_plant : felt,
         robot_factory : felt,
+        research_lab : felt,
     ):
     end
 
@@ -93,5 +94,8 @@ namespace IOgame:
     end
 
     func lab_pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount):
+    end
+
+    func get_tech_levels(planet_id : Uint256) -> (result : TechLevels):
     end
 end

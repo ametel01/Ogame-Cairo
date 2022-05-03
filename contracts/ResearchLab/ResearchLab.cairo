@@ -4,18 +4,19 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
-from contracts.ResearchLab.library import _ogame_address, research_lab_upgrade_cost
+from contracts.ResearchLab.library import (
+    _ogame_address,
+    research_lab_upgrade_cost,
+    energy_tech_upgrade_cost,
+    get_available_resources,
+    ResearchQue,
+    research_timelock,
+    research_qued,
+)
 from contracts.utils.constants import TRUE
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
-from contracts.utils.library import (
-    _research_lab_level,
-    _players_spent_resources,
-    BuildingQue,
-    buildings_timelock,
-    building_qued,
-)
-from contracts.interfaces.IOgame import IOgame
+from contracts.Ogame.IOgame import IOgame
 from contracts.utils.Formulas import formulas_buildings_production_time
 from contracts.utils.constants import RESEARCH_LAB_BUILDING_ID, UINT256_DECIMALS
 
@@ -31,7 +32,7 @@ end
 @external
 func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
-) -> (success : felt):
+) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
     assert_not_zero(caller)
     let (cue_status) = buildings_timelock.read(caller)
@@ -54,12 +55,6 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
-    let (spent_so_far) = _players_spent_resources.read(caller)
-    let new_total_spent = spent_so_far + metal_required + crystal_required
-    _players_spent_resources.write(caller, new_total_spent)
-    IOgame.lab_pay_resources_erc20(
-        ogame_address, caller, metal_required, crystal_required, deuterium_required
-    )
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, deuterium_required
     )
@@ -69,7 +64,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     buildings_timelock.write(caller, cue_details)
     building_qued.write(caller, RESEARCH_LAB_BUILDING_ID, TRUE)
 
-    return (TRUE)
+    return (metal_required, crystal_required, deuterium_required)
 end
 
 @external
@@ -95,16 +90,37 @@ func _research_lab_upgrade_complete{
     return (TRUE)
 end
 
-# ############################ INTERNAL FUNCS ######################################
-func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    caller : felt
-) -> (metal : felt, crystal : felt, deuterium : felt):
+func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, current_tech_level : felt
+) -> (success : felt):
+    alloc_locals
+    assert_not_zero(caller)
+    let (que_status) = research_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("Research lab is busy"):
+        assert current_timelock = 0
+    end
+    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
+    let (metal_required, crystal_required, deuterium_required) = energy_tech_upgrade_cost(
+        current_tech_level
+    )
     let (ogame_address) = _ogame_address.read()
-    let (metal_address) = IOgame.metal_address(ogame_address)
-    let (crystal_address) = IOgame.crystal_address(ogame_address)
-    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
-    let (metal_available) = IERC20.balanceOf(metal_address, caller)
-    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
-    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
-    return (metal_available.low, crystal_available.low, deuterium_available.low)
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(caller)
+    let (requirements_met) = energy_tech_requirements_check(research_lab_level)
+    assert requirements_met = TRUE
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    return (TRUE)
+end
+
+func _energy_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt, current_tech_level) -> (success : felt):
+    return (TRUE)
 end

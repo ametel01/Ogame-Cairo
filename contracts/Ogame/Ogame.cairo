@@ -39,6 +39,7 @@ from contracts.utils.library import (
     _research_lab_level,
     buildings_timelock,
     building_qued,
+    _players_spent_resources,
 )
 from contracts.utils.Formulas import (
     formulas_metal_building,
@@ -48,7 +49,23 @@ from contracts.utils.Formulas import (
 )
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 from contracts.ResearchLab.IResearchLab import IResearchLab
-
+from contracts.Ogame.storage import (
+    _energy_tech,
+    _computer_tech,
+    _laser_tech,
+    _armour_tech,
+    _astrophysics,
+    _espionage_tech,
+    _hyperspace_drive,
+    _hyperspace_tech,
+    _impulse_drive,
+    _ion_tech,
+    _plasma_tech,
+    _weapon_tech,
+    _shielding_tech,
+    _combustion_drive,
+)
+from contracts.Ogame.structs import TechLevels
 #########################################################################################
 #                                   Constructor                                         #
 #########################################################################################
@@ -259,6 +276,10 @@ func collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     return ()
 end
 
+##############################################################################################
+#                               RESOURCES EXTERNALS FUNCS                                    #
+##############################################################################################
+
 @external
 func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     _start_metal_upgrade()
@@ -310,6 +331,10 @@ func solar_plant_upgrade_complete{
     return ()
 end
 
+##############################################################################################
+#                              FACILITIES EXTERNALS FUNCS                                    #
+##############################################################################################
+
 @external
 func robot_factory_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ):
@@ -330,7 +355,13 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     ):
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
-    IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    let (metal_spent, crystal_spent, deuterium_spent) = IResearchLab._research_lab_upgrade_start(
+        lab_address, caller
+    )
+    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
     return ()
 end
 
@@ -347,13 +378,40 @@ func research_lab_upgrade_complete{
     return ()
 end
 
+##############################################################################################
+#                              RESEARCH EXTERNALS FUNCS                                      #
+##############################################################################################
 @external
-func lab_pay_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    payer : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt
-):
+func energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _energy_tech.read(planet_id)
     let (lab_address) = _research_lab_address.read()
-    assert caller = lab_address
-    _pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount)
+    IResearchLab._energy_tech_upgrade_start(lab_address, caller, current_tech_level)
     return ()
+end
+
+@external
+func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    planet_id : Uint256
+) -> (result : TechLevels):
+    let (research_lab) = _research_lab_level.read(planet_id)
+    let (energy_tech) = _energy_tech.read(planet_id)
+    let (computer_tech) = _computer_tech.read(planet_id)
+    let (laser_tech) = _laser_tech.read(planet_id)
+    let (armour_tech) = _armour_tech.read(planet_id)
+    let (ion_tech) = _ion_tech.read(planet_id)
+    let (espionage_tech) = _espionage_tech.read(planet_id)
+    let (plasma_tech) = _plasma_tech.read(planet_id)
+    let (weapons_tech) = _weapon_tech.read(planet_id)
+    let (shielding_tech) = _shielding_tech.read(planet_id)
+    let (hyperspace_tech) = _hyperspace_tech.read(planet_id)
+    let (astrophysics) = _astrophysics.read(planet_id)
+    let (comustion_drive) = _combustion_drive.read(planet_id)
+    let (hyperspace_drive) = _hyperspace_drive.read(planet_id)
+    let (impulse_drive) = _impulse_drive.read(planet_id)
+
+    return (
+        TechLevels(research_lab, energy_tech, computer_tech, laser_tech, armour_tech, ion_tech, espionage_tech, plasma_tech, weapons_tech, shielding_tech, hyperspace_tech, astrophysics, comustion_drive, hyperspace_drive, impulse_drive),
+    )
 end
