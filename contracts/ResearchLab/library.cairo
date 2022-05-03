@@ -3,15 +3,28 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.pow import pow
-from contracts.utils.constants import TRUE
+from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.Ogame.structs import TechLevels
+
+#########################################################################################
+#                                           CONSTANTS                                   #
+#########################################################################################
+const ENERGY_TECH_ID = 11
+
+#########################################################################################
+#                                           STRUCTS                                     #
+#########################################################################################
 
 struct ResearchQue:
     member tech_id : felt
     member lock_end : felt
 end
+
+#########################################################################################
+#                                           STORAGES                                    #
+#########################################################################################
 
 @storage_var
 func _ogame_address() -> (address : felt):
@@ -41,7 +54,9 @@ end
 func research_qued(address : felt, id : felt) -> (is_qued : felt):
 end
 
-# ##################### GENERAL TECH COST ###########################
+# ###################################################################################################
+#                                GENERAL TECH COST FUNCS                                            #
+#####################################################################################################
 func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
@@ -486,4 +501,18 @@ func _get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     let (planet_id) = IOgame.owner_of(ogame_address, caller)
     let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
     return (tech_levels)
+end
+
+func reset_research_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt
+):
+    research_timelock.write(address, ResearchQue(0, 0))
+    return ()
+end
+
+func reset_research_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, id : felt
+):
+    research_qued.write(address, id, FALSE)
+    return ()
 end

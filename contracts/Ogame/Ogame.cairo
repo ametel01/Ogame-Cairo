@@ -38,6 +38,7 @@ from contracts.utils.library import (
     buildings_timelock,
     building_qued,
     _players_spent_resources,
+    reset_timelock,
 )
 from contracts.utils.Formulas import (
     formulas_metal_building,
@@ -392,6 +393,7 @@ func research_lab_upgrade_complete{
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_lab_level) = _research_lab_level.read(planet_id)
     _research_lab_level.write(planet_id, current_lab_level + 1)
+    reset_timelock(caller)
     return ()
 end
 
@@ -404,7 +406,27 @@ func energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _energy_tech.read(planet_id)
     let (lab_address) = _research_lab_address.read()
-    IResearchLab._energy_tech_upgrade_start(lab_address, caller, current_tech_level)
+    let (metal, crystal, deuterium) = IResearchLab._energy_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func energy_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._energy_tech_upgrade_complete(caller)
+    assert success = TRUE
+    let (current_tech_level) = _energy_tech.read(planet_id)
+    _energy_tech.write(planet_id, current_tech_level + 1)
     return ()
 end
 

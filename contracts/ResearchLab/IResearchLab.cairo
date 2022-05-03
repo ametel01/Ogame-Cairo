@@ -12,9 +12,11 @@ namespace IResearchLab:
     func _research_lab_upgrade_complete(caller : felt):
     end
 
-    func _energy_tech_upgrade_start(caller : felt, current_tech_level : felt):
+    func _energy_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
     end
 
-    func _energy_tech_upgrade_complet(caller : felt, current_tech_level : felt):
+    func _energy_tech_upgrade_complete(caller : felt, current_tech_level : felt):
     end
 end

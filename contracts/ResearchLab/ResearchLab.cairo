@@ -13,6 +13,9 @@ from contracts.ResearchLab.library import (
     ResearchQue,
     research_timelock,
     research_qued,
+    ENERGY_TECH_ID,
+    reset_research_que,
+    reset_research_timelock,
 )
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
@@ -89,7 +92,7 @@ end
 
 func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt, current_tech_level : felt
-) -> (success : felt):
+) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
     assert_not_zero(caller)
     let (que_status) = research_timelock.read(caller)
@@ -115,11 +118,34 @@ func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
-    return (TRUE)
+    let (research_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, deuterium_required
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + research_time
+    let que_details = ResearchQue(ENERGY_TECH_ID, time_end)
+    research_qued.write(caller, ENERGY_TECH_ID, TRUE)
+    research_timelock.write(caller, que_details)
+    return (metal_required, crystal_required, deuterium_required)
 end
 
 func _energy_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level) -> (success : felt):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (is_qued) = research_qued.read(caller, ENERGY_TECH_ID)
+    with_attr error_message("Tryed to complete the wrong technology"):
+        assert is_qued = TRUE
+    end
+    let (cue_details) = research_timelock.read(caller)
+    let timelock_end = cue_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    reset_research_timelock(caller)
+    reset_research_que(caller, ENERGY_TECH_ID)
     return (TRUE)
 end
