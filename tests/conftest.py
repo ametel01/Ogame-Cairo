@@ -10,7 +10,7 @@ from starkware.starknet.testing.contract import StarknetContract
 from starkware.starknet.business_logic.state.state import BlockInfo
 from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
-CONTRACT_FILE = os.path.join("contracts", "Ogame.cairo")
+OGAME_FILE = os.path.join("contracts", "Ogame", "Ogame.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
 ERC721_FILE = os.path.join("contracts", "token", "erc721",
                            "ERC721.cairo")
@@ -56,7 +56,7 @@ async def user_two(starknet):
 @pytest_asyncio.fixture
 async def game(starknet, erc721, admin):
     return await starknet.deploy(
-        source=CONTRACT_FILE,
+        source=OGAME_FILE,
         constructor_calldata=[erc721.contract_address, admin.contract_address])
 
 
@@ -140,7 +140,5 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
     await user1.send_transaction(user_one,
                                  game.contract_address,
                                  'generate_planet', [])
-
-    
 
     return(minter, game, erc721, metal, crystal, deuterium, user_one, research_lab)

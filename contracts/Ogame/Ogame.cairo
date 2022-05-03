@@ -4,7 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
-from contracts.utils.constants import TRUE
+from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.StructuresManager import (
     get_upgrades_cost,
@@ -26,8 +26,6 @@ from contracts.ResourcesManager import (
     _pay_resources_erc20,
 )
 from contracts.utils.library import (
-    Planet,
-    Cost,
     _number_of_planets,
     _planets,
     _planet_to_owner,
@@ -65,7 +63,7 @@ from contracts.Ogame.storage import (
     _shielding_tech,
     _combustion_drive,
 )
-from contracts.Ogame.structs import TechLevels
+from contracts.Ogame.structs import TechLevels, BuildingQue, Cost, Planet
 #########################################################################################
 #                                   Constructor                                         #
 #########################################################################################
@@ -220,6 +218,22 @@ func build_time_completion{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
 end
 
 @view
+func get_buildings_timelock_status{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (status : BuildingQue):
+    let (que_details) = buildings_timelock.read(caller)
+    return (que_details)
+end
+
+@view
+func is_building_qued{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, building_id : felt
+) -> (status : felt):
+    let (que_status) = building_qued.read(caller, building_id)
+    return (que_status)
+end
+
+@view
 func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     your_address : felt
 ) -> (points : felt):
@@ -355,13 +369,16 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     ):
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent) = IResearchLab._research_lab_upgrade_start(
-        lab_address, caller
-    )
+    let (metal_spent, crystal_spent, deuterium_spent,
+        time_unlocked) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
+    let que_details = BuildingQue(RESEARCH_LAB_BUILDING_ID, time_unlocked)
+    buildings_timelock.write(caller, que_details)
+    building_qued.write(caller, RESEARCH_LAB_BUILDING_ID, TRUE)
+
     return ()
 end
 

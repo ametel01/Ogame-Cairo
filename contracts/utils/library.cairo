@@ -7,71 +7,7 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
-##########################################################################################
-#                                               Structs                                  #
-##########################################################################################
-
-# @dev Stores the levels of the mines.
-struct MineLevels:
-    member metal : felt
-    member crystal : felt
-    member deuterium : felt
-end
-
-# @dev Stores the energy available.
-struct Energy:
-    member solar_plant : felt
-    # member satellites : felt
-end
-
-# @dev Stores the level of the facilities.
-struct Facilities:
-    member robot_factory : felt
-end
-
-# @dev The main planet struct.
-struct Planet:
-    member mines : MineLevels
-    member energy : Energy
-    member facilities : Facilities
-    member timer : felt
-end
-
-# @dev Used to handle costs.
-struct Cost:
-    member metal : felt
-    member crystal : felt
-    member deuterium : felt
-end
-
-# @dev Used to represent the civil ships.
-struct CivilShips:
-    member cargo : felt
-    member recycler : felt
-    member espyonage_probe : felt
-    member solar_satellite : felt
-end
-
-# @dev Used to represent the combat ships.
-struct CombatShips:
-    member light_fighter : felt
-    member heavy_fighter : felt
-    member cruiser : felt
-    member battle_ship : felt
-    member death_star : felt
-end
-
-# @dev Temporary struct to represent a fleet.
-struct Fleet:
-    member civil : CivilShips
-    member combat : CombatShips
-end
-
-# @dev Stores the building on cue details
-struct BuildingQue:
-    member id : felt
-    member lock_end : felt
-end
+from contracts.Ogame.structs import Planet, BuildingQue
 
 ##########################################################################################
 #                                       Storage                                          #
@@ -138,7 +74,7 @@ func buildings_timelock(address : felt) -> (cued_details : BuildingQue):
 end
 
 # @dev Stores the que status for a specific building. IDs:
-# 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory
+# 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory, 6-research lab
 @storage_var
 func building_qued(address : felt, id : felt) -> (is_qued : felt):
 end

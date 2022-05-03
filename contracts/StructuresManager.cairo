@@ -37,15 +37,9 @@ from contracts.utils.Formulas import (
     formulas_buildings_production_time,
 )
 from contracts.utils.library import (
-    Cost,
     _planet_to_owner,
     _number_of_planets,
     _planets,
-    Planet,
-    MineLevels,
-    Energy,
-    Facilities,
-    BuildingQue,
     erc721_token_address,
     planet_genereted,
     structure_updated,
@@ -58,6 +52,7 @@ from contracts.utils.library import (
     erc20_metal_address,
     erc20_crystal_address,
 )
+from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, Facilities, BuildingQue
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a

@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.uint256 import Uint256
 
-from contracts.Ogame.structs import Planet, Cost, TechLevels
+from contracts.Ogame.structs import Planet, Cost, TechLevels, BuildingQue
 
 @contract_interface
 namespace IOgame:
@@ -48,7 +48,16 @@ namespace IOgame:
     ):
     end
 
+    func get_tech_levels(planet_id : Uint256) -> (result : TechLevels):
+    end
+
     func build_time_completion(your_address : felt) -> (timestamp : felt):
+    end
+
+    func get_buildings_timelock_status(caller : felt) -> (status : BuildingQue):
+    end
+
+    func is_building_qued(caller : felt, building_id : felt) -> (result : felt):
     end
 
     func player_points(your_address : felt) -> (points : felt):
@@ -57,45 +66,42 @@ namespace IOgame:
     func erc20_addresses(metal_token : felt, crystal_token : felt, deuterium_token : felt):
     end
 
-    func generate_planet() -> ():
+    func generate_planet():
     end
 
-    func collect_resources() -> ():
+    func collect_resources():
     end
 
     func metal_upgrade_start() -> (end_time : felt):
     end
 
-    func metal_upgrade_complete() -> ():
+    func metal_upgrade_complete():
     end
 
     func crystal_upgrade_start() -> (end_time : felt):
     end
 
-    func crystal_upgrade_complete() -> ():
+    func crystal_upgrade_complete():
     end
 
     func deuterium_upgrade_start() -> (end_time : felt):
     end
 
-    func deuterium_upgrade_complete() -> ():
+    func deuterium_upgrade_complete():
     end
 
     func solar_plant_upgrade_start() -> (end_time : felt):
     end
 
-    func solar_plant_upgrade_complete() -> ():
+    func solar_plant_upgrade_complete():
     end
 
     func robot_factory_upgrade_start() -> (end_time : felt):
     end
 
-    func robot_factory_upgrade_complete() -> ():
+    func robot_factory_upgrade_complete():
     end
 
     func lab_pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount):
-    end
-
-    func get_tech_levels(planet_id : Uint256) -> (result : TechLevels):
     end
 end

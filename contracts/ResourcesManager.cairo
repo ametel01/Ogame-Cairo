@@ -8,13 +8,11 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.constants import UINT256_DECIMALS
+from contracts.Ogame.structs import MineLevels, Energy, Facilities
 from contracts.utils.library import (
     _planet_to_owner,
     _planets,
     Planet,
-    MineLevels,
-    Energy,
-    Facilities,
     erc20_metal_address,
     erc20_crystal_address,
     erc20_deuterium_address,
