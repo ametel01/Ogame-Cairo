@@ -13,6 +13,11 @@ from contracts.Ogame.structs import TechLevels
 #                                           CONSTANTS                                   #
 #########################################################################################
 const ENERGY_TECH_ID = 11
+const LASER_TECH_ID = 12
+const ARMOUR_TECH_ID = 13
+const ESPIONAGE_TECH_ID = 14
+const ION_TECH_ID = 15
+const PLASMA_TECH_ID = 16
 
 #########################################################################################
 #                                           STRUCTS                                     #

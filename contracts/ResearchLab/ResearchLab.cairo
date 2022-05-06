@@ -9,11 +9,17 @@ from contracts.ResearchLab.library import (
     research_lab_upgrade_cost,
     energy_tech_upgrade_cost,
     energy_tech_requirements_check,
+    laser_tech_requirements_check,
+    laser_tech_upgrade_cost,
+    armour_tech_requirements_check,
+    armour_tech_upgrade_cost,
     get_available_resources,
     ResearchQue,
     research_timelock,
     research_qued,
     ENERGY_TECH_ID,
+    LASER_TECH_ID,
+    ARMOUR_TECH_ID,
     reset_research_que,
     reset_research_timelock,
 )
@@ -75,7 +81,7 @@ func _research_lab_upgrade_complete{
     alloc_locals
     let (ogame_address) = _ogame_address.read()
     let (is_qued) = IOgame.is_building_qued(ogame_address, caller, RESEARCH_LAB_BUILDING_ID)
-    with_attr error_message("Tryed to complete the wrong structure"):
+    with_attr error_message("Tried to complete the wrong structure"):
         assert is_qued = TRUE
     end
     let (ogame_address) = _ogame_address.read()
@@ -134,7 +140,7 @@ func _energy_tech_upgrade_complete{
     tempvar syscall_ptr = syscall_ptr
     let (time_now) = get_block_timestamp()
     let (is_qued) = research_qued.read(caller, ENERGY_TECH_ID)
-    with_attr error_message("Tryed to complete the wrong technology"):
+    with_attr error_message("Tried to complete the wrong technology"):
         assert is_qued = TRUE
     end
     let (cue_details) = research_timelock.read(caller)
@@ -145,5 +151,121 @@ func _energy_tech_upgrade_complete{
     end
     reset_research_timelock(caller)
     reset_research_que(caller, ENERGY_TECH_ID)
+    return (TRUE)
+end
+
+@external
+func _laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, current_tech_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    alloc_locals
+    assert_not_zero(caller)
+    let (que_status) = research_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("Research lab is busy"):
+        assert current_timelock = 0
+    end
+    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
+    let (metal_required, crystal_required, deuterium_required) = laser_tech_upgrade_cost(
+        current_tech_level
+    )
+    let (requirements_met) = laser_tech_requirements_check(caller)
+    assert requirements_met = TRUE
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    let (research_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, deuterium_required
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + research_time
+    let que_details = ResearchQue(LASER_TECH_ID, time_end)
+    research_qued.write(caller, LASER_TECH_ID, TRUE)
+    research_timelock.write(caller, que_details)
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _laser_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (success : felt):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (is_qued) = research_qued.read(caller, LASER_TECH_ID)
+    with_attr error_message("Tried to complete the wrong technology"):
+        assert is_qued = TRUE
+    end
+    let (cue_details) = research_timelock.read(caller)
+    let timelock_end = cue_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    reset_research_timelock(caller)
+    reset_research_que(caller, LASER_TECH_ID)
+    return (TRUE)
+end
+
+@external
+func _armour_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, current_tech_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    alloc_locals
+    assert_not_zero(caller)
+    let (que_status) = research_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("Research lab is busy"):
+        assert current_timelock = 0
+    end
+    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
+    let (metal_required, crystal_required, deuterium_required) = armour_tech_upgrade_cost(
+        current_tech_level
+    )
+    let (requirements_met) = armour_tech_requirements_check(caller)
+    assert requirements_met = TRUE
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    let (research_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, deuterium_required
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + research_time
+    let que_details = ResearchQue(ARMOUR_TECH_ID, time_end)
+    research_qued.write(caller, ARMOUR_TECH_ID, TRUE)
+    research_timelock.write(caller, que_details)
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _armour_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (success : felt):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (is_qued) = research_qued.read(caller, ARMOUR_TECH_ID)
+    with_attr error_message("Tried to complete the wrong technology"):
+        assert is_qued = TRUE
+    end
+    let (cue_details) = research_timelock.read(caller)
+    let timelock_end = cue_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    reset_research_timelock(caller)
+    reset_research_que(caller, ARMOUR_TECH_ID)
     return (TRUE)
 end
