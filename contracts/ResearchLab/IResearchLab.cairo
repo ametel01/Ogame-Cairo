@@ -43,4 +43,12 @@ namespace IResearchLab:
 
     func _armour_tech_upgrade_complete(caller : felt) -> (success : felt):
     end
+
+    func _ion_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _ion_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
 end

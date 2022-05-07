@@ -16,14 +16,12 @@ OGame is a browser-based, money-management and space-war themed massively multip
 4. Add energy production requirements for mines. :heavy_check_mark:
 5. Add time constraints for buildings upgrades. :heavy_check_mark:
 6. Implementation of Robot Factory. :heavy_check_mark:
-7. Add research lab.
+7. Add research lab. :heavy_check_mark:
 8. Add technologies.
-9. Allow creation of colonies.
-10. Implement logic for space travel between planets.
-11. Implementation of basic ships:
-
-- Small Cargo
-- Light Fighter
+9. Add Shipyard.
+10. Add ships.
+11. Implement logic for space travel between planets.
+12. Implement lagic for ships combat.
 
 This will most likely keep me busy for a while. The rest of the roadmap is yet to be decided.
 
