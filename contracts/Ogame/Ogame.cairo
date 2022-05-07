@@ -460,7 +460,7 @@ func computer_tech_upgrade_complete{
     let (success) = IResearchLab._computer_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
     let (current_tech_level) = _computer_tech.read(planet_id)
-    _energy_tech.write(planet_id, current_tech_level + 1)
+    _computer_tech.write(planet_id, current_tech_level + 1)
     return ()
 end
 
