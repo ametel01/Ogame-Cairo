@@ -20,6 +20,14 @@ namespace IResearchLab:
     func _energy_tech_upgrade_complete(caller : felt) -> (success : felt):
     end
 
+    func _computer_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _computer_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
     func _laser_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
         metal_required : felt, crystal_required : felt, deuterium_required : felt
     ):

@@ -434,6 +434,37 @@ func energy_tech_upgrade_complete{
 end
 
 @external
+func computer_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _computer_tech.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._computer_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func computer_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._computer_tech_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _computer_tech.read(planet_id)
+    _energy_tech.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+@external
 func laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
@@ -488,7 +519,7 @@ func armour_tech_upgrade_complete{
     let (success) = IResearchLab._armour_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
     let (current_tech_level) = _armour_tech.read(planet_id)
-    _laser_tech.write(planet_id, current_tech_level + 1)
+    _armour_tech.write(planet_id, current_tech_level + 1)
     return ()
 end
 
@@ -498,8 +529,8 @@ func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 ) -> (result : TechLevels):
     let (research_lab) = _research_lab_level.read(planet_id)
     let (energy_tech) = _energy_tech.read(planet_id)
-    let (computer_tech) = _computer_tech.read(planet_id)
     let (laser_tech) = _laser_tech.read(planet_id)
+    let (computer_tech) = _computer_tech.read(planet_id)
     let (armour_tech) = _armour_tech.read(planet_id)
     let (ion_tech) = _ion_tech.read(planet_id)
     let (espionage_tech) = _espionage_tech.read(planet_id)
@@ -513,6 +544,6 @@ func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     let (impulse_drive) = _impulse_drive.read(planet_id)
 
     return (
-        TechLevels(research_lab, energy_tech, computer_tech, laser_tech, armour_tech, ion_tech, espionage_tech, plasma_tech, weapons_tech, shielding_tech, hyperspace_tech, astrophysics, comustion_drive, hyperspace_drive, impulse_drive),
+        TechLevels(research_lab, energy_tech, laser_tech, computer_tech, armour_tech, ion_tech, espionage_tech, plasma_tech, weapons_tech, shielding_tech, hyperspace_tech, astrophysics, comustion_drive, hyperspace_drive, impulse_drive),
     )
 end

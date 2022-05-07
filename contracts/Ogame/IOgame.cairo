@@ -101,7 +101,4 @@ namespace IOgame:
 
     func robot_factory_upgrade_complete():
     end
-
-    func lab_pay_resources_erc20(payer, metal_amount, crystal_amount, deuterium_amount):
-    end
 end

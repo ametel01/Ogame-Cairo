@@ -13,11 +13,12 @@ from contracts.Ogame.structs import TechLevels
 #                                           CONSTANTS                                   #
 #########################################################################################
 const ENERGY_TECH_ID = 11
-const LASER_TECH_ID = 12
-const ARMOUR_TECH_ID = 13
-const ESPIONAGE_TECH_ID = 14
-const ION_TECH_ID = 15
-const PLASMA_TECH_ID = 16
+const COMPUTER_TECH_ID = 12
+const LASER_TECH_ID = 13
+const ARMOUR_TECH_ID = 14
+const ESPIONAGE_TECH_ID = 15
+const ION_TECH_ID = 16
+const PLASMA_TECH_ID = 17
 
 #########################################################################################
 #                                           STRUCTS                                     #
@@ -84,6 +85,21 @@ func energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let base_metal = 0
     let base_crystal = 800
     let base_deuterium = 400
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func computer_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    current_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 0
+    let base_crystal = 400
+    let base_deuterium = 600
     if current_level == 0:
         tempvar syscall_ptr = syscall_ptr
         return (base_metal, base_crystal, base_deuterium)
@@ -290,6 +306,18 @@ func energy_tech_requirements_check{
     return (TRUE)
 end
 
+func computer_tech_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (tech_levels) = _get_tech_levels(caller)
+    let research_lab_level = tech_levels.research_lab
+    with_attr error_message("research lab must be at level 1"):
+        assert_le(1, research_lab_level)
+    end
+    return (TRUE)
+end
+
 func laser_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
@@ -329,7 +357,7 @@ func astrophysics_requirements_check{
     with_attr error_message("impulse drive must be at level 3"):
         assert impulse_drive_level = 3
     end
-    with_attr error_message("espinage tech must be at level 4"):
+    with_attr error_message("espionage tech must be at level 4"):
         assert espionage_tech_level = 4
     end
     return (TRUE)
