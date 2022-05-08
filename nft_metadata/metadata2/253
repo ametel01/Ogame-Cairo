@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/13.webp",
+    "tokenId": 253,
+    "name": "NoGame #253",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 119
+        },
+        {
+            "trait_type": "temperature",
+            "value": -32
+        },
+        {
+            "trait_type": "type",
+            "value": "Chthonian planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 13
+        }
+    ]
+}

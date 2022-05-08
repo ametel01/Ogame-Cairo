@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/3.webp",
+    "tokenId": 513,
+    "name": "NFT_OGM #513",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 178
+        },
+        {
+            "trait_type": "temperature",
+            "value": 130
+        },
+        {
+            "trait_type": "type",
+            "value": "Brown dwarf"
+        },
+        {
+            "trait_type": "position",
+            "value": 3
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/7.webp",
+    "tokenId": 607,
+    "name": "NoGame #607",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 235
+        },
+        {
+            "trait_type": "temperature",
+            "value": 45
+        },
+        {
+            "trait_type": "type",
+            "value": "Eccentric Jupiter"
+        },
+        {
+            "trait_type": "position",
+            "value": 7
+        }
+    ]
+}

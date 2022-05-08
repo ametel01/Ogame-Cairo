@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/6.webp",
+    "tokenId": 336,
+    "name": "NoGame #336",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 231
+        },
+        {
+            "trait_type": "temperature",
+            "value": 75
+        },
+        {
+            "trait_type": "type",
+            "value": "Ammonia planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 6
+        }
+    ]
+}

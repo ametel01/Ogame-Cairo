@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/8.webp",
+    "tokenId": 68,
+    "name": "NFT_OGM #68",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 223
+        },
+        {
+            "trait_type": "temperature",
+            "value": 57
+        },
+        {
+            "trait_type": "type",
+            "value": "Earth analog"
+        },
+        {
+            "trait_type": "position",
+            "value": 8
+        }
+    ]
+}

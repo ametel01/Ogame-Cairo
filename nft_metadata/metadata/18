@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/3.webp",
+    "tokenId": 18,
+    "name": "NFT_OGM #18",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 148
+        },
+        {
+            "trait_type": "temperature",
+            "value": 155
+        },
+        {
+            "trait_type": "type",
+            "value": "Forest planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 3
+        }
+    ]
+}
