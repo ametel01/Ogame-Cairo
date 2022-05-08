@@ -61,6 +61,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     end
     let (planet_id) = IOgame.owner_of(ogame_address, caller)
     let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
+    let (_, _, _, _, robot_factory_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let current_lab_level = tech_levels.research_lab
     let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
     let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
@@ -75,7 +76,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
         assert enough_deuterium = TRUE
     end
     let (building_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, robot_factory_level
     )
     let (time_now) = get_block_timestamp()
     let time_unlocked = time_now + building_time
@@ -130,8 +131,10 @@ func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
@@ -188,8 +191,10 @@ func _computer_tech_upgrade_start{
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
@@ -246,8 +251,10 @@ func _laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
@@ -304,8 +311,10 @@ func _armour_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
@@ -362,8 +371,10 @@ func _ion_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
@@ -420,8 +431,10 @@ func _espionage_tech_upgrade_start{
         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
         assert enough_deuterium = TRUE
     end
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, deuterium_required
+        metal_required, crystal_required, research_lab_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time

@@ -525,7 +525,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         [1, 0])
     assert_equals(data.result.response, [
                   2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    
+
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'research_lab_upgrade_start',
@@ -554,7 +554,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'research_lab_upgrade_complete',
                                  [])
-    
+
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
@@ -567,7 +567,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         [1, 0])
     assert_equals(data.result.response, [
                   4, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    
+
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'energy_tech_upgrade_start',
@@ -660,7 +660,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         [1, 0])
     assert_equals(data.result.response, [
                   4, 4, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    
+
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'laser_tech_upgrade_start',
@@ -731,3 +731,27 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                         [1, 0])
     assert_equals(data.result.response, [
                   4, 4, 1, 5, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'espionage_tech_upgrade_start',
+                                 [])
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*11681)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'espionage_tech_upgrade_complete',
+                                 [])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [75036, 35996, 18166, 35])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'get_tech_levels',
+                                        [1, 0])
+    assert_equals(data.result.response, [
+                  4, 4, 1, 5, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0])
