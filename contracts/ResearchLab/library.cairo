@@ -19,6 +19,13 @@ const ARMOUR_TECH_ID = 14
 const ESPIONAGE_TECH_ID = 15
 const ION_TECH_ID = 16
 const PLASMA_TECH_ID = 17
+const WEAPONS_TECH_ID = 18
+const SHIELDING_TECH_ID = 19
+const HYPERSPACE_TECH_ID = 20
+const ASTROPHYSICS_TECH_ID = 21
+const COMBUSTION_DRIVE_ID = 22
+const HYPERSPACE_DRIVE_ID = 23
+const IMPULSE_DRIVE_ID = 24
 
 #########################################################################################
 #                                           STRUCTS                                     #
@@ -199,7 +206,7 @@ func astrophysics_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     end
 end
 
-func weaponst_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func weapons_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 800

@@ -35,7 +35,7 @@ func _plasma_tech(planet_id : Uint256) -> (level : felt):
 end
 
 @storage_var
-func _weapon_tech(planet_id : Uint256) -> (level : felt):
+func _weapons_tech(planet_id : Uint256) -> (level : felt):
 end
 
 @storage_var

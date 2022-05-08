@@ -59,4 +59,44 @@ namespace IResearchLab:
 
     func _espionage_tech_upgrade_complete(caller : felt) -> (success : felt):
     end
+
+    func _plasma_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _plasma_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _weapons_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _weapons_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _shielding_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _shielding_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _hyperspace_tech_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _hyperspace_tech_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _astrophysics_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _astrophysics_upgrade_complete(caller : felt) -> (success : felt):
+    end
 end

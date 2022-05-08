@@ -61,7 +61,7 @@ from contracts.Ogame.storage import (
     _impulse_drive,
     _ion_tech,
     _plasma_tech,
-    _weapon_tech,
+    _weapons_tech,
     _shielding_tech,
     _combustion_drive,
 )
@@ -584,6 +584,158 @@ func espionage_tech_upgrade_complete{
 end
 
 @external
+func plasma_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _plasma_tech.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._plasma_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func plasma_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._plasma_tech_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _plasma_tech.read(planet_id)
+    _plasma_tech.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+func weapons_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _weapons_tech.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._weapons_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func weapons_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._weapons_tech_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _weapons_tech.read(planet_id)
+    _weapons_tech.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+func shielding_tech_upgrade_start{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _shielding_tech.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._shielding_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func shielding_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._shielding_tech_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _shielding_tech.read(planet_id)
+    _shielding_tech.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+func hyperspace_tech_upgrade_start{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _hyperspace_tech.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._hyperspace_tech_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func hyperspace_tech_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._hyperspace_tech_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _hyperspace_tech.read(planet_id)
+    _hyperspace_tech.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+func astrophysics_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _astrophysics.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._astrophysics_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func astrophysics_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._astrophysics_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _astrophysics.read(planet_id)
+    _astrophysics.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+@external
 func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     planet_id : Uint256
 ) -> (result : TechLevels):
@@ -595,7 +747,7 @@ func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     let (ion_tech) = _ion_tech.read(planet_id)
     let (espionage_tech) = _espionage_tech.read(planet_id)
     let (plasma_tech) = _plasma_tech.read(planet_id)
-    let (weapons_tech) = _weapon_tech.read(planet_id)
+    let (weapons_tech) = _weapons_tech.read(planet_id)
     let (shielding_tech) = _shielding_tech.read(planet_id)
     let (hyperspace_tech) = _hyperspace_tech.read(planet_id)
     let (astrophysics) = _astrophysics.read(planet_id)
