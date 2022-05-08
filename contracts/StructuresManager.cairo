@@ -4,31 +4,67 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero, assert_le
 from starkware.cairo.common.uint256 import Uint256, uint256_le
 from contracts.utils.constants import (
-    FALSE, TRUE, METAL_BUILDING_ID, CRYSTAL_BUILDING_ID, DEUTERIUM_BUILDING_ID,
-    SOLAR_PLANT_BUILDING_ID)
+    FALSE,
+    TRUE,
+    METAL_BUILDING_ID,
+    CRYSTAL_BUILDING_ID,
+    DEUTERIUM_BUILDING_ID,
+    SOLAR_PLANT_BUILDING_ID,
+)
 from starkware.cairo.common.math_cmp import is_le
 from contracts.token.erc721.interfaces.IERC721 import IERC721
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _receive_resources_erc20, _pay_resources_erc20
 from starkware.starknet.common.syscalls import (
-    get_block_timestamp, get_contract_address, get_caller_address)
+    get_block_timestamp,
+    get_contract_address,
+    get_caller_address,
+)
 from contracts.utils.Formulas import (
-    formulas_metal_mine, formulas_crystal_mine, formulas_deuterium_mine, formulas_metal_building,
-    formulas_crystal_building, formulas_deuterium_building, formulas_solar_plant,
-    formulas_solar_plant_building, formulas_robot_factory_building, _consumption,
-    _consumption_deuterium, _production_limiter, formulas_production_scaler,
-    formulas_buildings_production_time)
+    formulas_metal_mine,
+    formulas_crystal_mine,
+    formulas_deuterium_mine,
+    formulas_metal_building,
+    formulas_crystal_building,
+    formulas_deuterium_building,
+    formulas_solar_plant,
+    formulas_solar_plant_building,
+    formulas_robot_factory_building,
+    _consumption,
+    _consumption_deuterium,
+    _production_limiter,
+    formulas_production_scaler,
+    formulas_buildings_production_time,
+)
 from contracts.utils.library import (
-    Cost, _planet_to_owner, _number_of_planets, _planets, Planet, MineLevels, Energy, Facilities,
-    BuildingQue, erc721_token_address, planet_genereted, structure_updated, buildings_timelock,
-    _get_planet, reset_timelock, building_qued, reset_building_que, _players_spent_resources,
-    erc20_metal_address, erc20_crystal_address)
+    Cost,
+    _planet_to_owner,
+    _number_of_planets,
+    _planets,
+    Planet,
+    MineLevels,
+    Energy,
+    Facilities,
+    BuildingQue,
+    erc721_token_address,
+    planet_genereted,
+    structure_updated,
+    buildings_timelock,
+    _get_planet,
+    reset_timelock,
+    building_qued,
+    reset_building_que,
+    _players_spent_resources,
+    erc20_metal_address,
+    erc20_crystal_address,
+)
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a
 # random ID generator.
 func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        caller : felt):
+    caller : felt
+):
     alloc_locals
     let (time_now) = get_block_timestamp()
     # One address can only have one planet at this stage.
@@ -38,7 +74,8 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
         MineLevels(metal=0, crystal=0, deuterium=0),
         Energy(solar_plant=0),
         Facilities(robot_factory=0),
-        timer=time_now)
+        timer=time_now,
+    )
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
@@ -56,7 +93,7 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
 end
 
 func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        ):
+    ):
     alloc_locals
     let (address) = get_caller_address()
     let (cue_status) = buildings_timelock.read(address)
@@ -67,9 +104,13 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.metal
+    let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_metal_building(
-        metal_mine_level=current_mine_level)
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+        metal_mine_level=current_mine_level
+    )
+    let (building_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, robot_factory_level
+    )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -116,7 +157,8 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer)
+        timer=planet.timer,
+    )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 1)
@@ -135,8 +177,11 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.crystal
+    let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, robot_factory_level
+    )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -183,7 +228,8 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer)
+        timer=planet.timer,
+    )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 2)
@@ -202,8 +248,11 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.deuterium
+    let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, robot_factory_level
+    )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -250,7 +299,8 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         deuterium=planet.mines.deuterium + 1),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer)
+        timer=planet.timer,
+    )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 3)
@@ -259,7 +309,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ):
+    ):
     alloc_locals
     let (address) = get_caller_address()
     let (cue_status) = buildings_timelock.read(address)
@@ -270,8 +320,11 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (contract) = get_contract_address()
     let (local planet) = _get_planet()
     let current_plant_level = planet.energy.solar_plant
+    let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, robot_factory_level
+    )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -318,7 +371,8 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer)
+        timer=planet.timer,
+    )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
     reset_building_que(address, 4)
@@ -327,9 +381,14 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
 end
 
 func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        address : felt) -> (
-        up_metal : Cost, up_crystal : Cost, up_deuturium : Cost, up_solar : Cost,
-        up_robot_factory : Cost):
+    address : felt
+) -> (
+    up_metal : Cost,
+    up_crystal : Cost,
+    up_deuturium : Cost,
+    up_solar : Cost,
+    up_robot_factory : Cost,
+):
     alloc_locals
     let (planet_id) = _planet_to_owner.read(address)
     let (planet) = _planets.read(planet_id)
@@ -348,5 +407,6 @@ func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
         Cost(c_metal, c_crystal, 0),
         Cost(d_metal, d_crystal, 0),
         Cost(s_metal, s_crystal, 0),
-        Cost(r_metal, r_crystal, r_deuterium))
+        Cost(r_metal, r_crystal, r_deuterium),
+    )
 end
