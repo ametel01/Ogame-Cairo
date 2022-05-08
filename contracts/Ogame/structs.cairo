@@ -67,8 +67,8 @@ end
 struct TechLevels:
     member research_lab : felt
     member energy_tech : felt
-    member laser_tech : felt
     member computer_tech : felt
+    member laser_tech : felt
     member armour_tech : felt
     member ion_tech : felt
     member espionage_tech : felt

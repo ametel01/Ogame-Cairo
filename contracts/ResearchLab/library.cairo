@@ -325,10 +325,10 @@ func laser_tech_requirements_check{
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 1"):
-        assert research_lab_level = 1
+        assert_le(1, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 2"):
-        assert energy_tech_level = 2
+        assert_le(2, energy_tech_level)
     end
     return (TRUE)
 end
@@ -369,7 +369,7 @@ func espionage_tech_requirements_check{
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 3"):
-        assert research_lab_level = 3
+        assert_le(3, research_lab_level)
     end
     return (TRUE)
 end
@@ -382,11 +382,13 @@ func ion_tech_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let laser_tech_level = tech_levels.laser_tech
     let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 4"):
-        assert research_lab_level = 4
+        assert_le(4, research_lab_level)
     end
     with_attr error_message("laser tech must be at level 5"):
-        assert laser_tech_level = 5
-        assert energy_tech_level = 4
+        assert_le(5, laser_tech_level)
+    end
+    with_attr error_message("energy tech must be at level 4"):
+        assert_le(4, energy_tech_level)
     end
     return (TRUE)
 end
@@ -400,16 +402,16 @@ func plasma_tech_requirements_check{
     let energy_tech_level = tech_levels.energy_tech
     let ion_tech_level = tech_levels.ion_tech
     with_attr error_message("research lab must be at level 4"):
-        assert research_lab_level = 4
+        assert_le(4, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 8"):
-        assert energy_tech_level = 8
+        assert_le(8, energy_tech_level)
     end
     with_attr error_message("laser tech must be at level 10"):
-        assert laser_tech_level = 10
+        assert_le(10, laser_tech_level)
     end
     with_attr error_message("ion tech must be at level 5"):
-        assert ion_tech_level = 5
+        assert_le(5, ion_tech_level)
     end
     return (TRUE)
 end
@@ -420,7 +422,7 @@ func weapons_tech_requirements_check{
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 4"):
-        assert research_lab_level = 4
+        assert_le(4, research_lab_level)
     end
     return (TRUE)
 end
@@ -432,10 +434,10 @@ func shielding_tech_requirements_check{
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 6"):
-        assert research_lab_level = 6
+        assert_le(6, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 3"):
-        assert energy_tech_level = 3
+        assert_le(3, energy_tech_level)
     end
     return (TRUE)
 end
@@ -451,10 +453,10 @@ func hyperspace_tech_requirements_check{
         assert research_lab_level = 7
     end
     with_attr error_message("energy tech must be at level 5"):
-        assert energy_tech_level = 5
+        assert_le(5, energy_tech_level)
     end
     with_attr error_message("shielding tech must be at level 5"):
-        assert shielding_tech_level = 5
+        assert_le(5, shielding_tech_level)
     end
     return (TRUE)
 end
@@ -468,10 +470,10 @@ func combustion_drive_requirements_check{
     let energy_tech_level = tech_levels.energy_tech
 
     with_attr error_message("research lab must be at level 1"):
-        assert research_lab_level = 1
+        assert_le(1, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 1"):
-        assert energy_tech_level = 1
+        assert_le(1, energy_tech_level)
     end
 
     return (TRUE)
@@ -484,10 +486,10 @@ func impulse_drive_requirements_check{
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
     with_attr error_message("research lab must be at level 2"):
-        assert research_lab_level = 2
+        assert_le(2, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 1"):
-        assert energy_tech_level = 1
+        assert_le(1, energy_tech_level)
     end
     return (TRUE)
 end
@@ -501,13 +503,13 @@ func hyperspace_drive_requirements_check{
     let shielding_tech_level = tech_levels.shielding_tech
     let hyperspace_tech_level = tech_levels.hyperspace_tech
     with_attr error_message("research lab must be at level 7"):
-        assert research_lab_level = 7
+        assert_le(7, research_lab_level)
     end
     with_attr error_message("energy tech must be at level 5"):
-        assert energy_tech_level = 5
+        assert_le(5, energy_tech_level)
     end
     with_attr error_message("shielding tech must be at level 5"):
-        assert shielding_tech_level = 5
+        assert_le(5, shielding_tech_level)
     end
     with_attr error_message("hyperspace tech must be at level 3"):
         assert hyperspace_tech_level = 3
