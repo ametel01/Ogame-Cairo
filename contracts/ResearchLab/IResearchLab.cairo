@@ -99,4 +99,28 @@ namespace IResearchLab:
 
     func _astrophysics_upgrade_complete(caller : felt) -> (success : felt):
     end
+
+    func _combustion_drive_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _combustion_drive_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _hyperspace_drive_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _hyperspace_drive_upgrade_complete(caller : felt) -> (success : felt):
+    end
+
+    func _impulse_drive_upgrade_start(caller : felt, current_tech_level : felt) -> (
+        metal_required : felt, crystal_required : felt, deuterium_required : felt
+    ):
+    end
+
+    func _impulse_drive_upgrade_complete(caller : felt) -> (success : felt):
+    end
 end

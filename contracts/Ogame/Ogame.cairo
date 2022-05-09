@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
-from starkware.starknet.common.syscalls import get_caller_address
+from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
@@ -65,7 +65,15 @@ from contracts.Ogame.storage import (
     _shielding_tech,
     _combustion_drive,
 )
-from contracts.Ogame.structs import TechLevels, BuildingQue, Cost, Planet
+from contracts.Ogame.structs import (
+    TechLevels,
+    BuildingQue,
+    Cost,
+    Planet,
+    MineLevels,
+    Energy,
+    Facilities,
+)
 #########################################################################################
 #                                   Constructor                                         #
 #########################################################################################
@@ -613,6 +621,7 @@ func plasma_tech_upgrade_complete{
     return ()
 end
 
+@external
 func weapons_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ):
     let (caller) = get_caller_address()
@@ -643,6 +652,7 @@ func weapons_tech_upgrade_complete{
     return ()
 end
 
+@external
 func shielding_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
@@ -674,6 +684,7 @@ func shielding_tech_upgrade_complete{
     return ()
 end
 
+@external
 func hyperspace_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
@@ -705,6 +716,7 @@ func hyperspace_tech_upgrade_complete{
     return ()
 end
 
+@external
 func astrophysics_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ):
     let (caller) = get_caller_address()
@@ -736,26 +748,127 @@ func astrophysics_upgrade_complete{
 end
 
 @external
+func combustion_drive_upgrade_start{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _combustion_drive.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._combustion_drive_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func combustion_drive_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._combustion_drive_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _combustion_drive.read(planet_id)
+    _combustion_drive.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+@external
+func impulse_drive_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _impulse_drive.read(planet_id)
+    let (lab_address) = _research_lab_address.read()
+    let (metal, crystal, deuterium) = IResearchLab._impulse_drive_upgrade_start(
+        lab_address, caller, current_tech_level
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func impulse_drive_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (lab_address) = _research_lab_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (success) = IResearchLab._impulse_drive_upgrade_complete(lab_address, caller)
+    assert success = TRUE
+    let (current_tech_level) = _impulse_drive.read(planet_id)
+    _impulse_drive.write(planet_id, current_tech_level + 1)
+    return ()
+end
+
+@external
 func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     planet_id : Uint256
 ) -> (result : TechLevels):
     let (research_lab) = _research_lab_level.read(planet_id)
-    let (energy_tech) = _energy_tech.read(planet_id)
-    let (laser_tech) = _laser_tech.read(planet_id)
-    let (computer_tech) = _computer_tech.read(planet_id)
     let (armour_tech) = _armour_tech.read(planet_id)
-    let (ion_tech) = _ion_tech.read(planet_id)
-    let (espionage_tech) = _espionage_tech.read(planet_id)
-    let (plasma_tech) = _plasma_tech.read(planet_id)
-    let (weapons_tech) = _weapons_tech.read(planet_id)
-    let (shielding_tech) = _shielding_tech.read(planet_id)
-    let (hyperspace_tech) = _hyperspace_tech.read(planet_id)
     let (astrophysics) = _astrophysics.read(planet_id)
-    let (comustion_drive) = _combustion_drive.read(planet_id)
+    let (combustion_drive) = _combustion_drive.read(planet_id)
+    let (computer_tech) = _computer_tech.read(planet_id)
+    let (energy_tech) = _energy_tech.read(planet_id)
+    let (espionage_tech) = _espionage_tech.read(planet_id)
     let (hyperspace_drive) = _hyperspace_drive.read(planet_id)
+    let (hyperspace_tech) = _hyperspace_tech.read(planet_id)
     let (impulse_drive) = _impulse_drive.read(planet_id)
+    let (ion_tech) = _ion_tech.read(planet_id)
+    let (laser_tech) = _laser_tech.read(planet_id)
+    let (plasma_tech) = _plasma_tech.read(planet_id)
+    let (shielding_tech) = _shielding_tech.read(planet_id)
+    let (weapons_tech) = _weapons_tech.read(planet_id)
 
     return (
-        TechLevels(research_lab, energy_tech, computer_tech, laser_tech, armour_tech, ion_tech, espionage_tech, plasma_tech, weapons_tech, shielding_tech, hyperspace_tech, astrophysics, comustion_drive, hyperspace_drive, impulse_drive),
+        TechLevels(research_lab, armour_tech, astrophysics, combustion_drive, computer_tech, energy_tech, espionage_tech, hyperspace_drive, hyperspace_tech, impulse_drive, ion_tech, laser_tech, plasma_tech, shielding_tech, weapons_tech),
     )
+end
+
+#########################################################################################################
+#                                           GOD MODE                                                    #
+#                       @external TO BE REMOVED BEFORE DEPLOYMENT                                       #
+#########################################################################################################
+
+@external
+func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    preset_techs : TechLevels
+):
+    let (caller) = get_caller_address()
+    let (time_now) = get_block_timestamp()
+    let planet = Planet(
+        MineLevels(metal=25, crystal=23, deuterium=21),
+        Energy(solar_plant=30),
+        Facilities(robot_factory=20),
+        timer=time_now,
+    )
+    let planet_id = Uint256(1, 0)
+    _planet_to_owner.write(caller, planet_id)
+    _planets.write(planet_id, planet)
+    _research_lab_level.write(planet_id, preset_techs.research_lab)
+    _energy_tech.write(planet_id, preset_techs.energy_tech)
+    _laser_tech.write(planet_id, preset_techs.laser_tech)
+    _computer_tech.write(planet_id, preset_techs.computer_tech)
+    _armour_tech.write(planet_id, preset_techs.armour_tech)
+    _ion_tech.write(planet_id, preset_techs.ion_tech)
+    _espionage_tech.write(planet_id, preset_techs.espionage_tech)
+    _plasma_tech.write(planet_id, preset_techs.plasma_tech)
+    _weapons_tech.write(planet_id, preset_techs.weapons_tech)
+    _shielding_tech.write(planet_id, preset_techs.shielding_tech)
+    _hyperspace_tech.write(planet_id, preset_techs.hyperspace_tech)
+    _astrophysics.write(planet_id, preset_techs.astrophysics)
+    _combustion_drive.write(planet_id, preset_techs.combustion_drive)
+    _hyperspace_drive.write(planet_id, preset_techs.hyperspace_drive)
+    _impulse_drive.write(planet_id, preset_techs.impulse_drive)
+    return ()
 end

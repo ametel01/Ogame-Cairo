@@ -947,7 +947,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
                                  [])
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*11000101784)
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*11000111784)
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,

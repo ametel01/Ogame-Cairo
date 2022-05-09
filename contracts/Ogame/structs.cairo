@@ -66,18 +66,18 @@ end
 
 struct TechLevels:
     member research_lab : felt
-    member energy_tech : felt
-    member computer_tech : felt
-    member laser_tech : felt
     member armour_tech : felt
-    member ion_tech : felt
-    member espionage_tech : felt
-    member plasma_tech : felt
-    member weapons_tech : felt
-    member shielding_tech : felt
-    member hyperspace_tech : felt
     member astrophysics : felt
-    member comustion_drive : felt
+    member combustion_drive : felt
+    member computer_tech : felt
+    member energy_tech : felt
+    member espionage_tech : felt
     member hyperspace_drive : felt
+    member hyperspace_tech : felt
     member impulse_drive : felt
+    member ion_tech : felt
+    member laser_tech : felt
+    member plasma_tech : felt
+    member shielding_tech : felt
+    member weapons_tech : felt
 end
