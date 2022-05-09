@@ -12,7 +12,7 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'GOD_MODE',
-                                 [20, 8, 0, 0, 0, 8, 0, 0, 3, 5, 5, 10, 0, 5, 1])
+                                 [20, 8, 0, 0, 0, 8, 4, 0, 3, 5, 5, 10, 0, 5, 1])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1000)
     data = await user1.send_transaction(user_one,
@@ -34,7 +34,7 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
                                         'get_tech_levels',
                                         [1, 0])
     assert_equals(data.result.response, [
-                  20, 8, 0, 0, 0, 8, 0, 0, 3, 5, 5, 10, 0, 5, 1])
+                  20, 8, 0, 0, 0, 8, 4, 0, 3, 5, 5, 10, 0, 5, 1])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -157,6 +157,10 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'hyperspace_tech_upgrade_complete',
                                  [])
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
+                                 [])
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
@@ -178,6 +182,10 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'combustion_drive_upgrade_complete',
+                                 [])
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
                                  [])
 
     await user1.send_transaction(user_one,
@@ -207,4 +215,4 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
                                         'get_tech_levels',
                                         [1, 0])
     assert_equals(data.result.response, [
-                  20, 9, 1, 1, 1, 9, 1, 1, 4, 6, 6, 11, 1, 6, 2])
+                  20, 9, 1, 1, 1, 9, 5, 1, 4, 6, 6, 11, 1, 6, 2])

@@ -61,3 +61,39 @@ end
 @storage_var
 func _impulse_drive(planet_id : Uint256) -> (level : felt):
 end
+
+##################################################################################
+#                             SHIPYARD STORAGE                                   #
+##################################################################################
+
+@storage_var
+func _ships_cargo(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_recycler(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_espionage_probe(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_solar_satellite(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_light_fighter(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_cruiser(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_battleship(planet_id : Uint256) -> (amount : felt):
+end
+
+@storage_var
+func _ships_deathstar(planet_id : Uint256) -> (amount : felt):
+end
