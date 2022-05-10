@@ -67,6 +67,7 @@ from contracts.Ogame.storage import (
     _weapons_tech,
     _shielding_tech,
     _combustion_drive,
+    _ships_cargo,
 )
 from contracts.Ogame.structs import (
     TechLevels,
@@ -151,11 +152,10 @@ func research_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
 end
 
 @view
-func research_lab_level{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
-) -> (res : felt):
-    let (planet_id) = _planet_to_owner.read(your_address)
-    let (res) = _research_lab_level.read(planet_id)
+func shipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    res : felt
+):
+    let (res) = _shipyard_address.read()
     return (res)
 end
 
@@ -903,6 +903,40 @@ func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     return (
         TechLevels(research_lab, armour_tech, astrophysics, combustion_drive, computer_tech, energy_tech, espionage_tech, hyperspace_drive, hyperspace_tech, impulse_drive, ion_tech, laser_tech, plasma_tech, shielding_tech, weapons_tech),
     )
+end
+
+#########################################################################################################
+#                                           SHIPYARD FUNCTIONS                                          #
+#########################################################################################################
+
+@external
+func cargo_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (current_tech_level) = _impulse_drive.read(planet_id)
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal, crystal, deuterium) = IShipyard._cargo_ship_build_start(
+        shipyard_address, caller, number_of_units
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func cargo_ship_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (units_produced, success) = IShipyard._cargo_ship_build_complete(shipyard_address, caller)
+    assert success = TRUE
+    let (current_amount_of_units) = _ships_cargo.read(planet_id)
+    _ships_cargo.write(planet_id, current_amount_of_units + units_produced)
+    return ()
 end
 
 #########################################################################################################

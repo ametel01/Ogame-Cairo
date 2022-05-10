@@ -6,6 +6,8 @@ from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from starkware.cairo.common.pow import pow
+from contracts.ResearchLab.library import _get_tech_levels
+from contracts.Ogame.structs import TechLevels
 
 #########################################################################################
 #                                           CONSTANTS                                   #
@@ -45,6 +47,7 @@ end
 
 struct ShipyardQue:
     member ship_id : felt
+    member units : felt
     member lock_end : felt
 end
 
@@ -83,6 +86,38 @@ end
 #                                SHIPS REQUIREMENTS CHECHS                                          #
 #####################################################################################################
 
+func _cargo_ship_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 2"):
+        assert_le(2, shipyard_level)
+    end
+    with_attr error_message("combustion drive must be at level 2"):
+        assert_le(2, tech_levels.combustion_drive)
+    end
+    return (TRUE)
+end
+
+# ###################################################################################################
+#                                SHIPS COST CALCULATION FUNCTIONS                                   #
+#####################################################################################################
+
+func _cargo_ship_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 2000
+    let crystal_required = 2000
+    let deuterium_required = 0
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
 # ###################################################################################################
 #                                INTERNAL FUNCTIONS                                                 #
 #####################################################################################################
@@ -113,4 +148,18 @@ func shipyard_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         let (multiplier) = pow(2, current_level)
         return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
     end
+end
+
+func reset_shipyard_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt
+):
+    shipyard_timelock.write(address, ShipyardQue(0, 0, 0))
+    return ()
+end
+
+func reset_shipyard_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, id : felt
+):
+    ships_qued.write(address, id, FALSE)
+    return ()
 end
