@@ -18,7 +18,7 @@ OGame is a browser-based, money-management and space-war themed massively multip
 6. Implementation of Robot Factory. :heavy_check_mark:
 7. Add research lab. :heavy_check_mark:
 8. Add technologies. :heavy_check_mark:
-9. Add Shipyard.
+9. Add Shipyard. :heavy_check_mark:
 10. Add ships.
 11. Implement logic for space travel between planets.
 12. Implement lagic for ships combat.

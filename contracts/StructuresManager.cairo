@@ -53,6 +53,7 @@ from contracts.utils.library import (
     erc20_crystal_address,
 )
 from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, Facilities, BuildingQue
+from contracts.Ogame.storage import _resources_timer
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a
@@ -69,13 +70,13 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
         MineLevels(metal=0, crystal=0, deuterium=0),
         Energy(solar_plant=0),
         Facilities(robot_factory=0),
-        timer=time_now,
     )
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
     let new_id = last_id + 1
     let new_planet_id = Uint256(new_id, 0)
+    _resources_timer.write(new_planet_id, 0)
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, caller, new_planet_id)
     _planet_to_owner.write(caller, new_planet_id)
@@ -149,7 +150,6 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer,
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -217,7 +217,6 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer,
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -285,7 +284,6 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         deuterium=planet.mines.deuterium + 1),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer,
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -354,7 +352,6 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
         Facilities(robot_factory=planet.facilities.robot_factory),
-        timer=planet.timer,
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)

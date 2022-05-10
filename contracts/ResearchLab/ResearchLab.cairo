@@ -84,7 +84,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
         assert current_timelock = 0
     end
     let (planet_id) = IOgame.owner_of(ogame_address, caller)
-    let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
+    let (tech_levels) = IOgame.get_tech_levels(ogame_address, caller)
     let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )

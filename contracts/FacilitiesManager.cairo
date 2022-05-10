@@ -109,7 +109,6 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory + 1),
-        timer=planet.timer,
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)

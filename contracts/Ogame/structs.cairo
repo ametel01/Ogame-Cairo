@@ -25,7 +25,6 @@ struct Planet:
     member mines : MineLevels
     member energy : Energy
     member facilities : Facilities
-    member timer : felt
 end
 
 # @dev Used to handle costs.
@@ -35,27 +34,17 @@ struct Cost:
     member deuterium : felt
 end
 
-# @dev Used to represent the civil ships.
-struct CivilShips:
+# @dev Temporary struct to represent a fleet.
+struct Fleet:
+    member shipyard : felt
     member cargo : felt
     member recycler : felt
-    member espyonage_probe : felt
+    member espionage_probe : felt
     member solar_satellite : felt
-end
-
-# @dev Used to represent the combat ships.
-struct CombatShips:
     member light_fighter : felt
-    member heavy_fighter : felt
     member cruiser : felt
     member battle_ship : felt
     member death_star : felt
-end
-
-# @dev Temporary struct to represent a fleet.
-struct Fleet:
-    member civil : CivilShips
-    member combat : CombatShips
 end
 
 # @dev Stores the building on cue details

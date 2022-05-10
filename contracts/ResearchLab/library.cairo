@@ -542,8 +542,7 @@ func _get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     caller : felt
 ) -> (result : TechLevels):
     let (ogame_address) = _ogame_address.read()
-    let (planet_id) = IOgame.owner_of(ogame_address, caller)
-    let (tech_levels) = IOgame.get_tech_levels(ogame_address, planet_id)
+    let (tech_levels) = IOgame.get_tech_levels(ogame_address, caller)
     return (tech_levels)
 end
 

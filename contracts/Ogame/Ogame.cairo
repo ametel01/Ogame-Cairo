@@ -68,6 +68,13 @@ from contracts.Ogame.storage import (
     _shielding_tech,
     _combustion_drive,
     _ships_cargo,
+    _ships_recycler,
+    _ships_espionage_probe,
+    _ships_solar_satellite,
+    _ships_light_fighter,
+    _ships_cruiser,
+    _ships_battleship,
+    _ships_deathstar,
 )
 from contracts.Ogame.structs import (
     TechLevels,
@@ -77,6 +84,7 @@ from contracts.Ogame.structs import (
     MineLevels,
     Energy,
     Facilities,
+    Fleet,
 )
 #########################################################################################
 #                                   Constructor                                         #
@@ -161,7 +169,7 @@ end
 
 @view
 func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
+    caller : felt
 ) -> (
     metal_mine : felt,
     crystal_mine : felt,
@@ -171,7 +179,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     research_lab : felt,
     shipyard : felt,
 ):
-    let (planet_id) = _planet_to_owner.read(your_address)
+    let (planet_id) = _planet_to_owner.read(caller)
     let (planet) = _planets.read(planet_id)
     let metal = planet.mines.metal
     let crystal = planet.mines.crystal
@@ -193,13 +201,13 @@ end
 
 @view
 func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
+    caller : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt, energy : felt):
     alloc_locals
-    let (id) = _planet_to_owner.read(your_address)
+    let (id) = _planet_to_owner.read(caller)
     let (planet) = _planets.read(id)
     let (metal_available, crystal_available, deuterium_available) = _calculate_available_resources(
-        your_address
+        caller
     )
     let metal = planet.mines.metal
     let crystal = planet.mines.crystal
@@ -211,7 +219,7 @@ end
 
 @view
 func get_structures_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
+    caller : felt
 ) -> (
     metal_mine : Cost,
     crystal_mine : Cost,
@@ -219,15 +227,15 @@ func get_structures_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     solar_plant : Cost,
     robot_factory : Cost,
 ):
-    let (metal, crystal, deuterium, solar_plant, robot_factory) = get_upgrades_cost(your_address)
+    let (metal, crystal, deuterium, solar_plant, robot_factory) = get_upgrades_cost(caller)
     return (metal, crystal, deuterium, solar_plant, robot_factory)
 end
 
 @view
 func build_time_completion{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
+    caller : felt
 ) -> (building_id : felt, time_end : felt):
-    let (que_details) = buildings_timelock.read(your_address)
+    let (que_details) = buildings_timelock.read(caller)
     let time_end = que_details.lock_end
     let building_id = que_details.id
     return (building_id, time_end)
@@ -251,9 +259,9 @@ end
 
 @view
 func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    your_address : felt
+    caller : felt
 ) -> (points : felt):
-    let (points) = formulas_calculate_player_points(your_address)
+    let (points) = formulas_calculate_player_points(caller)
     return (points)
 end
 
@@ -386,8 +394,9 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     ):
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -419,8 +428,9 @@ end
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (shipyard_address) = _shipyard_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -882,8 +892,9 @@ end
 
 @external
 func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    planet_id : Uint256
+    caller : felt
 ) -> (result : TechLevels):
+    let (planet_id) = _planet_to_owner.read(caller)
     let (research_lab) = _research_lab_level.read(planet_id)
     let (armour_tech) = _armour_tech.read(planet_id)
     let (astrophysics) = _astrophysics.read(planet_id)
@@ -939,6 +950,25 @@ func cargo_ship_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     return ()
 end
 
+@external
+func get_fleet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (result : Fleet):
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard) = _shipyard_level.read(planet_id)
+    let (cargo_ship) = _ships_cargo.read(planet_id)
+    let (recycler_ship) = _ships_recycler.read(planet_id)
+    let (espionage_probe) = _ships_espionage_probe.read(planet_id)
+    let (solar_satellite) = _ships_solar_satellite.read(planet_id)
+    let (light_fighter) = _ships_light_fighter.read(planet_id)
+    let (cruiser) = _ships_cruiser.read(planet_id)
+    let (battleship) = _ships_battleship.read(planet_id)
+    let (deathstar) = _ships_deathstar.read(planet_id)
+    return (
+        Fleet(shipyard, cargo_ship, recycler_ship, espionage_probe, solar_satellite, light_fighter, cruiser, battleship, deathstar),
+    )
+end
+
 #########################################################################################################
 #                                           GOD MODE                                                    #
 #                       @external TO BE REMOVED BEFORE DEPLOYMENT                                       #
@@ -946,7 +976,7 @@ end
 
 @external
 func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    preset_techs : TechLevels
+    preset_techs : TechLevels, preset_fleet : Fleet
 ):
     let (caller) = get_caller_address()
     let (time_now) = get_block_timestamp()
@@ -954,11 +984,11 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
         MineLevels(metal=25, crystal=23, deuterium=21),
         Energy(solar_plant=30),
         Facilities(robot_factory=20),
-        timer=time_now,
     )
     let planet_id = Uint256(1, 0)
     _planet_to_owner.write(caller, planet_id)
     _planets.write(planet_id, planet)
+    # Techs setups
     _research_lab_level.write(planet_id, preset_techs.research_lab)
     _energy_tech.write(planet_id, preset_techs.energy_tech)
     _laser_tech.write(planet_id, preset_techs.laser_tech)
@@ -974,5 +1004,16 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     _combustion_drive.write(planet_id, preset_techs.combustion_drive)
     _hyperspace_drive.write(planet_id, preset_techs.hyperspace_drive)
     _impulse_drive.write(planet_id, preset_techs.impulse_drive)
+
+    # Fleet setup
+    _shipyard_level.write(planet_id, preset_fleet.shipyard)
+    _ships_cargo.write(planet_id, preset_fleet.cargo)
+    _ships_recycler.write(planet_id, preset_fleet.recycler)
+    _ships_espionage_probe.write(planet_id, preset_fleet.espionage_probe)
+    _ships_solar_satellite.write(planet_id, preset_fleet.solar_satellite)
+    _ships_light_fighter.write(planet_id, preset_fleet.light_fighter)
+    _ships_cruiser.write(planet_id, preset_fleet.cruiser)
+    _ships_battleship.write(planet_id, preset_fleet.battle_ship)
+    _ships_deathstar.write(planet_id, preset_fleet.death_star)
     return ()
 end

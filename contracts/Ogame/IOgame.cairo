@@ -24,7 +24,7 @@ namespace IOgame:
     func deuterium_address() -> (res : felt):
     end
 
-    func get_structures_levels(your_address : felt) -> (
+    func get_structures_levels(caller : felt) -> (
         metal_mine : felt,
         crystal_mine : felt,
         deuterium_mine : felt,
@@ -35,12 +35,12 @@ namespace IOgame:
     ):
     end
 
-    func resources_available(your_address : felt) -> (
+    func resources_available(caller : felt) -> (
         metal : felt, crystal : felt, deuterium : felt, energy : felt
     ):
     end
 
-    func get_structures_upgrade_cost(your_address : felt) -> (
+    func get_structures_upgrade_cost(caller : felt) -> (
         metal_mine : Cost,
         crystal_mine : Cost,
         deuterium_mine : Cost,
@@ -49,10 +49,10 @@ namespace IOgame:
     ):
     end
 
-    func get_tech_levels(planet_id : Uint256) -> (result : TechLevels):
+    func get_tech_levels(caller : felt) -> (result : TechLevels):
     end
 
-    func build_time_completion(your_address : felt) -> (timestamp : felt):
+    func build_time_completion(caller : felt) -> (timestamp : felt):
     end
 
     func get_buildings_timelock_status(caller : felt) -> (status : BuildingQue):
@@ -61,7 +61,7 @@ namespace IOgame:
     func is_building_qued(caller : felt, building_id : felt) -> (result : felt):
     end
 
-    func player_points(your_address : felt) -> (points : felt):
+    func player_points(caller : felt) -> (points : felt):
     end
 
     func erc20_addresses(metal_token : felt, crystal_token : felt, deuterium_token : felt):
