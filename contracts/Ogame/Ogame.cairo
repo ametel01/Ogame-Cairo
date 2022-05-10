@@ -4,7 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
-from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID
+from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID, SHIPYARD_BUILDING_ID
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.StructuresManager import (
     get_upgrades_cost,
@@ -35,6 +35,8 @@ from contracts.utils.library import (
     erc20_deuterium_address,
     _research_lab_address,
     _research_lab_level,
+    _shipyard_address,
+    _shipyard_level,
     buildings_timelock,
     building_qued,
     _players_spent_resources,
@@ -49,6 +51,7 @@ from contracts.utils.Formulas import (
 )
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 from contracts.ResearchLab.IResearchLab import IResearchLab
+from contracts.Shipyard.IShipyard import IShipyard
 from contracts.Ogame.storage import (
     _energy_tech,
     _computer_tech,
@@ -166,6 +169,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     solar_plant : felt,
     robot_factory : felt,
     research_lab : felt,
+    shipyard : felt,
 ):
     let (planet_id) = _planet_to_owner.read(your_address)
     let (planet) = _planets.read(planet_id)
@@ -175,6 +179,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let solar_plant = planet.energy.solar_plant
     let robot_factory = planet.facilities.robot_factory
     let (research_lab) = _research_lab_level.read(planet_id)
+    let (shipyard) = _shipyard_level.read(planet_id)
     return (
         metal_mine=metal,
         crystal_mine=crystal,
@@ -182,6 +187,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         solar_plant=solar_plant,
         robot_factory=robot_factory,
         research_lab=research_lab,
+        shipyard=shipyard,
     )
 end
 
@@ -267,11 +273,12 @@ func erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 end
 
 @external
-func set_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    lab_address : felt
+func set_facilities_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    lab_address : felt, shipyard_address : felt
 ):
     Ownable_only_owner()
     _research_lab_address.write(lab_address)
+    _shipyard_address.write(shipyard_address)
     return ()
 end
 
@@ -405,6 +412,37 @@ func research_lab_upgrade_complete{
     _research_lab_level.write(planet_id, current_lab_level + 1)
     reset_timelock(caller)
     reset_building_que(caller, RESEARCH_LAB_BUILDING_ID)
+    return ()
+end
+
+@external
+func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal_spent, crystal_spent, deuterium_spent,
+        time_unlocked) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
+    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
+    let que_details = BuildingQue(SHIPYARD_BUILDING_ID, time_unlocked)
+    buildings_timelock.write(caller, que_details)
+    building_qued.write(caller, SHIPYARD_BUILDING_ID, TRUE)
+
+    return ()
+end
+
+@external
+func shipyard_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard_address) = _shipyard_address.read()
+    let (success) = IShipyard._shipyard_upgrade_complete(shipyard_address, caller)
+    assert success = TRUE
+    let (current_shipyard_level) = _shipyard_level.read(planet_id)
+    _shipyard_level.write(planet_id, current_shipyard_level + 1)
+    reset_timelock(caller)
+    reset_building_que(caller, SHIPYARD_BUILDING_ID)
     return ()
 end
 

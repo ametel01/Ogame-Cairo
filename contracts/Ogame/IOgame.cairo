@@ -31,6 +31,7 @@ namespace IOgame:
         solar_plant : felt,
         robot_factory : felt,
         research_lab : felt,
+        shipyard : felt,
     ):
     end
 

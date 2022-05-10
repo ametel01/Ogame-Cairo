@@ -62,8 +62,7 @@ end
 func research_timelock(address : felt) -> (cued_details : ResearchQue):
 end
 
-# @dev Stores the que status for a specific tech. IDs:
-# 1-metal mine, 2-crystal-mine, 3-deuterium mine, 4-solar plant, 5-robot factory
+# @dev Stores the que status for a specific tech.
 @storage_var
 func research_qued(address : felt, id : felt) -> (is_qued : felt):
 end
@@ -71,6 +70,7 @@ end
 # ###################################################################################################
 #                                GENERAL TECH COST FUNCS                                            #
 #####################################################################################################
+
 func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):

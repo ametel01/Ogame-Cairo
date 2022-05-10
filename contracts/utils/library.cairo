@@ -67,6 +67,14 @@ end
 func _research_lab_level(planet_id : Uint256) -> (level : felt):
 end
 
+@storage_var
+func _shipyard_address() -> (address : felt):
+end
+
+@storage_var
+func _shipyard_level(planet_id : Uint256) -> (level : felt):
+end
+
 # @dev Stores the timestamp of the end of the timelock for buildings upgrades.
 # @params The address of the player.
 @storage_var
