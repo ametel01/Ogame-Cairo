@@ -22,7 +22,7 @@ func formulas_metal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     let (metal_hour) = _resources_production_formula(30, mine_level)
     let (prod_second, _) = unsigned_div_rem(metal_hour * 1000, 3600)  # 91
     let fact8 = prod_second * time_elapsed
-    let (prod_scaled, _) = unsigned_div_rem(fact8, 10000)  # 32
+    let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)  # 32
     return (metal_produced=prod_scaled)
 end
 
@@ -35,7 +35,7 @@ func formulas_crystal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let (crystal_hour) = _resources_production_formula(20, mine_level)
     let (fact7, _) = unsigned_div_rem(crystal_hour * 1000, 3600)
     let fact8 = fact7 * time_elapsed
-    let (prod_scaled, _) = unsigned_div_rem(fact8, 10000)
+    let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)
     return (crystal_produced=prod_scaled)
 end
 
@@ -48,7 +48,7 @@ func formulas_deuterium_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     let (deuterium_hour) = _resources_production_formula(10, mine_level)
     let (fact7, _) = unsigned_div_rem(deuterium_hour * 1000, 3600)
     let fact8 = fact7 * time_elapsed
-    let (prod_scaled, _) = unsigned_div_rem(fact8, 10000)
+    let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)
     return (deuterium_produced=prod_scaled)
 end
 
