@@ -109,13 +109,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_required, crystal_required) = formulas_metal_building(
         metal_mine_level=current_mine_level
     )
-<<<<<<< HEAD
     let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
-=======
-    let (building_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, robot_factory_level
-    )
->>>>>>> cc96c8ccecc5450fff28bb32383eaa10dd6bb747
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -162,10 +156,6 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-<<<<<<< HEAD
-=======
-        timer=planet.timer,
->>>>>>> cc96c8ccecc5450fff28bb32383eaa10dd6bb747
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -236,10 +226,6 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-<<<<<<< HEAD
-=======
-        timer=planet.timer,
->>>>>>> cc96c8ccecc5450fff28bb32383eaa10dd6bb747
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -310,10 +296,6 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         deuterium=planet.mines.deuterium + 1),
         Energy(solar_plant=planet.energy.solar_plant),
         Facilities(robot_factory=planet.facilities.robot_factory),
-<<<<<<< HEAD
-=======
-        timer=planet.timer,
->>>>>>> cc96c8ccecc5450fff28bb32383eaa10dd6bb747
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -385,10 +367,6 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
         Facilities(robot_factory=planet.facilities.robot_factory),
-<<<<<<< HEAD
-=======
-        timer=planet.timer,
->>>>>>> cc96c8ccecc5450fff28bb32383eaa10dd6bb747
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
