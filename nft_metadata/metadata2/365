@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/5.webp",
+    "tokenId": 365,
+    "name": "NoGame #365",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 228
+        },
+        {
+            "trait_type": "temperature",
+            "value": 71
+        },
+        {
+            "trait_type": "type",
+            "value": "Helium planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 5
+        }
+    ]
+}

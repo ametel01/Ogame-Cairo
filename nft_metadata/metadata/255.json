@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/0.webp",
+    "tokenId": 255,
+    "name": "NFT_OGM #255",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 133
+        },
+        {
+            "trait_type": "temperature",
+            "value": -115
+        },
+        {
+            "trait_type": "type",
+            "value": "Chthonian planet"
+        },
+        {
+            "trait_type": "position",
+            "value": 15
+        }
+    ]
+}

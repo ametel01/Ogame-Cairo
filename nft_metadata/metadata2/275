@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/5.webp",
+    "tokenId": 275,
+    "name": "NoGame #275",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 188
+        },
+        {
+            "trait_type": "temperature",
+            "value": 68
+        },
+        {
+            "trait_type": "type",
+            "value": "Brown dwarf"
+        },
+        {
+            "trait_type": "position",
+            "value": 5
+        }
+    ]
+}

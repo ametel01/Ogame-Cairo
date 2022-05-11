@@ -1,0 +1,23 @@
+{
+    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/10.webp",
+    "tokenId": 85,
+    "name": "NoGame #85",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 145
+        },
+        {
+            "trait_type": "temperature",
+            "value": 28
+        },
+        {
+            "trait_type": "type",
+            "value": "Gas giant"
+        },
+        {
+            "trait_type": "position",
+            "value": 10
+        }
+    ]
+}
