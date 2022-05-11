@@ -4,10 +4,8 @@ from starkware.cairo.common.uint256 import Uint256
 
 from contracts.utils.library import Planet, Cost
 
-
 @contract_interface
 namespace IOgame:
-
     func number_of_planets() -> (n_planets : felt):
     end
 
@@ -27,10 +25,7 @@ namespace IOgame:
     end
 
     func resources_available(your_address : felt) -> (
-        metal : felt,
-        crystal : felt,
-        deuterium : felt,
-        energy : felt,
+        metal : felt, crystal : felt, deuterium : felt, energy : felt
     ):
     end
 
@@ -49,11 +44,7 @@ namespace IOgame:
     func player_points(your_address : felt) -> (points : felt):
     end
 
-    func erc20_addresses(
-        metal_token : felt,
-        crystal_token : felt,
-        deuterium_token : felt,
-    ) -> ():
+    func erc20_addresses(metal_token : felt, crystal_token : felt, deuterium_token : felt) -> ():
     end
 
     func generate_planet() -> ():
