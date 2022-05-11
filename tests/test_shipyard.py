@@ -19,25 +19,11 @@ async def test_shipyard(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'collect_resources',
                                  [])
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'collect_resources',
-                                 [])
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'resources_available',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [8125700, 4115100, 1551700, 2594])
 
     await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'shipyard_upgrade_start',
                                         [])
-    data = await user1.send_transaction(user_one,
-                                        ogame.contract_address,
-                                        'resources_available',
-                                        [user_one.contract_address])
-    assert_equals(data.result.response, [812220, 411380, 155060, 2594])
 
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1001)
@@ -45,20 +31,22 @@ async def test_shipyard(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'shipyard_upgrade_complete',
                                         [])
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'collect_resources',
-                                 [])
+
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [812220, 411380, 155060, 2594])
+    assert_equals(data.result.response, [8133025, 4118814, 1553051, 2594])
 
     await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'cargo_ship_build_start',
                                         [5])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [8123025, 4108814, 1553051, 2594])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1005)
     await user1.send_transaction(user_one,
@@ -77,4 +65,5 @@ async def test_shipyard(starknet, deploy_game_v1):
                                         'get_structures_levels',
                                         [user_one.contract_address])
     assert_equals(data.result.response, [25, 23, 21, 30, 20, 20, 2])
+    
 
