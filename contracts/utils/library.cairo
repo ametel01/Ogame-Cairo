@@ -3,7 +3,10 @@
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
-    get_block_timestamp, get_contract_address, get_caller_address)
+    get_block_timestamp,
+    get_contract_address,
+    get_caller_address,
+)
 ##########################################################################################
 #                                               Structs                                  #
 ##########################################################################################
@@ -31,7 +34,6 @@ struct Planet:
     member mines : MineLevels
     member energy : Energy
     member facilities : Facilities
-    member timer : felt
 end
 
 # @dev Used to handle costs.
@@ -133,7 +135,7 @@ func building_qued(address : felt, id : felt) -> (is_qued : felt):
 end
 
 @storage_var
-func resources_timer(planet_id : Uint256) -> (timestamp : felt):
+func _resources_timer(planet_id : Uint256) -> (timestamp : felt):
 end
 
 ##########################################################################################
@@ -162,7 +164,8 @@ const FALSE = 0
 ##########################################################################################
 
 func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        planet : Planet):
+    planet : Planet
+):
     let (address) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(address)
     let (res) = _planets.read(planet_id)
@@ -170,13 +173,15 @@ func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
 end
 
 func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        address : felt):
+    address : felt
+):
     buildings_timelock.write(address, BuildingQue(0, 0))
     return ()
 end
 
 func reset_building_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        address : felt, id : felt):
+    address : felt, id : felt
+):
     building_qued.write(address, id, FALSE)
     return ()
 end

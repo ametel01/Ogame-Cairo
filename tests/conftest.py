@@ -5,7 +5,7 @@ from utils.Signer import Signer
 
 from starkware.starknet.testing.starknet import Starknet
 from starkware.starknet.testing.contract import StarknetContract
-from starkware.starknet.business_logic.state import BlockInfo
+from starkware.starknet.business_logic.state.state import BlockInfo
 from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 CONTRACT_FILE = os.path.join("contracts", "Ogame.cairo")
