@@ -101,6 +101,123 @@ func _cargo_ship_requirements_check{
     return (TRUE)
 end
 
+func _recycler_ship_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 4"):
+        assert_le(4, shipyard_level)
+    end
+    with_attr error_message("combustion drive must be at level 6"):
+        assert_le(6, tech_levels.combustion_drive)
+    end
+    with_attr error_message("shielding technology must be at level 2"):
+        assert_le(2, tech_levels.shielding_tech)
+    end
+    return (TRUE)
+end
+
+func _espionage_probe_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 3"):
+        assert_le(3, shipyard_level)
+    end
+    with_attr error_message("combustion drive must be at level 3"):
+        assert_le(3, tech_levels.combustion_drive)
+    end
+    with_attr error_message("espionage technology must be at level 2"):
+        assert_le(2, tech_levels.espionage_tech)
+    end
+    return (TRUE)
+end
+
+func _solar_satellite_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 1"):
+        assert_le(1, shipyard_level)
+    end
+    return (TRUE)
+end
+
+func _light_fighter_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 1"):
+        assert_le(1, shipyard_level)
+    end
+    with_attr error_message("combustion drive must be at level 1"):
+        assert_le(1, tech_levels.combustion_drive)
+    end
+    return (TRUE)
+end
+
+func _cruiser_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 5"):
+        assert_le(5, shipyard_level)
+    end
+    with_attr error_message("ion technology must be at level 2"):
+        assert_le(2, tech_levels.ion_tech)
+    end
+    with_attr error_message("impulse drive must be at level 4"):
+        assert_le(4, tech_levels.impulse_drive)
+    end
+    return (TRUE)
+end
+
+func _battleship_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 7"):
+        assert_le(7, shipyard_level)
+    end
+    with_attr error_message("hyperspace drive must be at level 4"):
+        assert_le(4, tech_levels.hyperspace_drive)
+    end
+    return (TRUE)
+end
+
+func _deathstar_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("shipyard must be at level 12"):
+        assert_le(12, shipyard_level)
+    end
+    with_attr error_message("hyperspace tech must be at level 6"):
+        assert_le(6, tech_levels.hyperspace_tech)
+    end
+    with_attr error_message("hyperspace drive must be at level 7"):
+        assert_le(7, tech_levels.espionage_tech)
+    end
+    with_attr error_message("hyperspace drive must be at level 7"):
+        assert_le(7, tech_levels.espionage_tech)
+    end
+    return (TRUE)
+end
+
 # ###################################################################################################
 #                                SHIPS COST CALCULATION FUNCTIONS                                   #
 #####################################################################################################
@@ -111,6 +228,97 @@ func _cargo_ship_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     let metal_required = 2000
     let crystal_required = 2000
     let deuterium_required = 0
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _recycler_ship_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 10000
+    let crystal_required = 6000
+    let deuterium_required = 2000
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _espionage_probe_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 0
+    let crystal_required = 1000
+    let deuterium_required = 0
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _solar_satellite_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 0
+    let crystal_required = 2000
+    let deuterium_required = 500
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _light_fighter_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 3000
+    let crystal_required = 1000
+    let deuterium_required = 0
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _cruiser_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 20000
+    let crystal_required = 7000
+    let deuterium_required = 2000
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _battleship_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 45000
+    let crystal_required = 15000
+    let deuterium_required = 0
+    return (
+        metal_required * number_of_units,
+        crystal_required * number_of_units,
+        deuterium_required * number_of_units,
+    )
+end
+
+func _deathstar_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let metal_required = 5000000
+    let crystal_required = 4000000
+    let deuterium_required = 1000000
     return (
         metal_required * number_of_units,
         crystal_required * number_of_units,
@@ -153,7 +361,7 @@ end
 func reset_shipyard_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt
 ):
-    shipyard_timelock.write(address, ShipyardQue(0, 0, 0))
+    shipyard_timelock.write(address, ShipyardQue(ship_id=0, units=0, lock_end=0))
     return ()
 end
 
