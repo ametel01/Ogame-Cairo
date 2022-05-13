@@ -3,11 +3,14 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.math import assert_le
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.Ogame.structs import TechLevels
+from contracts.utils.Formulas import formulas_buildings_production_time
+from starkware.starknet.common.syscalls import get_block_timestamp
 
 #########################################################################################
 #                                           CONSTANTS                                   #
@@ -86,7 +89,7 @@ func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     end
 end
 
-func energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 0
@@ -101,7 +104,7 @@ func energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     end
 end
 
-func computer_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _computer_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 0
@@ -116,7 +119,7 @@ func computer_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     end
 end
 
-func laser_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _laser_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 200
@@ -131,7 +134,7 @@ func laser_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     end
 end
 
-func armour_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _armour_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 1000
@@ -146,9 +149,9 @@ func armour_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     end
 end
 
-func espionage_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    current_level : felt
-) -> (metal : felt, crystal : felt, deuterium : felt):
+func _espionage_tech_upgrade_cost{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 200
     let base_crystal = 1000
     let base_deuterium = 200
@@ -161,7 +164,7 @@ func espionage_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     end
 end
 
-func ion_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _ion_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 1000
@@ -176,7 +179,7 @@ func ion_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     end
 end
 
-func plasma_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _plasma_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 2000
@@ -191,7 +194,7 @@ func plasma_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     end
 end
 
-func astrophysics_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _astrophysics_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 4000
@@ -206,7 +209,7 @@ func astrophysics_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     end
 end
 
-func weapons_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _weapons_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 800
@@ -221,7 +224,7 @@ func weapons_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     end
 end
 
-func shieldieng_tech_upgrade_cost{
+func _shieldieng_tech_upgrade_cost{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 200
@@ -236,7 +239,7 @@ func shieldieng_tech_upgrade_cost{
     end
 end
 
-func hyperspace_tech_upgrade_cost{
+func _hyperspace_tech_upgrade_cost{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 0
@@ -252,7 +255,7 @@ func hyperspace_tech_upgrade_cost{
 end
 
 # ################################## ENGINES #########################################
-func combustion_drive_upgrade_cost{
+func _combustion_drive_upgrade_cost{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 400
@@ -267,7 +270,7 @@ func combustion_drive_upgrade_cost{
     end
 end
 
-func impulse_drive_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _impulse_drive_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 2000
@@ -282,7 +285,7 @@ func impulse_drive_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     end
 end
 
-func hyperspace_drive_upgrade_cost{
+func _hyperspace_drive_upgrade_cost{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(current_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 10000
@@ -301,33 +304,33 @@ end
 #                                TECH UPGRADE REQUIREMENTS CHECK                   #
 ####################################################################################
 
-func energy_tech_requirements_check{
+func _energy_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (ogame_address) = _ogame_address.read()
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 1"):
         assert_le(1, research_lab_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func computer_tech_requirements_check{
+func _computer_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (ogame_address) = _ogame_address.read()
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 1"):
         assert_le(1, research_lab_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func laser_tech_requirements_check{
+func _laser_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -337,23 +340,23 @@ func laser_tech_requirements_check{
     with_attr error_message("energy tech must be at level 2"):
         assert_le(2, energy_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func armour_tech_requirements_check{
+func _armour_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 2"):
         assert_le(2, research_lab_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func astrophysics_requirements_check{
+func _astrophysics_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let impulse_drive_level = tech_levels.impulse_drive
@@ -367,23 +370,23 @@ func astrophysics_requirements_check{
     with_attr error_message("espionage tech must be at level 4"):
         assert_le(4, espionage_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func espionage_tech_requirements_check{
+func _espionage_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 3"):
         assert_le(3, research_lab_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func ion_tech_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    caller : felt
-) -> (response : felt):
+func _ion_tech_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let laser_tech_level = tech_levels.laser_tech
@@ -397,12 +400,12 @@ func ion_tech_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     with_attr error_message("energy tech must be at level 4"):
         assert_le(4, energy_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func plasma_tech_requirements_check{
+func _plasma_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let laser_tech_level = tech_levels.laser_tech
@@ -420,23 +423,23 @@ func plasma_tech_requirements_check{
     with_attr error_message("ion tech must be at level 5"):
         assert_le(5, ion_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func weapons_tech_requirements_check{
+func _weapons_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     with_attr error_message("research lab must be at level 4"):
         assert_le(4, research_lab_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func shielding_tech_requirements_check{
+func _shielding_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -446,12 +449,12 @@ func shielding_tech_requirements_check{
     with_attr error_message("energy tech must be at level 3"):
         assert_le(3, energy_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func hyperspace_tech_requirements_check{
+func _hyperspace_tech_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -465,13 +468,13 @@ func hyperspace_tech_requirements_check{
     with_attr error_message("shielding tech must be at level 5"):
         assert_le(5, shielding_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 # ###################### ENGINES SPECIFIC UPGRADE REQUIREMENTS CHECK #########################
 
-func combustion_drive_requirements_check{
+func _combustion_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -483,12 +486,12 @@ func combustion_drive_requirements_check{
         assert_le(1, energy_tech_level)
     end
 
-    return (TRUE)
+    return ()
 end
 
-func impulse_drive_requirements_check{
+func _impulse_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -498,12 +501,12 @@ func impulse_drive_requirements_check{
     with_attr error_message("energy tech must be at level 1"):
         assert_le(1, energy_tech_level)
     end
-    return (TRUE)
+    return ()
 end
 
-func hyperspace_drive_requirements_check{
+func _hyperspace_drive_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}(caller : felt) -> (response : felt):
+}(caller : felt) -> ():
     let (tech_levels) = _get_tech_levels(caller)
     let research_lab_level = tech_levels.research_lab
     let energy_tech_level = tech_levels.energy_tech
@@ -521,11 +524,22 @@ func hyperspace_drive_requirements_check{
     with_attr error_message("hyperspace tech must be at level 3"):
         assert_le(3, hyperspace_tech_level)
     end
-    return (TRUE)
+    return ()
+end
+
+func _graviton_tech_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> ():
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, enengy_available) = IOgame.resources_available(ogame_address, caller)
+    with_attr error_message("research lab must be at level 1"):
+        assert_le(300000, enengy_available)
+    end
+    return ()
 end
 
 # ############################ INTERNAL FUNCS ######################################
-func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let (ogame_address) = _ogame_address.read()
@@ -546,16 +560,90 @@ func _get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     return (tech_levels)
 end
 
-func reset_research_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _reset_research_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt
 ):
     research_timelock.write(address, ResearchQue(0, 0))
     return ()
 end
 
-func reset_research_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _reset_research_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt, id : felt
 ):
     research_qued.write(address, id, FALSE)
+    return ()
+end
+
+func _check_lab_que_not_busy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+):
+    let (que_status) = research_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("Research lab is busy"):
+        assert current_timelock = 0
+    end
+    return ()
+end
+
+func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
+):
+    alloc_locals
+    let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    return ()
+end
+
+func _check_trying_to_complete_the_right_tech{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt, TECH_ID : felt):
+    let (is_qued) = research_qued.read(caller, TECH_ID)
+    with_attr error_message("Tried to complete the wrong technology"):
+        assert is_qued = TRUE
+    end
+    return ()
+end
+
+func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (cue_details) = research_timelock.read(caller)
+    let timelock_end = cue_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    return ()
+end
+
+func _set_research_timelock_and_que{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(
+    caller : felt,
+    TECH_ID : felt,
+    metal_required : felt,
+    crystal_required : felt,
+    deuterium_required : felt,
+):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
+    let (research_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, research_lab_level
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + research_time
+    let que_details = ResearchQue(TECH_ID, time_end)
+    research_qued.write(caller, TECH_ID, TRUE)
+    research_timelock.write(caller, que_details)
     return ()
 end

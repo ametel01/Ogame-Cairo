@@ -7,35 +7,35 @@ from starkware.starknet.common.syscalls import get_caller_address, get_block_tim
 from contracts.ResearchLab.library import (
     _ogame_address,
     research_lab_upgrade_cost,
-    energy_tech_upgrade_cost,
-    energy_tech_requirements_check,
-    computer_tech_upgrade_cost,
-    computer_tech_requirements_check,
-    laser_tech_requirements_check,
-    laser_tech_upgrade_cost,
-    armour_tech_requirements_check,
-    armour_tech_upgrade_cost,
-    ion_tech_requirements_check,
-    ion_tech_upgrade_cost,
-    espionage_tech_requirements_check,
-    espionage_tech_upgrade_cost,
-    plasma_tech_requirements_check,
-    plasma_tech_upgrade_cost,
-    weapons_tech_requirements_check,
-    weapons_tech_upgrade_cost,
-    shielding_tech_requirements_check,
-    shieldieng_tech_upgrade_cost,
-    hyperspace_tech_requirements_check,
-    hyperspace_tech_upgrade_cost,
-    astrophysics_requirements_check,
-    astrophysics_upgrade_cost,
-    combustion_drive_requirements_check,
-    combustion_drive_upgrade_cost,
-    hyperspace_drive_requirements_check,
-    hyperspace_drive_upgrade_cost,
-    impulse_drive_requirements_check,
-    impulse_drive_upgrade_cost,
-    get_available_resources,
+    _energy_tech_upgrade_cost,
+    _energy_tech_requirements_check,
+    _computer_tech_upgrade_cost,
+    _computer_tech_requirements_check,
+    _laser_tech_requirements_check,
+    _laser_tech_upgrade_cost,
+    _armour_tech_requirements_check,
+    _armour_tech_upgrade_cost,
+    _ion_tech_requirements_check,
+    _ion_tech_upgrade_cost,
+    _espionage_tech_requirements_check,
+    _espionage_tech_upgrade_cost,
+    _plasma_tech_requirements_check,
+    _plasma_tech_upgrade_cost,
+    _weapons_tech_requirements_check,
+    _weapons_tech_upgrade_cost,
+    _shielding_tech_requirements_check,
+    _shieldieng_tech_upgrade_cost,
+    _hyperspace_tech_requirements_check,
+    _hyperspace_tech_upgrade_cost,
+    _astrophysics_requirements_check,
+    _astrophysics_upgrade_cost,
+    _combustion_drive_requirements_check,
+    _combustion_drive_upgrade_cost,
+    _hyperspace_drive_requirements_check,
+    _hyperspace_drive_upgrade_cost,
+    _impulse_drive_requirements_check,
+    _impulse_drive_upgrade_cost,
+    _get_available_resources,
     ResearchQue,
     research_timelock,
     research_qued,
@@ -53,12 +53,18 @@ from contracts.ResearchLab.library import (
     COMBUSTION_DRIVE_ID,
     HYPERSPACE_DRIVE_ID,
     IMPULSE_DRIVE_ID,
-    reset_research_que,
-    reset_research_timelock,
+    _reset_research_que,
+    _reset_research_timelock,
+    _check_lab_que_not_busy,
+    _check_enough_resources,
+    _set_research_timelock_and_que,
+    _check_trying_to_complete_the_right_tech,
+    _check_waited_enough,
 )
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.Ogame.IOgame import IOgame
+from contracts.Ogame.library import _check_que_not_busy
 from contracts.utils.Formulas import formulas_buildings_production_time
 from contracts.utils.constants import RESEARCH_LAB_BUILDING_ID, UINT256_DECIMALS, TRUE
 
@@ -78,29 +84,16 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     alloc_locals
     assert_not_zero(caller)
     let (ogame_address) = _ogame_address.read()
-    let (cue_status) = IOgame.get_buildings_timelock_status(ogame_address, caller)
-    let current_timelock = cue_status.lock_end
-    with_attr error_message("Building que is busy"):
-        assert current_timelock = 0
-    end
+    _check_que_not_busy(ogame_address, caller)
     let (planet_id) = IOgame.owner_of(ogame_address, caller)
     let (tech_levels) = IOgame.get_tech_levels(ogame_address, caller)
     let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let current_lab_level = tech_levels.research_lab
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
     let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
         current_lab_level
     )
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
@@ -137,36 +130,16 @@ func _energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = energy_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _energy_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = energy_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _energy_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, ENERGY_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(ENERGY_TECH_ID, time_end)
-    research_qued.write(caller, ENERGY_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -175,20 +148,10 @@ func _energy_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, ENERGY_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, ENERGY_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, ENERGY_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, ENERGY_TECH_ID)
     return (TRUE)
 end
 
@@ -197,36 +160,16 @@ func _computer_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = computer_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _computer_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = computer_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _computer_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, COMPUTER_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(COMPUTER_TECH_ID, time_end)
-    research_qued.write(caller, COMPUTER_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -235,20 +178,10 @@ func _computer_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, COMPUTER_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, COMPUTER_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, COMPUTER_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, COMPUTER_TECH_ID)
     return (TRUE)
 end
 
@@ -257,36 +190,16 @@ func _laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = laser_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _laser_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = laser_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _laser_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, LASER_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(LASER_TECH_ID, time_end)
-    research_qued.write(caller, LASER_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -295,20 +208,10 @@ func _laser_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, LASER_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, LASER_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, LASER_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, LASER_TECH_ID)
     return (TRUE)
 end
 
@@ -317,36 +220,16 @@ func _armour_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = armour_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _armour_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = armour_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _armour_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, ARMOUR_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(ARMOUR_TECH_ID, time_end)
-    research_qued.write(caller, ARMOUR_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -355,20 +238,10 @@ func _armour_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, ARMOUR_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, ARMOUR_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, ARMOUR_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, ARMOUR_TECH_ID)
     return (TRUE)
 end
 
@@ -377,36 +250,16 @@ func _ion_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = ion_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _ion_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = ion_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _ion_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, ION_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(ION_TECH_ID, time_end)
-    research_qued.write(caller, ION_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -415,20 +268,10 @@ func _ion_tech_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     caller : felt
 ) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, ION_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, ION_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, ION_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, ION_TECH_ID)
     return (TRUE)
 end
 
@@ -437,36 +280,16 @@ func _espionage_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = espionage_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _espionage_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = espionage_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _espionage_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, ESPIONAGE_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(ESPIONAGE_TECH_ID, time_end)
-    research_qued.write(caller, ESPIONAGE_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -475,20 +298,10 @@ func _espionage_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, ESPIONAGE_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, ESPIONAGE_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, ESPIONAGE_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, ESPIONAGE_TECH_ID)
     return (TRUE)
 end
 
@@ -497,36 +310,16 @@ func _plasma_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = plasma_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _plasma_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = plasma_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _plasma_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, PLASMA_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(PLASMA_TECH_ID, time_end)
-    research_qued.write(caller, PLASMA_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -535,20 +328,10 @@ func _plasma_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, PLASMA_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, PLASMA_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, PLASMA_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, PLASMA_TECH_ID)
     return (TRUE)
 end
 
@@ -557,36 +340,16 @@ func _weapons_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = weapons_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _weapons_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = weapons_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _weapons_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, WEAPONS_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(WEAPONS_TECH_ID, time_end)
-    research_qued.write(caller, WEAPONS_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -595,20 +358,10 @@ func _weapons_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, WEAPONS_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, WEAPONS_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, WEAPONS_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, WEAPONS_TECH_ID)
     return (TRUE)
 end
 
@@ -617,36 +370,16 @@ func _shielding_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = shieldieng_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _shieldieng_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = shielding_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _shielding_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, SHIELDING_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(SHIELDING_TECH_ID, time_end)
-    research_qued.write(caller, SHIELDING_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -655,20 +388,10 @@ func _shielding_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, SHIELDING_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, SHIELDING_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, SHIELDING_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, SHIELDING_TECH_ID)
     return (TRUE)
 end
 
@@ -677,36 +400,16 @@ func _hyperspace_tech_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = hyperspace_tech_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _hyperspace_tech_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = hyperspace_tech_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _hyperspace_tech_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, HYPERSPACE_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(HYPERSPACE_TECH_ID, time_end)
-    research_qued.write(caller, HYPERSPACE_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -715,20 +418,10 @@ func _hyperspace_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, HYPERSPACE_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, HYPERSPACE_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, HYPERSPACE_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, HYPERSPACE_TECH_ID)
     return (TRUE)
 end
 
@@ -737,36 +430,16 @@ func _astrophysics_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     caller : felt, current_tech_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = astrophysics_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _astrophysics_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = astrophysics_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _astrophysics_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, ASTROPHYSICS_TECH_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(ASTROPHYSICS_TECH_ID, time_end)
-    research_qued.write(caller, ASTROPHYSICS_TECH_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -775,20 +448,10 @@ func _astrophysics_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, ASTROPHYSICS_TECH_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, ASTROPHYSICS_TECH_ID)
+    _check_trying_to_complete_the_right_tech(caller, ASTROPHYSICS_TECH_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, ASTROPHYSICS_TECH_ID)
     return (TRUE)
 end
 
@@ -797,36 +460,16 @@ func _combustion_drive_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = combustion_drive_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _combustion_drive_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = combustion_drive_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _combustion_drive_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, COMBUSTION_DRIVE_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(COMBUSTION_DRIVE_ID, time_end)
-    research_qued.write(caller, COMBUSTION_DRIVE_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -835,20 +478,10 @@ func _combustion_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, COMBUSTION_DRIVE_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, COMBUSTION_DRIVE_ID)
+    _check_trying_to_complete_the_right_tech(caller, COMBUSTION_DRIVE_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, COMBUSTION_DRIVE_ID)
     return (TRUE)
 end
 
@@ -857,36 +490,16 @@ func _hyperspace_drive_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = hyperspace_drive_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _hyperspace_drive_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = hyperspace_drive_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _hyperspace_drive_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, HYPERSPACE_DRIVE_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(HYPERSPACE_DRIVE_ID, time_end)
-    research_qued.write(caller, HYPERSPACE_DRIVE_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -895,20 +508,10 @@ func _hyperspace_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, HYPERSPACE_DRIVE_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, HYPERSPACE_DRIVE_ID)
+    _check_trying_to_complete_the_right_tech(caller, HYPERSPACE_DRIVE_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, HYPERSPACE_DRIVE_ID)
     return (TRUE)
 end
 
@@ -917,36 +520,16 @@ func _impulse_drive_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, current_tech_level : felt) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    assert_not_zero(caller)
-    let (que_status) = research_timelock.read(caller)
-    let current_timelock = que_status.lock_end
-    with_attr error_message("Research lab is busy"):
-        assert current_timelock = 0
-    end
-    let (metal_available, crystal_available, deuterium_available) = get_available_resources(caller)
-    let (metal_required, crystal_required, deuterium_required) = impulse_drive_upgrade_cost(
+    let (metal_required, crystal_required, deuterium_required) = _impulse_drive_upgrade_cost(
         current_tech_level
     )
-    let (requirements_met) = impulse_drive_requirements_check(caller)
-    assert requirements_met = TRUE
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
-    end
-    let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+    assert_not_zero(caller)
+    _check_lab_que_not_busy(caller)
+    _impulse_drive_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_research_timelock_and_que(
+        caller, IMPULSE_DRIVE_ID, metal_required, crystal_required, deuterium_required
     )
-    let (time_now) = get_block_timestamp()
-    let time_end = time_now + research_time
-    let que_details = ResearchQue(IMPULSE_DRIVE_ID, time_end)
-    research_qued.write(caller, IMPULSE_DRIVE_ID, TRUE)
-    research_timelock.write(caller, que_details)
     return (metal_required, crystal_required, deuterium_required)
 end
 
@@ -955,19 +538,9 @@ func _impulse_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals
-    tempvar syscall_ptr = syscall_ptr
-    let (time_now) = get_block_timestamp()
-    let (is_qued) = research_qued.read(caller, IMPULSE_DRIVE_ID)
-    with_attr error_message("Tried to complete the wrong technology"):
-        assert is_qued = TRUE
-    end
-    let (cue_details) = research_timelock.read(caller)
-    let timelock_end = cue_details.lock_end
-    let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
-        assert waited_enough = TRUE
-    end
-    reset_research_timelock(caller)
-    reset_research_que(caller, IMPULSE_DRIVE_ID)
+    _check_trying_to_complete_the_right_tech(caller, IMPULSE_DRIVE_ID)
+    _check_waited_enough(caller)
+    _reset_research_timelock(caller)
+    _reset_research_que(caller, IMPULSE_DRIVE_ID)
     return (TRUE)
 end

@@ -54,6 +54,7 @@ from contracts.utils.library import (
 )
 from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, Facilities, BuildingQue
 from contracts.Ogame.storage import _resources_timer
+from contracts.Ogame.library import _check_que_not_busy
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a

@@ -13,13 +13,14 @@ async def test_lab_upgrades(starknet, deploy_game_v1):
                                  ogame.contract_address,
                                  'GOD_MODE',
                                  [20, 8, 0, 0, 0, 8, 4, 0, 3, 5, 5, 10, 0, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*1000)
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [813020, 411780, 155260, 2594])
+    assert_equals(data.result.response, [8125700, 4115100, 1551700, 2594])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'collect_resources',
