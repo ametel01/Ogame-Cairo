@@ -2,12 +2,15 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_le
+from starkware.cairo.common.math_cmp import is_le
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from starkware.cairo.common.pow import pow
 from contracts.ResearchLab.library import _get_tech_levels
 from contracts.Ogame.structs import TechLevels
+from starkware.starknet.common.syscalls import get_block_timestamp
+from contracts.utils.Formulas import formulas_buildings_production_time
 
 #########################################################################################
 #                                           CONSTANTS                                   #
@@ -358,16 +361,109 @@ func shipyard_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     end
 end
 
-func reset_shipyard_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+#######################################################################################################
+#                                           INTERNAL FUNC                                             #
+#######################################################################################################
+
+func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (metal_address) = IOgame.metal_address(ogame_address)
+    let (crystal_address) = IOgame.crystal_address(ogame_address)
+    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
+    let (metal_available) = IERC20.balanceOf(metal_address, caller)
+    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
+    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
+    return (metal_available.low, crystal_available.low, deuterium_available.low)
+end
+
+func _reset_shipyard_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt
 ):
-    shipyard_timelock.write(address, ShipyardQue(ship_id=0, units=0, lock_end=0))
+    shipyard_timelock.write(address, ShipyardQue(0, 0, 0))
     return ()
 end
 
-func reset_shipyard_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func _reset_shipyard_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt, id : felt
 ):
     ships_qued.write(address, id, FALSE)
+    return ()
+end
+
+func _check_shipyard_que_not_busy{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt):
+    let (que_status) = shipyard_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("Shipyard lab is busy"):
+        assert current_timelock = 0
+    end
+    return ()
+end
+
+func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
+):
+    alloc_locals
+    let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    return ()
+end
+
+func _check_trying_to_complete_the_right_ship{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt, SHIP_ID : felt):
+    let (is_qued) = ships_qued.read(caller, SHIP_ID)
+    with_attr error_message("Tried to complete the wrong ship"):
+        assert is_qued = TRUE
+    end
+    return ()
+end
+
+func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (units_produced : felt):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (que_details) = shipyard_timelock.read(caller)
+    let timelock_end = que_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    let units_produced = que_details.units
+    return (units_produced)
+end
+
+func _set_shipyard_timelock_and_que{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(
+    caller : felt,
+    SHIP_ID : felt,
+    number_of_units : felt,
+    metal_required : felt,
+    crystal_required : felt,
+    deuterium_required : felt,
+):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (build_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, shipyard_level
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + build_time
+    let que_details = ShipyardQue(SHIP_ID, number_of_units, time_end)
+    ships_qued.write(caller, SHIP_ID, TRUE)
+    shipyard_timelock.write(caller, que_details)
     return ()
 end
