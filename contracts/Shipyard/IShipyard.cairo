@@ -12,7 +12,7 @@ namespace IShipyard:
     func _shipyard_upgrade_complete(caller : felt) -> (success : felt):
     end
 
-    func _cargo_ship_build_start(caller : felt, quantity : felt) -> (
+    func _cargo_ship_build_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -20,7 +20,7 @@ namespace IShipyard:
     func _cargo_ship_build_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_recycler_ship_start(caller : felt, quantity : felt) -> (
+    func _build_recycler_ship_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -28,7 +28,7 @@ namespace IShipyard:
     func _build_recycler_ship_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_espionage_probe_start(caller : felt, quantity : felt) -> (
+    func _build_espionage_probe_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -36,7 +36,7 @@ namespace IShipyard:
     func _build_espionage_probe_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_solar_satellite_start(caller : felt, quantity : felt) -> (
+    func _build_solar_satellite_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -44,7 +44,7 @@ namespace IShipyard:
     func _build_solar_satellite_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_light_fighter_ship_start(caller : felt, quantity : felt) -> (
+    func _build_light_fighter_ship_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -54,7 +54,7 @@ namespace IShipyard:
     ):
     end
 
-    func _build_cruiser_ship_start(caller : felt, quantity : felt) -> (
+    func _build_cruiser_ship_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -62,7 +62,7 @@ namespace IShipyard:
     func _build_cruiser_ship_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_battleship_start(caller : felt, quantity : felt) -> (
+    func _build_battleship_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
@@ -70,7 +70,7 @@ namespace IShipyard:
     func _build_battleship_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_deathstar_ship_start(caller : felt, quantity : felt) -> (
+    func _build_deathstar_ship_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end

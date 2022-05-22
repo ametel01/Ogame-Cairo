@@ -1,7 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math import assert_le
+from starkware.cairo.common.math import assert_le, unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
@@ -365,6 +365,16 @@ end
 #                                           INTERNAL FUNC                                             #
 #######################################################################################################
 
+func _ships_production_time{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    metal_required : felt, crystal_required : felt, shipyard_level : felt
+) -> (production_time : felt):
+    let fact1 = metal_required + crystal_required
+    let fact2 = 1 + shipyard_level
+    let fact3 = fact2 * 250
+    let (res, _) = unsigned_div_rem(fact1, fact3)
+    return (res)
+end
+
 func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
@@ -397,7 +407,7 @@ func _check_shipyard_que_not_busy{
 }(caller : felt):
     let (que_status) = shipyard_timelock.read(caller)
     let current_timelock = que_status.lock_end
-    with_attr error_message("Shipyard lab is busy"):
+    with_attr error_message("Shipyard is busy"):
         assert current_timelock = 0
     end
     return ()
@@ -457,9 +467,7 @@ func _set_shipyard_timelock_and_que{
 ):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
-    let (build_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, shipyard_level
-    )
+    let (build_time) = _ships_production_time(metal_required, crystal_required, shipyard_level)
     let (time_now) = get_block_timestamp()
     let time_end = time_now + build_time
     let que_details = ShipyardQue(SHIP_ID, number_of_units, time_end)

@@ -926,7 +926,6 @@ func cargo_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (current_tech_level) = _impulse_drive.read(planet_id)
     let (shipyard_address) = _shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._cargo_ship_build_start(
         shipyard_address, caller, number_of_units
@@ -947,6 +946,72 @@ func cargo_ship_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     assert success = TRUE
     let (current_amount_of_units) = _ships_cargo.read(planet_id)
     _ships_cargo.write(planet_id, current_amount_of_units + units_produced)
+    return ()
+end
+
+@external
+func recycler_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal, crystal, deuterium) = IShipyard._build_recycler_ship_start(
+        shipyard_address, caller, number_of_units
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func recycler_ship_build_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (units_produced, success) = IShipyard._build_recycler_ship_complete(
+        shipyard_address, caller
+    )
+    assert success = TRUE
+    let (current_amount_of_units) = _ships_recycler.read(planet_id)
+    _ships_recycler.write(planet_id, current_amount_of_units + units_produced)
+    return ()
+end
+
+@external
+func espionage_probe_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal, crystal, deuterium) = IShipyard._build_espionage_probe_start(
+        shipyard_address, caller, number_of_units
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func espionage_probe_build_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (units_produced, success) = IShipyard._build_espionage_probe_complete(
+        shipyard_address, caller
+    )
+    assert success = TRUE
+    let (current_amount_of_units) = _ships_espionage_probe.read(planet_id)
+    _ships_espionage_probe.write(planet_id, current_amount_of_units + units_produced)
     return ()
 end
 

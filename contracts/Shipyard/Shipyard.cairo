@@ -13,7 +13,13 @@ from contracts.Shipyard.library import (
     ships_qued,
     _cargo_ship_requirements_check,
     _cargo_ship_cost,
+    _recycler_ship_requirements_check,
+    _recycler_ship_cost,
+    _espionage_probe_requirements_check,
+    _espionage_probe_cost,
     CARGO_SHIP_ID,
+    RECYCLER_SHIP_ID,
+    ESPIONAGE_PROBE_ID,
     _reset_shipyard_que,
     _reset_shipyard_timelock,
     _check_shipyard_que_not_busy,
@@ -126,5 +132,77 @@ func _cargo_ship_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (units_produced) = _check_waited_enough(caller)
     _reset_shipyard_timelock(caller)
     _reset_shipyard_que(caller, CARGO_SHIP_ID)
+    return (units_produced, TRUE)
+end
+
+@external
+func _build_recycler_ship_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, number_of_units : felt
+) -> (metal_spent : felt, crystal_spent : felt, deuterium_spent : felt):
+    alloc_locals
+    let (metal_required, crystal_required, deuterium_required) = _recycler_ship_cost(
+        number_of_units
+    )
+    assert_not_zero(caller)
+    _check_shipyard_que_not_busy(caller)
+    _recycler_ship_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_shipyard_timelock_and_que(
+        caller,
+        RECYCLER_SHIP_ID,
+        number_of_units,
+        metal_required,
+        crystal_required,
+        deuterium_required,
+    )
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _build_recycler_ship_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (unit_produced : felt, success : felt):
+    alloc_locals
+    _check_trying_to_complete_the_right_ship(caller, RECYCLER_SHIP_ID)
+    let (units_produced) = _check_waited_enough(caller)
+    _reset_shipyard_timelock(caller)
+    _reset_shipyard_que(caller, RECYCLER_SHIP_ID)
+    return (units_produced, TRUE)
+end
+
+@external
+func _build_espionage_probe_start{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt, number_of_units : felt) -> (
+    metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
+):
+    alloc_locals
+    let (metal_required, crystal_required, deuterium_required) = _espionage_probe_cost(
+        number_of_units
+    )
+    assert_not_zero(caller)
+    _check_shipyard_que_not_busy(caller)
+    _espionage_probe_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_shipyard_timelock_and_que(
+        caller,
+        ESPIONAGE_PROBE_ID,
+        number_of_units,
+        metal_required,
+        crystal_required,
+        deuterium_required,
+    )
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _build_espionage_probe_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (units_produced : felt, success : felt):
+    alloc_locals
+    _check_trying_to_complete_the_right_ship(caller, ESPIONAGE_PROBE_ID)
+    let (units_produced) = _check_waited_enough(caller)
+    _reset_shipyard_timelock(caller)
+    _reset_shipyard_que(caller, ESPIONAGE_PROBE_ID)
     return (units_produced, TRUE)
 end
