@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/1.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/1.png",
     "tokenId": 181,
-    "name": "NFT_OGM #181",
+    "name": "NoGame v0.1 #181",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 158
+            "value": 106
         },
         {
             "trait_type": "temperature",
-            "value": 224
+            "value": 250
         },
         {
             "trait_type": "type",
-            "value": "Eccentric Jupiter"
+            "value": "Ammonia planet"
         },
         {
             "trait_type": "position",

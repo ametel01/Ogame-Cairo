@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/9.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/9.png",
     "tokenId": 369,
-    "name": "NFT_OGM #369",
+    "name": "NoGame v0.1 #369",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 178
+            "value": 232
         },
         {
             "trait_type": "temperature",
-            "value": 43
+            "value": 25
         },
         {
             "trait_type": "type",
-            "value": "Chthonian planet"
+            "value": "Brown dwarf"
         },
         {
             "trait_type": "position",

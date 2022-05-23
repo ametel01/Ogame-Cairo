@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/6.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/6.png",
     "tokenId": 411,
-    "name": "NFT_OGM #411",
+    "name": "NoGame v0.1 #411",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 175
+            "value": 235
         },
         {
             "trait_type": "temperature",
-            "value": 70
+            "value": 71
         },
         {
             "trait_type": "type",
-            "value": "Eccentric Jupiter"
+            "value": "Chthonian planet"
         },
         {
             "trait_type": "position",

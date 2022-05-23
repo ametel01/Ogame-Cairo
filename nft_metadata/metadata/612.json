@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/12.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/12.png",
     "tokenId": 612,
-    "name": "NFT_OGM #612",
+    "name": "NoGame v0.1 #612",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 136
+            "value": 133
         },
         {
             "trait_type": "temperature",
-            "value": 1
+            "value": 19
         },
         {
             "trait_type": "type",
-            "value": "Eccentric Jupiter"
+            "value": "Gas giant"
         },
         {
             "trait_type": "position",

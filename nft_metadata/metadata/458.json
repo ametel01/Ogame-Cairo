@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/8.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/8.png",
     "tokenId": 458,
-    "name": "NFT_OGM #458",
+    "name": "NoGame v0.1 #458",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 228
+            "value": 195
         },
         {
             "trait_type": "temperature",
-            "value": 33
+            "value": 63
         },
         {
             "trait_type": "type",
-            "value": "Brown dwarf"
+            "value": "Eccentric Jupiter"
         },
         {
             "trait_type": "position",

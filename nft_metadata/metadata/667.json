@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/7.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/7.png",
     "tokenId": 667,
-    "name": "NFT_OGM #667",
+    "name": "NoGame v0.1 #667",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 198
+            "value": 241
         },
         {
             "trait_type": "temperature",
-            "value": 74
+            "value": 72
         },
         {
             "trait_type": "type",
-            "value": "Brown dwarf"
+            "value": "Carbon planet"
         },
         {
             "trait_type": "position",

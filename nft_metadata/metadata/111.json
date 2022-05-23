@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/6.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/6.png",
     "tokenId": 111,
-    "name": "NFT_OGM #111",
+    "name": "NoGame v0.1 #111",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 146
+            "value": 181
         },
         {
             "trait_type": "temperature",
-            "value": 74
+            "value": 73
         },
         {
             "trait_type": "type",
-            "value": "Helium planet"
+            "value": "Eccentric Jupiter"
         },
         {
             "trait_type": "position",

@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/2.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/2.png",
     "tokenId": 587,
-    "name": "NFT_OGM #587",
+    "name": "NoGame v0.1 #587",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 164
+            "value": 137
         },
         {
             "trait_type": "temperature",
-            "value": 179
+            "value": 173
         },
         {
             "trait_type": "type",
-            "value": "Gas giant"
+            "value": "Chthonian planet"
         },
         {
             "trait_type": "position",

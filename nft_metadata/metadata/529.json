@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/4.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/4.png",
     "tokenId": 529,
-    "name": "NFT_OGM #529",
+    "name": "NoGame v0.1 #529",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 189
+            "value": 134
         },
         {
             "trait_type": "temperature",
-            "value": 105
+            "value": 99
         },
         {
             "trait_type": "type",
-            "value": "Earth analog"
+            "value": "Chthonian planet"
         },
         {
             "trait_type": "position",

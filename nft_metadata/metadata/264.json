@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/9.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/9.png",
     "tokenId": 264,
-    "name": "NFT_OGM #264",
+    "name": "NoGame v0.1 #264",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 181
+            "value": 167
         },
         {
             "trait_type": "temperature",
-            "value": 49
+            "value": 59
         },
         {
             "trait_type": "type",
-            "value": "Brown dwarf"
+            "value": "Earth analog"
         },
         {
             "trait_type": "position",

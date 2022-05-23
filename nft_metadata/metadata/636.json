@@ -1,15 +1,15 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/6.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/6.png",
     "tokenId": 636,
-    "name": "NFT_OGM #636",
+    "name": "NoGame v0.1 #636",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 228
+            "value": 150
         },
         {
             "trait_type": "temperature",
-            "value": 87
+            "value": 72
         },
         {
             "trait_type": "type",

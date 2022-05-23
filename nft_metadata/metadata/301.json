@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/1.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/1.png",
     "tokenId": 301,
-    "name": "NFT_OGM #301",
+    "name": "NoGame v0.1 #301",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 154
+            "value": 115
         },
         {
             "trait_type": "temperature",
-            "value": 235
+            "value": 257
         },
         {
             "trait_type": "type",
-            "value": "Chthonian planet"
+            "value": "Helium planet"
         },
         {
             "trait_type": "position",

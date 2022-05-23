@@ -1,19 +1,19 @@
 {
-    "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/10.webp",
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/10.png",
     "tokenId": 460,
-    "name": "NFT_OGM #460",
+    "name": "NoGame v0.1 #460",
     "attributes": [
         {
             "trait_type": "size",
-            "value": 224
+            "value": 156
         },
         {
             "trait_type": "temperature",
-            "value": 22
+            "value": 45
         },
         {
             "trait_type": "type",
-            "value": "Ammonia planet"
+            "value": "Chthonian planet"
         },
         {
             "trait_type": "position",
