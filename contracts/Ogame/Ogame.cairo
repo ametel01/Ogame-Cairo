@@ -1081,14 +1081,43 @@ func light_fighter_build_complete{
     return ()
 end
 
+@external
+func cruiser_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal, crystal, deuterium) = IShipyard._build_cruiser_start(
+        shipyard_address, caller, number_of_units
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func cruiser_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (units_produced, success) = IShipyard._build_cruiser_complete(shipyard_address, caller)
+    assert success = TRUE
+    let (current_amount_of_units) = _ships_cruiser.read(planet_id)
+    _ships_cruiser.write(planet_id, current_amount_of_units + units_produced)
+    return ()
+end
+
 # @external
-# func cruiser_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+# func battelship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
 #     number_of_units : felt
 # ):
 #     let (caller) = get_caller_address()
 #     let (planet_id) = _planet_to_owner.read(caller)
 #     let (shipyard_address) = _shipyard_address.read()
-#     let (metal, crystal, deuterium) = IShipyard._build_light_fighter_start(
+#     let (metal, crystal, deuterium) = IShipyard._build_battleship_start(
 #         shipyard_address, caller, number_of_units
 #     )
 #     _pay_resources_erc20(caller, metal, crystal, deuterium)
@@ -1099,18 +1128,18 @@ end
 # end
 
 # @external
-# func light_fighter_build_complete{
+# func battleship_build_complete{
 #     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 # }():
 #     let (caller) = get_caller_address()
 #     let (shipyard_address) = _shipyard_address.read()
 #     let (planet_id) = _planet_to_owner.read(caller)
-#     let (units_produced, success) = IShipyard._build_light_fighter_complete(
+#     let (units_produced, success) = IShipyard._build_battleship_complete(
 #         shipyard_address, caller
 #     )
 #     assert success = TRUE
-#     let (current_amount_of_units) = _ships_light_fighter.read(planet_id)
-#     _ships_light_fighter.write(planet_id, current_amount_of_units + units_produced)
+#     let (current_amount_of_units) = _ships_battleship.read(planet_id)
+#     _ships_battleship.write(planetr_id, current_amount_of_units + units_produced)
 #     return ()
 # end
 

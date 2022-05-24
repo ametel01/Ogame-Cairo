@@ -21,11 +21,17 @@ from contracts.Shipyard.library import (
     _solar_satellite_cost,
     _light_fighter_requirements_check,
     _light_fighter_cost,
+    _cruiser_requirements_check,
+    _cruiser_cost,
+    _battleship_requirements_check,
+    _battleship_cost,
     CARGO_SHIP_ID,
     RECYCLER_SHIP_ID,
     ESPIONAGE_PROBE_ID,
     SOLAR_SATELLITE_ID,
     LIGHT_FIGHTER_ID,
+    CRUISER_ID,
+    BATTLESHIP_ID,
     _reset_shipyard_que,
     _reset_shipyard_timelock,
     _check_shipyard_que_not_busy,
@@ -284,3 +290,66 @@ func _build_light_fighter_complete{
     _reset_shipyard_que(caller, LIGHT_FIGHTER_ID)
     return (units_produced, TRUE)
 end
+
+@external
+func _build_cruiser_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, number_of_units : felt
+) -> (metal_spent : felt, crystal_spent : felt, deuterium_spent : felt):
+    alloc_locals
+    let (metal_required, crystal_required, deuterium_required) = _cruiser_cost(number_of_units)
+    assert_not_zero(caller)
+    _check_shipyard_que_not_busy(caller)
+    _cruiser_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_shipyard_timelock_and_que(
+        caller, CRUISER_ID, number_of_units, metal_required, crystal_required, deuterium_required
+    )
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _build_cruiser_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (units_produced : felt, success : felt):
+    alloc_locals
+    _check_trying_to_complete_the_right_ship(caller, CRUISER_ID)
+    let (units_produced) = _check_waited_enough(caller)
+    _reset_shipyard_timelock(caller)
+    _reset_shipyard_que(caller, CRUISER_ID)
+    return (units_produced, TRUE)
+end
+
+# @external
+# func _build_battleship_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+#     caller : felt, number_of_units : felt
+# ) -> (metal_spent : felt, crystal_spent : felt, deuterium_spent : felt):
+#     alloc_locals
+#     let (metal_required, crystal_required, deuterium_required) = _battleship_cost(
+#         number_of_units
+#     )
+#     assert_not_zero(caller)
+#     _check_shipyard_que_not_busy(caller)
+#     _battleship_requirements_check(caller)
+#     _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+#     _set_shipyard_timelock_and_que(
+#         caller,
+#         BATTLESHIP_ID,
+#         number_of_units,
+#         metal_required,
+#         crystal_required,
+#         deuterium_required,
+#     )
+#     return (metal_required, crystal_required, deuterium_required)
+# end
+
+# @external
+# func _build_battleship_complete{
+#     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+# }(caller : felt) -> (units_produced : felt, success : felt):
+#     alloc_locals
+#     _check_trying_to_complete_the_right_ship(caller, BATTLESHIP_ID)
+#     let (units_produced) = _check_waited_enough(caller)
+#     _reset_shipyard_timelock(caller)
+#     _reset_shipyard_que(caller, BATTLESHIP_ID)
+#     return (units_produced, TRUE)
+# end
