@@ -19,10 +19,13 @@ from contracts.Shipyard.library import (
     _espionage_probe_cost,
     _solar_satellite_requirements_check,
     _solar_satellite_cost,
+    _light_fighter_requirements_check,
+    _light_fighter_cost,
     CARGO_SHIP_ID,
     RECYCLER_SHIP_ID,
     ESPIONAGE_PROBE_ID,
     SOLAR_SATELLITE_ID,
+    LIGHT_FIGHTER_ID,
     _reset_shipyard_que,
     _reset_shipyard_timelock,
     _check_shipyard_que_not_busy,
@@ -244,5 +247,40 @@ func _build_solar_satellite_complete{
     let (units_produced) = _check_waited_enough(caller)
     _reset_shipyard_timelock(caller)
     _reset_shipyard_que(caller, SOLAR_SATELLITE_ID)
+    return (units_produced, TRUE)
+end
+
+@external
+func _build_light_fighter_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, number_of_units : felt
+) -> (metal_spent : felt, crystal_spent : felt, deuterium_spent : felt):
+    alloc_locals
+    let (metal_required, crystal_required, deuterium_required) = _light_fighter_cost(
+        number_of_units
+    )
+    assert_not_zero(caller)
+    _check_shipyard_que_not_busy(caller)
+    _light_fighter_requirements_check(caller)
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    _set_shipyard_timelock_and_que(
+        caller,
+        LIGHT_FIGHTER_ID,
+        number_of_units,
+        metal_required,
+        crystal_required,
+        deuterium_required,
+    )
+    return (metal_required, crystal_required, deuterium_required)
+end
+
+@external
+func _build_light_fighter_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (units_produced : felt, success : felt):
+    alloc_locals
+    _check_trying_to_complete_the_right_ship(caller, LIGHT_FIGHTER_ID)
+    let (units_produced) = _check_waited_enough(caller)
+    _reset_shipyard_timelock(caller)
+    _reset_shipyard_que(caller, LIGHT_FIGHTER_ID)
     return (units_produced, TRUE)
 end

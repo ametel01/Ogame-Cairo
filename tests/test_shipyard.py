@@ -221,3 +221,47 @@ async def test_solar_satellite(starknet, deploy_game_v1):
                                         'get_fleet',
                                         [user_one.contract_address])
     assert_equals(data.result.response, [10, 0, 0, 0, 10, 0, 0, 0, 0])
+
+
+@pytest.mark.asyncio
+async def test_light_fighter(starknet, deploy_game_v1):
+    (_, ogame, _, _, _, _, user_one, _, _) = deploy_game_v1
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'GOD_MODE',
+                                 [20, 8, 0, 3, 0, 8, 4, 0, 3, 5, 5, 10, 0, 5, 1, 10, 0, 0, 0, 0, 0, 0, 0, 0])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=3600*10)
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'collect_resources',
+                                 [])
+
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [81752, 41448, 15616, 2594])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'light_fighter_build_start',
+                                 [10])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'resources_available',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [51752, 31448, 10616, 2594])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=36000+1760)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'light_fighter_build_complete',
+                                 [])
+    data = await user1.send_transaction(user_one,
+                                        ogame.contract_address,
+                                        'get_fleet',
+                                        [user_one.contract_address])
+    assert_equals(data.result.response, [10, 0, 0, 0, 10, 0, 0, 0, 0])

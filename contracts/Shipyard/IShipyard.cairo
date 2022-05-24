@@ -44,22 +44,20 @@ namespace IShipyard:
     func _build_solar_satellite_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_light_fighter_ship_start(caller : felt, number_of_units : felt) -> (
+    func _build_light_fighter_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
 
-    func _build_light_fighter_ship_complete(caller : felt) -> (
-        units_produced : felt, success : felt
-    ):
+    func _build_light_fighter_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
-    func _build_cruiser_ship_start(caller : felt, number_of_units : felt) -> (
+    func _build_cruiser_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):
     end
 
-    func _build_cruiser_ship_complete(caller : felt) -> (units_produced : felt, success : felt):
+    func _build_cruiser_complete(caller : felt) -> (units_produced : felt, success : felt):
     end
 
     func _build_battleship_start(caller : felt, number_of_units : felt) -> (

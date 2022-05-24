@@ -394,8 +394,9 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     ):
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -427,8 +428,9 @@ end
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (shipyard_address) = _shipyard_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -1045,6 +1047,72 @@ func solar_satellite_build_complete{
     _ships_solar_satellite.write(planet_id, current_amount_of_units + units_produced)
     return ()
 end
+
+@external
+func light_fighter_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    number_of_units : felt
+):
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (shipyard_address) = _shipyard_address.read()
+    let (metal, crystal, deuterium) = IShipyard._build_light_fighter_start(
+        shipyard_address, caller, number_of_units
+    )
+    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal + crystal
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func light_fighter_build_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (shipyard_address) = _shipyard_address.read()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (units_produced, success) = IShipyard._build_light_fighter_complete(
+        shipyard_address, caller
+    )
+    assert success = TRUE
+    let (current_amount_of_units) = _ships_light_fighter.read(planet_id)
+    _ships_light_fighter.write(planet_id, current_amount_of_units + units_produced)
+    return ()
+end
+
+# @external
+# func cruiser_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+#     number_of_units : felt
+# ):
+#     let (caller) = get_caller_address()
+#     let (planet_id) = _planet_to_owner.read(caller)
+#     let (shipyard_address) = _shipyard_address.read()
+#     let (metal, crystal, deuterium) = IShipyard._build_light_fighter_start(
+#         shipyard_address, caller, number_of_units
+#     )
+#     _pay_resources_erc20(caller, metal, crystal, deuterium)
+#     let (spent_so_far) = _players_spent_resources.read(caller)
+#     let new_total_spent = spent_so_far + metal + crystal
+#     _players_spent_resources.write(caller, new_total_spent)
+#     return ()
+# end
+
+# @external
+# func light_fighter_build_complete{
+#     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+# }():
+#     let (caller) = get_caller_address()
+#     let (shipyard_address) = _shipyard_address.read()
+#     let (planet_id) = _planet_to_owner.read(caller)
+#     let (units_produced, success) = IShipyard._build_light_fighter_complete(
+#         shipyard_address, caller
+#     )
+#     assert success = TRUE
+#     let (current_amount_of_units) = _ships_light_fighter.read(planet_id)
+#     _ships_light_fighter.write(planet_id, current_amount_of_units + units_produced)
+#     return ()
+# end
 
 @external
 func get_fleet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
