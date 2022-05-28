@@ -8,6 +8,9 @@ from starkware.cairo.common.bool import TRUE
 from contracts.utils.Formulas import formulas_buildings_production_time
 from contracts.Facilities.library import (
     _ogame_address,
+    FacilitiesQue,
+    facilities_timelock,
+    facility_qued,
     _get_available_resources,
     shipyard_upgrade_cost,
     SHIPYARD_ID,

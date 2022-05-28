@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.pow import pow
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.bool import TRUE
@@ -15,6 +16,15 @@ const ROBOT_FACTORY_ID = 11
 const SHIPYARD_ID = 12
 const RESEARCH_LAB_ID = 13
 const NANITE_FACTORY_ID = 14
+
+##############################################################################################
+#                                   STRUCTS                                                  #
+# ############################################################################################
+
+struct FacilitiesQue:
+    member facility_id : felt
+    member lock_end : felt
+end
 
 ##############################################################################################
 #                                   STORAGE                                                  #
@@ -36,17 +46,13 @@ end
 func deuterium_address() -> (address : felt):
 end
 
-func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    caller : felt
-) -> (metal : felt, crystal : felt, deuterium : felt):
-    let (ogame_address) = _ogame_address.read()
-    let (metal_address) = IOgame.metal_address(ogame_address)
-    let (crystal_address) = IOgame.crystal_address(ogame_address)
-    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
-    let (metal_available) = IERC20.balanceOf(metal_address, caller)
-    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
-    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
-    return (metal_available.low, crystal_available.low, deuterium_available.low)
+@storage_var
+func facilities_timelock(address : felt) -> (cued_details : FacilitiesQue):
+end
+
+# @dev Stores the que status for a specific ship.
+@storage_var
+func facility_qued(address : felt, id : felt) -> (is_qued : felt):
 end
 
 func shipyard_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -64,6 +70,23 @@ func shipyard_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     end
 end
 
+##############################################################################################
+#                                   TO BE MOVED TO A GENERALISED LIB                         #
+# ############################################################################################
+
+func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (metal_address) = IOgame.metal_address(ogame_address)
+    let (crystal_address) = IOgame.crystal_address(ogame_address)
+    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
+    let (metal_available) = IERC20.balanceOf(metal_address, caller)
+    let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
+    let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
+    return (metal_available.low, crystal_available.low, deuterium_available.low)
+end
+
 func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
 ):
@@ -78,4 +101,20 @@ func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
         assert enough_deuterium = TRUE
     end
     return ()
+end
+
+func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (units_produced : felt):
+    alloc_locals
+    tempvar syscall_ptr = syscall_ptr
+    let (time_now) = get_block_timestamp()
+    let (que_details) = facilities_timelock.read(caller)
+    let timelock_end = que_details.lock_end
+    let (waited_enough) = is_le(timelock_end, time_now)
+    with_attr error_message("Timelock not yet expired"):
+        assert waited_enough = TRUE
+    end
+    let units_produced = que_details.units
+    return (units_produced)
 end
