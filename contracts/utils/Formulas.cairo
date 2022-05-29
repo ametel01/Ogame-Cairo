@@ -3,13 +3,16 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
-from contracts.utils.constants import TRUE, FALSE
+from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.utils.library import _players_spent_resources
 
 ##############
 # Production #
 ##############
+
+const E18 = 10 ** 18
 
 # Prod per second = 30 * Level * 11**Level / 10**Level * 10000 / 3600 * 10000
 func formulas_metal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -225,16 +228,26 @@ func _production_limiter{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     return (production=res)
 end
 
+# 30 * M * 1.1 ** M
 func _resources_production_formula{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(mine_factor : felt, mine_level : felt) -> (production_hour):
     alloc_locals
+    let (max_level) = is_le(25, mine_level)
     let fact1 = mine_factor * mine_level
     let (fact2) = pow(11, mine_level)
     local fact3 = fact1 * fact2
-    let (fact4) = pow(10, mine_level)
-    let (fact5, _) = unsigned_div_rem(fact3, fact4)
-    return (production_hour=fact5)
+    if max_level == TRUE:
+        let (fact3a, _) = unsigned_div_rem(fact3, E18)
+        let (fact4) = pow(10, mine_level)
+        let (fact4a, _) = unsigned_div_rem(fact4, E18)
+        let (fact5, _) = unsigned_div_rem(fact3a, fact4a)
+        return (production_hour=fact5)
+    else:
+        let (fact4) = pow(10, mine_level)
+        let (fact5, _) = unsigned_div_rem(fact3, fact4)
+        return (production_hour=fact5)
+    end
 end
 
 func _solar_production_formula{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

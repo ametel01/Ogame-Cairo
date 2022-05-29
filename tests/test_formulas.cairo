@@ -3,14 +3,22 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 from contracts.utils.Formulas import (
-    formulas_solar_plant, _resources_production_formula, formulas_solar_plant_building,
-    formulas_metal_building, formulas_crystal_building, formulas_deuterium_building,
-    formulas_production_scaler, _consumption, _consumption_deuterium,
-    formulas_buildings_production_time, formulas_robot_factory_building)
+    formulas_solar_plant,
+    _resources_production_formula,
+    formulas_solar_plant_building,
+    formulas_metal_building,
+    formulas_crystal_building,
+    formulas_deuterium_building,
+    formulas_production_scaler,
+    _consumption,
+    _consumption_deuterium,
+    formulas_buildings_production_time,
+    formulas_robot_factory_building,
+)
 
 @external
 func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> ():
+    ) -> ():
     # Test for metal production scaled to 10k
     let (actual) = _resources_production_formula(30, 0)
     let expected = 0
@@ -24,7 +32,7 @@ func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (actual) = _resources_production_formula(30, 10)
     let expected = 778
     assert actual = expected
-    let (actual) = _resources_production_formula(30, 25)
+    let (actual) = _resources_production_formula(30, 50)
     let expected = 8126
     assert actual = expected
     # Test for crystal production scaled to 10k
@@ -34,7 +42,7 @@ func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (actual) = _resources_production_formula(20, 10)
     let expected = 518
     assert actual = expected
-    let (actual) = _resources_production_formula(20, 25)
+    let (actual) = _resources_production_formula(20, 50)
     let expected = 5417
     assert actual = expected
     # Test for deuterium production scaled to 10k
@@ -52,7 +60,7 @@ end
 
 @external
 func test_solar_plant_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> ():
+    ) -> ():
     let (actual) = formulas_solar_plant(2)
     let expected = 48
     assert actual = expected
@@ -69,7 +77,7 @@ end
 
 @external
 func test_metal_building_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> ():
+    ) -> ():
     let (metal, crystal) = formulas_metal_building(1)
     let expected = (90, 22)
     assert (metal, crystal) = expected
@@ -86,7 +94,7 @@ end
 
 @external
 func test_crystal_building_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> ():
+    ) -> ():
     let (metal, crystal) = formulas_crystal_building(1)
     let expected = (76, 38)
     assert (metal, crystal) = expected
@@ -103,7 +111,8 @@ end
 
 @external
 func test_deuterium_building_cost{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> ():
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}() -> ():
     let (metal, crystal) = formulas_deuterium_building(1)
     let expected = (337, 112)
     assert (metal, crystal) = expected
@@ -120,7 +129,8 @@ end
 
 @external
 func test_solar_plant_building_cost{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
     let (metal, crystal) = formulas_solar_plant_building(1)
     let expected = (75, 30)
     assert (metal, crystal) = expected
@@ -137,7 +147,8 @@ end
 
 @external
 func test_robot_factory_building_cost{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
     let (metal, crystal, deuterium) = formulas_robot_factory_building(0)
     let expected = (400, 120, 200)
     assert (metal, crystal, deuterium) = expected
@@ -186,7 +197,8 @@ end
 
 @external
 func test_buildings_production_time{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
     let (prod_time) = formulas_buildings_production_time(60, 15, 0)
     let expected = 108
     assert prod_time = expected
