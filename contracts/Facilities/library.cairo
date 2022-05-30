@@ -4,18 +4,19 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.pow import pow
 from starkware.cairo.common.math_cmp import is_le
-from starkware.cairo.common.bool import TRUE
+from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
-from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
+from contracts.utils.Formulas import formulas_buildings_production_time
 
 ##############################################################################################
 #                                   CONSTANTS                                                #
 # ############################################################################################
 
-const ROBOT_FACTORY_ID = 11
-const SHIPYARD_ID = 12
-const RESEARCH_LAB_ID = 13
-const NANITE_FACTORY_ID = 14
+const ROBOT_FACTORY_ID = 21
+const SHIPYARD_ID = 22
+const RESEARCH_LAB_ID = 23
+const NANITE_FACTORY_ID = 24
 
 ##############################################################################################
 #                                   STRUCTS                                                  #
@@ -103,18 +104,76 @@ func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     return ()
 end
 
+func _reset_facilities_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt
+):
+    facilities_timelock.write(address, FacilitiesQue(0, 0))
+    return ()
+end
+
+func _reset_shipyard_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, id : felt
+):
+    facility_qued.write(address, id, FALSE)
+    return ()
+end
+
+func _check_building_que_not_busy{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt):
+    let (que_status) = facilities_timelock.read(caller)
+    let current_timelock = que_status.lock_end
+    with_attr error_message("FACILITIES::Que is busy"):
+        assert current_timelock = 0
+    end
+    return ()
+end
+
+func _check_trying_to_complete_the_right_facility{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt, BUILDING_ID : felt):
+    let (is_qued) = facility_qued.read(caller, BUILDING_ID)
+    with_attr error_message("FACILITIES::Tried to complete the wrong ship"):
+        assert is_qued = TRUE
+    end
+    return ()
+end
+
 func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
-) -> (units_produced : felt):
+):
     alloc_locals
     tempvar syscall_ptr = syscall_ptr
     let (time_now) = get_block_timestamp()
     let (que_details) = facilities_timelock.read(caller)
     let timelock_end = que_details.lock_end
     let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("Timelock not yet expired"):
+    with_attr error_message("FACILITIES::Timelock not yet expired"):
         assert waited_enough = TRUE
     end
-    let units_produced = que_details.units
-    return (units_produced)
+    return ()
+end
+
+func _set_facilities_timelock_and_que{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(
+    caller : felt,
+    BUILDING_ID : felt,
+    metal_required : felt,
+    crystal_required : felt,
+    deuterium_required : felt,
+) -> (time_unlocked : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+        ogame_address, caller
+    )
+    let (build_time) = formulas_buildings_production_time(
+        metal_required, crystal_required, robot_factory_level
+    )
+    let (time_now) = get_block_timestamp()
+    let time_end = time_now + build_time
+    let que_details = FacilitiesQue(BUILDING_ID, time_end)
+    facility_qued.write(caller, BUILDING_ID, TRUE)
+    facilities_timelock.write(caller, que_details)
+    return (time_end)
 end

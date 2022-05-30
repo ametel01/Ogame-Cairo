@@ -7,7 +7,7 @@ from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
-from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.Ogame.structs import TechLevels
 from contracts.utils.Formulas import formulas_buildings_production_time
 from starkware.starknet.common.syscalls import get_block_timestamp

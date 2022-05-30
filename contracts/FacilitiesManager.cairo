@@ -9,7 +9,7 @@ from starkware.starknet.common.syscalls import (
 from starkware.cairo.common.uint256 import Uint256, uint256_le
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.math import assert_not_zero, assert_le
-from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.constants import ROBOT_FACTORY_BUILDING_ID
 from contracts.Ogame.structs import Cost, Planet, MineLevels, Energy, Facilities, BuildingQue

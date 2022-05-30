@@ -29,19 +29,7 @@ from contracts.utils.library import (
     _number_of_planets,
     _planets,
     _planet_to_owner,
-    erc721_token_address,
-    erc20_metal_address,
-    erc20_crystal_address,
-    erc20_deuterium_address,
-    _research_lab_address,
-    _research_lab_level,
-    _shipyard_address,
-    _shipyard_level,
-    buildings_timelock,
-    building_qued,
     _players_spent_resources,
-    reset_timelock,
-    reset_building_que,
 )
 from contracts.utils.Formulas import (
     formulas_metal_building,
@@ -53,6 +41,17 @@ from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 from contracts.ResearchLab.IResearchLab import IResearchLab
 from contracts.Shipyard.IShipyard import IShipyard
 from contracts.Ogame.storage import (
+    erc721_token_address,
+    erc20_metal_address,
+    erc20_crystal_address,
+    erc20_deuterium_address,
+    facilities_address,
+    research_lab_address,
+    shipyard_address,
+    shipyard_level,
+    robot_factory_level,
+    research_lab_level,
+    buildings_timelock,
     _energy_tech,
     _computer_tech,
     _laser_tech,
@@ -120,7 +119,7 @@ func owner_of{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 end
 
 @view
-func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = erc721_token_address.read()
@@ -128,7 +127,7 @@ func erc721_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_chec
 end
 
 @view
-func metal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_metal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = erc20_metal_address.read()
@@ -136,7 +135,7 @@ func metal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
 end
 
 @view
-func crystal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_crystal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = erc20_crystal_address.read()
@@ -144,7 +143,7 @@ func crystal_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 end
 
 @view
-func deuterium_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_deuterium_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = erc20_deuterium_address.read()
@@ -152,18 +151,24 @@ func deuterium_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 end
 
 @view
-func research_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    res : felt
-):
-    let (res) = _research_lab_address.read()
+func get_facilities_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (res : felt):
+    let (res) = facilities_address.read()
     return (res)
 end
 
 @view
-func shipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_research_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (res : felt):
+    let (res) = research_lab_address.read()
+    return (res)
+end
+
+@view
+func get_shipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
-    let (res) = _shipyard_address.read()
+    let (res) = shipyard_address.read()
     return (res)
 end
 
@@ -185,9 +190,9 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let crystal = planet.mines.crystal
     let deuterium = planet.mines.deuterium
     let solar_plant = planet.energy.solar_plant
-    let robot_factory = planet.facilities.robot_factory
-    let (research_lab) = _research_lab_level.read(planet_id)
-    let (shipyard) = _shipyard_level.read(planet_id)
+    let (robot_factory) = robot_factory_level.read(planet_id)
+    let (research_lab) = research_lab_level.read(planet_id)
+    let (shipyard) = shipyard_level.read(planet_id)
     return (
         metal_mine=metal,
         crystal_mine=crystal,
@@ -394,9 +399,8 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     ):
     let (caller) = get_caller_address()
     let (lab_address) = _research_lab_address.read()
-    let (
-        metal_spent, crystal_spent, deuterium_spent, time_unlocked
-    ) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    let (metal_spent, crystal_spent, deuterium_spent,
+        time_unlocked) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -428,9 +432,8 @@ end
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (shipyard_address) = _shipyard_address.read()
-    let (
-        metal_spent, crystal_spent, deuterium_spent, time_unlocked
-    ) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
+    let (metal_spent, crystal_spent, deuterium_spent,
+        time_unlocked) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent

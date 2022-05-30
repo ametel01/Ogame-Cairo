@@ -1,6 +1,53 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+##################################################################################
+#                              TOKENS ADDRESSES                              #
+##################################################################################
+# @dev Returns the address of the game's ERC721 contract.
+@storage_var
+func erc721_token_address() -> (address : felt):
+end
+
+# @dev Returns the address of the owner of the ERC721 contract.
+@storage_var
+func erc721_owner_address() -> (address : felt):
+end
+
+# @dev Returns the address of the ERC20 metal address.
+@storage_var
+func erc20_metal_address() -> (address : felt):
+end
+
+# @dev Returns the address of the ERC20 crystal address.
+@storage_var
+func erc20_crystal_address() -> (address : felt):
+end
+
+# @dev Returns the address of the ERC20 deuterium address.
+@storage_var
+func erc20_deuterium_address() -> (address : felt):
+end
+
+##################################################################################
+#                              COMPONENTS ADDRESSES                              #
+##################################################################################
+
+@storage_var
+func resources_address() -> (address : felt):
+end
+
+@storage_var
+func facilities_address() -> (address : felt):
+end
+
+@storage_var
+func shipyard_address() -> (address : felt):
+end
+
+@storage_var
+func research_lab_address() -> (address : felt):
+end
 
 ##################################################################################
 #                              RESOURCES STORAGE                                 #
@@ -8,6 +55,30 @@ from starkware.cairo.common.uint256 import Uint256
 
 @storage_var
 func _resources_timer(planet_id : Uint256) -> (last_collection_timestamp : felt):
+end
+
+##################################################################################
+#                             FACILITIES STORAGE                                 #
+##################################################################################
+
+@storage_var
+func shipyard_level() -> (level : felt):
+end
+
+@storage_var
+func robot_factory_level() -> (level : felt):
+end
+
+@storage_var
+func research_lab_level() -> (level : felt):
+end
+
+@storage_var
+func nanite_factory_level() -> (level : felt):
+end
+
+@storage_var
+func buildings_timelock(address : felt) -> (cued_details : BuildingQue):
 end
 
 ##################################################################################

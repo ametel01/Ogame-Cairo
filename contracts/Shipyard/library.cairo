@@ -5,7 +5,7 @@ from starkware.cairo.common.math import assert_le, unsigned_div_rem
 from starkware.cairo.common.math_cmp import is_le
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
-from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from starkware.cairo.common.pow import pow
 from contracts.ResearchLab.library import _get_tech_levels
 from contracts.Ogame.structs import TechLevels
@@ -388,6 +388,22 @@ func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     return (metal_available.low, crystal_available.low, deuterium_available.low)
 end
 
+func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
+):
+    alloc_locals
+    let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
+    with_attr error_message("not enough resources"):
+        let (enough_metal) = is_le(metal_required, metal_available)
+        assert enough_metal = TRUE
+        let (enough_crystal) = is_le(crystal_required, crystal_available)
+        assert enough_crystal = TRUE
+        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
+        assert enough_deuterium = TRUE
+    end
+    return ()
+end
+
 func _reset_shipyard_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt
 ):
@@ -407,24 +423,8 @@ func _check_shipyard_que_not_busy{
 }(caller : felt):
     let (que_status) = shipyard_timelock.read(caller)
     let current_timelock = que_status.lock_end
-    with_attr error_message("Shipyard is busy"):
+    with_attr error_message("SHIPYARD::Que is busy"):
         assert current_timelock = 0
-    end
-    return ()
-end
-
-func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
-):
-    alloc_locals
-    let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
-    with_attr error_message("not enough resources"):
-        let (enough_metal) = is_le(metal_required, metal_available)
-        assert enough_metal = TRUE
-        let (enough_crystal) = is_le(crystal_required, crystal_available)
-        assert enough_crystal = TRUE
-        let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-        assert enough_deuterium = TRUE
     end
     return ()
 end

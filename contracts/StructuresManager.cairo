@@ -12,8 +12,8 @@ from contracts.utils.constants import (
     SOLAR_PLANT_BUILDING_ID,
 )
 from starkware.cairo.common.math_cmp import is_le
-from contracts.token.erc721.interfaces.IERC721 import IERC721
-from contracts.token.erc20.interfaces.IERC20 import IERC20
+from contracts.Tokens.erc721.interfaces.IERC721 import IERC721
+from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _receive_resources_erc20, _pay_resources_erc20
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
