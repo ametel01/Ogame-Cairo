@@ -2,7 +2,7 @@
 
 @contract_interface
 namespace IFacilities:
-    func robot_factory_upgrade_start(caller : felt) -> (
+    func _robot_factory_upgrade_start(caller : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt, time_unlocked : felt
     ):
     end

@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
+from contracts.Ogame.structs import BuildingQue
 ##################################################################################
 #                              TOKENS ADDRESSES                              #
 ##################################################################################
@@ -50,11 +51,15 @@ func research_lab_address() -> (address : felt):
 end
 
 ##################################################################################
-#                              RESOURCES STORAGE                                 #
+#                              LOCKS AND QUES                                    #
 ##################################################################################
 
 @storage_var
 func _resources_timer(planet_id : Uint256) -> (last_collection_timestamp : felt):
+end
+
+@storage_var
+func building_qued(caller : felt, building_id : felt) -> (is_qued : felt):
 end
 
 ##################################################################################
@@ -65,16 +70,17 @@ end
 func shipyard_level() -> (level : felt):
 end
 
+# TODO: this need to be changed
 @storage_var
-func robot_factory_level() -> (level : felt):
+func robot_factory_level(planete_id : Uint256) -> (level : felt):
 end
 
 @storage_var
-func research_lab_level() -> (level : felt):
+func research_lab_level(planete_id : Uint256) -> (level : felt):
 end
 
 @storage_var
-func nanite_factory_level() -> (level : felt):
+func nanite_factory_level(planete_id : Uint256) -> (level : felt):
 end
 
 @storage_var

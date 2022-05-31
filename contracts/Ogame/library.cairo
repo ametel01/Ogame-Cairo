@@ -3,7 +3,9 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
 from contracts.Ogame.IOgame import IOgame
-from contracts.utils.constants import TRUE
+from starkware.cairo.common.bool import TRUE, FALSE
+from contracts.Ogame.storage import buildings_timelock, building_qued
+from contracts.Ogame.structs import BuildingQue
 
 func _check_que_not_busy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ogame_address : felt, caller : felt
@@ -16,30 +18,16 @@ func _check_que_not_busy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     return ()
 end
 
-# func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-#     caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
-# ):
-#     let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
-#     with_attr error_message("not enough resources"):
-#         let (enough_metal) = is_le(metal_required, metal_available)
-#         assert enough_metal = TRUE
-#         let (enough_crystal) = is_le(crystal_required, crystal_available)
-#         assert enough_crystal = TRUE
-#         let (enough_deuterium) = is_le(deuterium_required, deuterium_available)
-#         assert enough_deuterium = TRUE
-#     end
-#     return ()
-# end
+func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt
+):
+    buildings_timelock.write(address, BuildingQue(0, 0))
+    return ()
+end
 
-# func _get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-#     caller : felt,
-# ) -> (metal : felt, crystal : felt, deuterium : felt):
-#     let (ogame_address) = _ogame_address.read()
-#     let (metal_address) = IOgame.metal_address(ogame_address)
-#     let (crystal_address) = IOgame.crystal_address(ogame_address)
-#     let (deuterium_address) = IOgame.deuterium_address(ogame_address)
-#     let (metal_available) = IERC20.balanceOf(metal_address, caller)
-#     let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
-#     let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
-#     return (metal_available.low, crystal_available.low, deuterium_available.low)
-# end
+func reset_building_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, id : felt
+):
+    building_qued.write(address, id, FALSE)
+    return ()
+end

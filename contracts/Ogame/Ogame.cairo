@@ -4,8 +4,13 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
+from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID, SHIPYARD_BUILDING_ID
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
+from contracts.ResearchLab.IResearchLab import IResearchLab
+from contracts.Shipyard.IShipyard import IShipyard
+from contracts.Facilities.IFacilities import IFacilities
+from contracts.Ogame.library import reset_building_que, reset_timelock
 from contracts.StructuresManager import (
     get_upgrades_cost,
     _generate_planet,
@@ -37,9 +42,6 @@ from contracts.utils.Formulas import (
     formulas_deuterium_building,
     formulas_calculate_player_points,
 )
-from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
-from contracts.ResearchLab.IResearchLab import IResearchLab
-from contracts.Shipyard.IShipyard import IShipyard
 from contracts.Ogame.storage import (
     erc721_token_address,
     erc20_metal_address,
@@ -52,6 +54,7 @@ from contracts.Ogame.storage import (
     robot_factory_level,
     research_lab_level,
     buildings_timelock,
+    building_qued,
     _energy_tech,
     _computer_tech,
     _laser_tech,
@@ -158,14 +161,14 @@ func get_facilities_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 @view
-func get_research_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func getresearch_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ) -> (res : felt):
     let (res) = research_lab_address.read()
     return (res)
 end
 
 @view
-func get_shipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func getshipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = shipyard_address.read()
@@ -286,23 +289,15 @@ func erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 end
 
 @external
-func set_facilities_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    lab_address : felt, shipyard_address : felt
+func set_modules_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    _facilities_address : felt, _lab_address : felt, shipyard_address : felt
 ):
     Ownable_only_owner()
-    _research_lab_address.write(lab_address)
-    _shipyard_address.write(shipyard_address)
+    facilities_address.write(_facilities_address)
+    research_lab_address.write(_lab_address)
+    shipyard_address.write(shipyard_address)
     return ()
 end
-
-# @external
-# func facilities_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-#     research_lab_address : felt
-# ):
-#     Ownable_only_owner()
-#     _research_lab_address.write(research_lab_address)
-#     return ()
-# end
 
 @external
 func generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
@@ -398,9 +393,10 @@ end
 func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ):
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
+    let (lab_address) = research_lab_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -418,11 +414,11 @@ func research_lab_upgrade_complete{
 }():
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (success) = IResearchLab._research_lab_upgrade_complete(lab_address, caller)
     assert success = TRUE
-    let (current_lab_level) = _research_lab_level.read(planet_id)
-    _research_lab_level.write(planet_id, current_lab_level + 1)
+    let (current_lab_level) = research_lab_level.read(planet_id)
+    research_lab_level.write(planet_id, current_lab_level + 1)
     reset_timelock(caller)
     reset_building_que(caller, RESEARCH_LAB_BUILDING_ID)
     return ()
@@ -431,9 +427,10 @@ end
 @external
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
-    let (metal_spent, crystal_spent, deuterium_spent,
-        time_unlocked) = IShipyard._shipyard_upgrade_start(shipyard_address, caller)
+    let (_facilities_address) = facilities_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IFacilities._shipyard_upgrade_start(facilities_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -449,11 +446,11 @@ end
 func shipyard_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (shipyard_address) = shipyard_address.read()
     let (success) = IShipyard._shipyard_upgrade_complete(shipyard_address, caller)
     assert success = TRUE
-    let (current_shipyard_level) = _shipyard_level.read(planet_id)
-    _shipyard_level.write(planet_id, current_shipyard_level + 1)
+    let (current_shipyard_level) = shipyard_level.read(planet_id)
+    shipyard_level.write(planet_id, current_shipyard_level + 1)
     reset_timelock(caller)
     reset_building_que(caller, SHIPYARD_BUILDING_ID)
     return ()
@@ -467,7 +464,7 @@ func energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _energy_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._energy_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -483,7 +480,7 @@ func energy_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._energy_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -498,7 +495,7 @@ func computer_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _computer_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._computer_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -514,7 +511,7 @@ func computer_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._computer_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -528,7 +525,7 @@ func laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _laser_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._laser_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -543,7 +540,7 @@ end
 func laser_tech_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ):
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._laser_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -557,7 +554,7 @@ func armour_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _armour_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._armour_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -573,7 +570,7 @@ func armour_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._armour_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -587,7 +584,7 @@ func ion_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _ion_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._ion_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -601,7 +598,7 @@ end
 @external
 func ion_tech_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._ion_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -617,7 +614,7 @@ func espionage_tech_upgrade_start{
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _espionage_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._espionage_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -633,7 +630,7 @@ func espionage_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._espionage_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -647,7 +644,7 @@ func plasma_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _plasma_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._plasma_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -663,7 +660,7 @@ func plasma_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._plasma_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -678,7 +675,7 @@ func weapons_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _weapons_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._weapons_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -694,7 +691,7 @@ func weapons_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._weapons_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -710,7 +707,7 @@ func shielding_tech_upgrade_start{
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _shielding_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._shielding_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -726,7 +723,7 @@ func shielding_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._shielding_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -742,7 +739,7 @@ func hyperspace_tech_upgrade_start{
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _hyperspace_tech.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._hyperspace_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -758,7 +755,7 @@ func hyperspace_tech_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._hyperspace_tech_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -773,7 +770,7 @@ func astrophysics_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _astrophysics.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._astrophysics_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -789,7 +786,7 @@ func astrophysics_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._astrophysics_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -805,7 +802,7 @@ func combustion_drive_upgrade_start{
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _combustion_drive.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._combustion_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -821,7 +818,7 @@ func combustion_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._combustion_drive_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -837,7 +834,7 @@ func hyperspace_drive_upgrade_start{
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _hyperspace_drive.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._hyperspace_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -853,7 +850,7 @@ func hyperspace_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._hyperspace_drive_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -868,7 +865,7 @@ func impulse_drive_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
     let (current_tech_level) = _impulse_drive.read(planet_id)
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (metal, crystal, deuterium) = IResearchLab._impulse_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
@@ -884,7 +881,7 @@ func impulse_drive_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (lab_address) = _research_lab_address.read()
+    let (lab_address) = research_lab_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (success) = IResearchLab._impulse_drive_upgrade_complete(lab_address, caller)
     assert success = TRUE
@@ -898,7 +895,7 @@ func get_tech_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     caller : felt
 ) -> (result : TechLevels):
     let (planet_id) = _planet_to_owner.read(caller)
-    let (research_lab) = _research_lab_level.read(planet_id)
+    let (research_lab) = research_lab_level.read(planet_id)
     let (armour_tech) = _armour_tech.read(planet_id)
     let (astrophysics) = _astrophysics.read(planet_id)
     let (combustion_drive) = _combustion_drive.read(planet_id)
@@ -929,9 +926,9 @@ func cargo_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._cargo_ship_build_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -943,9 +940,9 @@ end
 @external
 func cargo_ship_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (units_produced, success) = IShipyard._cargo_ship_build_complete(shipyard_address, caller)
+    let (units_produced, success) = IShipyard._cargo_ship_build_complete(_shipyard_address, caller)
     assert success = TRUE
     let (current_amount_of_units) = _ships_cargo.read(planet_id)
     _ships_cargo.write(planet_id, current_amount_of_units + units_produced)
@@ -958,9 +955,9 @@ func recycler_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._build_recycler_ship_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -974,10 +971,10 @@ func recycler_ship_build_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (units_produced, success) = IShipyard._build_recycler_ship_complete(
-        shipyard_address, caller
+        _shipyard_address, caller
     )
     assert success = TRUE
     let (current_amount_of_units) = _ships_recycler.read(planet_id)
@@ -991,9 +988,9 @@ func espionage_probe_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._build_espionage_probe_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -1007,10 +1004,10 @@ func espionage_probe_build_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (units_produced, success) = IShipyard._build_espionage_probe_complete(
-        shipyard_address, caller
+        _shipyard_address, caller
     )
     assert success = TRUE
     let (current_amount_of_units) = _ships_espionage_probe.read(planet_id)
@@ -1024,9 +1021,9 @@ func solar_satellite_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._build_solar_satellite_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -1040,10 +1037,10 @@ func solar_satellite_build_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (units_produced, success) = IShipyard._build_solar_satellite_complete(
-        shipyard_address, caller
+        _shipyard_address, caller
     )
     assert success = TRUE
     let (current_amount_of_units) = _ships_solar_satellite.read(planet_id)
@@ -1057,9 +1054,9 @@ func light_fighter_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._build_light_fighter_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -1073,10 +1070,10 @@ func light_fighter_build_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
     let (units_produced, success) = IShipyard._build_light_fighter_complete(
-        shipyard_address, caller
+        _shipyard_address, caller
     )
     assert success = TRUE
     let (current_amount_of_units) = _ships_light_fighter.read(planet_id)
@@ -1090,9 +1087,9 @@ func cruiser_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 ):
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (metal, crystal, deuterium) = IShipyard._build_cruiser_start(
-        shipyard_address, caller, number_of_units
+        _shipyard_address, caller, number_of_units
     )
     _pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
@@ -1104,9 +1101,9 @@ end
 @external
 func cruiser_build_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
-    let (shipyard_address) = _shipyard_address.read()
+    let (_shipyard_address) = shipyard_address.read()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (units_produced, success) = IShipyard._build_cruiser_complete(shipyard_address, caller)
+    let (units_produced, success) = IShipyard._build_cruiser_complete(_shipyard_address, caller)
     assert success = TRUE
     let (current_amount_of_units) = _ships_cruiser.read(planet_id)
     _ships_cruiser.write(planet_id, current_amount_of_units + units_produced)
@@ -1119,7 +1116,7 @@ end
 # ):
 #     let (caller) = get_caller_address()
 #     let (planet_id) = _planet_to_owner.read(caller)
-#     let (shipyard_address) = _shipyard_address.read()
+#     let (shipyard_address) = shipyard_address.read()
 #     let (metal, crystal, deuterium) = IShipyard._build_battleship_start(
 #         shipyard_address, caller, number_of_units
 #     )
@@ -1135,7 +1132,7 @@ end
 #     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 # }():
 #     let (caller) = get_caller_address()
-#     let (shipyard_address) = _shipyard_address.read()
+#     let (shipyard_address) = shipyard_address.read()
 #     let (planet_id) = _planet_to_owner.read(caller)
 #     let (units_produced, success) = IShipyard._build_battleship_complete(
 #         shipyard_address, caller
@@ -1151,7 +1148,7 @@ func get_fleet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     caller : felt
 ) -> (result : Fleet):
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard) = _shipyard_level.read(planet_id)
+    let (shipyard) = shipyard_level.read(planet_id)
     let (cargo_ship) = _ships_cargo.read(planet_id)
     let (recycler_ship) = _ships_recycler.read(planet_id)
     let (espionage_probe) = _ships_espionage_probe.read(planet_id)
@@ -1185,7 +1182,7 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     _planet_to_owner.write(caller, planet_id)
     _planets.write(planet_id, planet)
     # Techs setups
-    _research_lab_level.write(planet_id, preset_techs.research_lab)
+    research_lab_level.write(planet_id, preset_techs.research_lab)
     _energy_tech.write(planet_id, preset_techs.energy_tech)
     _laser_tech.write(planet_id, preset_techs.laser_tech)
     _computer_tech.write(planet_id, preset_techs.computer_tech)
@@ -1202,7 +1199,7 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     _impulse_drive.write(planet_id, preset_techs.impulse_drive)
 
     # Fleet setup
-    _shipyard_level.write(planet_id, preset_fleet.shipyard)
+    shipyard_level.write(planet_id, preset_fleet.shipyard)
     _ships_cargo.write(planet_id, preset_fleet.cargo)
     _ships_recycler.write(planet_id, preset_fleet.recycler)
     _ships_espionage_probe.write(planet_id, preset_fleet.espionage_probe)
