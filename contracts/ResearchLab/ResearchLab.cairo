@@ -61,7 +61,6 @@ from contracts.ResearchLab.library import (
     _check_trying_to_complete_the_right_tech,
     _check_waited_enough,
 )
-from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.Ogame.IOgame import IOgame
 from contracts.Ogame.library import _check_que_not_busy

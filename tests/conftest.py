@@ -12,13 +12,14 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 OGAME_FILE = os.path.join("contracts", "Ogame", "Ogame.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
-ERC721_FILE = os.path.join("contracts", "token", "erc721",
+ERC721_FILE = os.path.join("contracts", "Tokens", "erc721",
                            "ERC721.cairo")
-ERC20_FILE = os.path.join("contracts", "token", "erc20",
+ERC20_FILE = os.path.join("contracts", "Tokens", "erc20",
                           "ERC20_Mintable.cairo")
-MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
+MINTER_FILE = os.path.join("contracts", "Minter", "erc721_minter.cairo")
 LAB_FILE = os.path.join("contracts", "ResearchLab", "ResearchLab.cairo")
 SHIPYARD_FILE = os.path.join("contracts", "Shipyard", "Shipyard.cairo")
+FACILITIES_FILE = os.path.join("contrcacts", "Facilities","Facilities.cairo" )
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
@@ -115,6 +116,12 @@ async def shipyard(starknet, game):
         constructor_calldata=[game.contract_address])
 
 @pytest_asyncio.fixture
+async def facilities(starknet, game):
+    return await starknet.deploy(
+        source=FACILITIES_FILE,
+        constructor_calldata=[game.contract_address])
+
+@pytest_asyncio.fixture
 async def deploy_game_v1(minter, erc721, game, admin, user_one,
                          metal, crystal, deuterium, research_lab, shipyard):
 
@@ -141,7 +148,7 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
 
     await owner.send_transaction(admin,
                                  game.contract_address,
-                                 'set_facilities_addresses', [research_lab.contract_address, shipyard.contract_address])
+                                 'set_modules_addresses', [0, research_lab.contract_address, shipyard.contract_address])
 
     await user1.send_transaction(user_one,
                                  game.contract_address,

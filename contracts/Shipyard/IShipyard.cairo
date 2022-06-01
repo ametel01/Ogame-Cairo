@@ -2,14 +2,6 @@
 
 @contract_interface
 namespace IShipyard:
-    func _shipyard_upgrade_start(caller : felt) -> (
-        metal_spent : felt, crystal_spent : felt, deuterium_spent : felt, time_unlocked : felt
-    ):
-    end
-
-    func _shipyard_upgrade_complete(caller : felt) -> (success : felt):
-    end
-
     func _cargo_ship_build_start(caller : felt, number_of_units : felt) -> (
         metal_spent : felt, crystal_spent : felt, deuterium_spent : felt
     ):

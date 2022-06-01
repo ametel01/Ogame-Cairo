@@ -13,23 +13,19 @@ from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.constants import ROBOT_FACTORY_BUILDING_ID
 from contracts.Ogame.structs import Cost, Planet, MineLevels, Energy, Facilities, BuildingQue
-from contracts.utils.library import (
+from contracts.utils.library import planet_genereted, structure_updated, TRUE
+from contracts.Ogame.library import reset_timelock, reset_building_que, _get_planet
+from contracts.Ogame.storage import (
+    _players_spent_resources,
     _planet_to_owner,
     _number_of_planets,
     _planets,
     erc721_token_address,
-    planet_genereted,
-    structure_updated,
-    buildings_timelock,
-    building_qued,
-    _get_planet,
-    reset_timelock,
-    reset_building_que,
     erc20_metal_address,
     erc20_crystal_address,
     erc20_deuterium_address,
-    TRUE,
-    _players_spent_resources,
+    buildings_timelock,
+    building_qued,
 )
 from contracts.utils.Formulas import (
     formulas_robot_factory_building,

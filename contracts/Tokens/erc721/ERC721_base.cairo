@@ -10,7 +10,7 @@ from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub
 
 from contracts.utils.ERC165_base import ERC165_register_interface
 
-from contracts.token.erc721.interfaces.IERC721_Receiver import IERC721_Receiver
+from contracts.Tokens.erc721.interfaces.IERC721_Receiver import IERC721_Receiver
 
 #
 # Storage

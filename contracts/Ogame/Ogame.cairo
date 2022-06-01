@@ -30,12 +30,7 @@ from contracts.ResourcesManager import (
     _calculate_available_resources,
     _pay_resources_erc20,
 )
-from contracts.utils.library import (
-    _number_of_planets,
-    _planets,
-    _planet_to_owner,
-    _players_spent_resources,
-)
+
 from contracts.utils.Formulas import (
     formulas_metal_building,
     formulas_crystal_building,
@@ -43,6 +38,10 @@ from contracts.utils.Formulas import (
     formulas_calculate_player_points,
 )
 from contracts.Ogame.storage import (
+    _number_of_planets,
+    _planets,
+    _planet_to_owner,
+    _players_spent_resources,
     erc721_token_address,
     erc20_metal_address,
     erc20_crystal_address,
@@ -161,14 +160,14 @@ func get_facilities_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 @view
-func getresearch_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func get_research_lab_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     ) -> (res : felt):
     let (res) = research_lab_address.read()
     return (res)
 end
 
 @view
-func getshipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+func get_shipyard_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     res : felt
 ):
     let (res) = shipyard_address.read()
@@ -290,12 +289,12 @@ end
 
 @external
 func set_modules_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _facilities_address : felt, _lab_address : felt, shipyard_address : felt
+    _facilities_address : felt, _lab_address : felt, _shipyard_address : felt
 ):
     Ownable_only_owner()
     facilities_address.write(_facilities_address)
     research_lab_address.write(_lab_address)
-    shipyard_address.write(shipyard_address)
+    shipyard_address.write(_shipyard_address)
     return ()
 end
 
@@ -370,67 +369,13 @@ func solar_plant_upgrade_complete{
     return ()
 end
 
-##############################################################################################
-#                              FACILITIES EXTERNALS FUNCS                                    #
-##############################################################################################
-
-@external
-func robot_factory_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    ):
-    _start_robot_factory_upgrade()
-    return ()
-end
-
-@external
-func robot_factory_upgrade_complete{
-    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}():
-    _end_robot_factory_upgrade()
-    return ()
-end
-
-@external
-func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    ):
-    let (caller) = get_caller_address()
-    let (lab_address) = research_lab_address.read()
-    let (
-        metal_spent, crystal_spent, deuterium_spent, time_unlocked
-    ) = IResearchLab._research_lab_upgrade_start(lab_address, caller)
-    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
-    let (spent_so_far) = _players_spent_resources.read(caller)
-    let new_total_spent = spent_so_far + metal_spent + crystal_spent
-    _players_spent_resources.write(caller, new_total_spent)
-    let que_details = BuildingQue(RESEARCH_LAB_BUILDING_ID, time_unlocked)
-    buildings_timelock.write(caller, que_details)
-    building_qued.write(caller, RESEARCH_LAB_BUILDING_ID, TRUE)
-
-    return ()
-end
-
-@external
-func research_lab_upgrade_complete{
-    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-}():
-    let (caller) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(caller)
-    let (lab_address) = research_lab_address.read()
-    let (success) = IResearchLab._research_lab_upgrade_complete(lab_address, caller)
-    assert success = TRUE
-    let (current_lab_level) = research_lab_level.read(planet_id)
-    research_lab_level.write(planet_id, current_lab_level + 1)
-    reset_timelock(caller)
-    reset_building_que(caller, RESEARCH_LAB_BUILDING_ID)
-    return ()
-end
-
 @external
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (_facilities_address) = facilities_address.read()
     let (
         metal_spent, crystal_spent, deuterium_spent, time_unlocked
-    ) = IFacilities._shipyard_upgrade_start(facilities_address, caller)
+    ) = IFacilities._shipyard_upgrade_start(_facilities_address, caller)
     _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
@@ -446,8 +391,8 @@ end
 func shipyard_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard_address) = shipyard_address.read()
-    let (success) = IShipyard._shipyard_upgrade_complete(shipyard_address, caller)
+    let (_facilities_address) = facilities_address.read()
+    let (success) = IFacilities._shipyard_upgrade_complete(_facilities_address, caller)
     assert success = TRUE
     let (current_shipyard_level) = shipyard_level.read(planet_id)
     shipyard_level.write(planet_id, current_shipyard_level + 1)
@@ -1182,6 +1127,7 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     _planet_to_owner.write(caller, planet_id)
     _planets.write(planet_id, planet)
     # Techs setups
+    robot_factory_level.write(planet_id, 20)
     research_lab_level.write(planet_id, preset_techs.research_lab)
     _energy_tech.write(planet_id, preset_techs.energy_tech)
     _laser_tech.write(planet_id, preset_techs.laser_tech)

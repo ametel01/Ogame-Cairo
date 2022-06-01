@@ -8,31 +8,11 @@ from starkware.starknet.common.syscalls import (
     get_caller_address,
 )
 from contracts.Ogame.structs import Planet, BuildingQue
+from contracts.Ogame.storage import _planet_to_owner, _planets
 
 ##########################################################################################
 #                                       Storage                                          #
 ##########################################################################################
-
-# @dev Returns the total number of planets present in the universe.
-@storage_var
-func _number_of_planets() -> (n : felt):
-end
-
-# @dev Returns the planet struct of a given planet.
-# @params The planet ID which is = to the NFT ID.
-@storage_var
-func _planets(planet_id : Uint256) -> (planet : Planet):
-end
-
-# @dev Mapping between player address and planet ID.
-# @params The player address
-@storage_var
-func _planet_to_owner(address : felt) -> (planet_id : Uint256):
-end
-
-@storage_var
-func _players_spent_resources(address : felt) -> (spent_resources : felt):
-end
 
 # @dev Returns the address of the game's ERC721 contract.
 @storage_var
@@ -115,26 +95,3 @@ const FALSE = 0
 ##########################################################################################
 #                                               Functions                                #
 ##########################################################################################
-
-func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-    planet : Planet
-):
-    let (address) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(address)
-    let (res) = _planets.read(planet_id)
-    return (planet=res)
-end
-
-func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    address : felt
-):
-    buildings_timelock.write(address, BuildingQue(0, 0))
-    return ()
-end
-
-func reset_building_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    address : felt, id : felt
-):
-    building_qued.write(address, id, FALSE)
-    return ()
-end

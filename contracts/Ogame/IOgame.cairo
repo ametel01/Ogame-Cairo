@@ -15,13 +15,13 @@ namespace IOgame:
     func erc721_address() -> (res : felt):
     end
 
-    func metal_address() -> (res : felt):
+    func get_metal_address() -> (res : felt):
     end
 
-    func crystal_address() -> (res : felt):
+    func get_crystal_address() -> (res : felt):
     end
 
-    func deuterium_address() -> (res : felt):
+    func get_deuterium_address() -> (res : felt):
     end
 
     func get_structures_levels(caller : felt) -> (

@@ -8,17 +8,8 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.constants import UINT256_DECIMALS
-from contracts.Ogame.structs import MineLevels, Energy, Facilities
-from contracts.utils.library import (
-    _planet_to_owner,
-    _planets,
-    Planet,
-    erc20_metal_address,
-    erc20_crystal_address,
-    erc20_deuterium_address,
-    resources_timer,
-    FALSE,
-)
+from contracts.Ogame.structs import MineLevels, Energy, Facilities, Planet
+from contracts.utils.library import resources_timer, FALSE
 from contracts.utils.Formulas import (
     _consumption,
     _consumption_deuterium,
@@ -29,7 +20,14 @@ from contracts.utils.Formulas import (
     formulas_production_scaler,
     _solar_production_formula,
 )
-from contracts.Ogame.storage import _resources_timer
+from contracts.Ogame.storage import (
+    _resources_timer,
+    _planet_to_owner,
+    _planets,
+    erc20_metal_address,
+    erc20_crystal_address,
+    erc20_deuterium_address,
+)
 
 func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt

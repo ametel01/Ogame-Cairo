@@ -36,24 +36,21 @@ from contracts.utils.Formulas import (
     formulas_production_scaler,
     formulas_buildings_production_time,
 )
-from contracts.utils.library import (
+
+from contracts.utils.library import planet_genereted, structure_updated, buildings_timelock
+from contracts.Ogame.library import reset_timelock, reset_building_que, _get_planet
+from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, Facilities, BuildingQue
+from contracts.Ogame.storage import (
+    _resources_timer,
+    _players_spent_resources,
     _planet_to_owner,
     _number_of_planets,
     _planets,
     erc721_token_address,
-    planet_genereted,
-    structure_updated,
-    buildings_timelock,
-    _get_planet,
-    reset_timelock,
-    building_qued,
-    reset_building_que,
-    _players_spent_resources,
     erc20_metal_address,
     erc20_crystal_address,
+    building_qued,
 )
-from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, Facilities, BuildingQue
-from contracts.Ogame.storage import _resources_timer
 from contracts.Ogame.library import _check_que_not_busy
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage

@@ -1,7 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.uint256 import Uint256
-from contracts.Ogame.structs import BuildingQue
+from contracts.Ogame.structs import BuildingQue, Planet
 ##################################################################################
 #                              TOKENS ADDRESSES                              #
 ##################################################################################
@@ -30,6 +30,30 @@ end
 func erc20_deuterium_address() -> (address : felt):
 end
 
+##################################################################################
+#                              GENERAL STORAGE                                   #
+##################################################################################
+
+# @dev Returns the total number of planets present in the universe.
+@storage_var
+func _number_of_planets() -> (n : felt):
+end
+
+# @dev Returns the planet struct of a given planet.
+# @params The planet ID which is = to the NFT ID.
+@storage_var
+func _planets(planet_id : Uint256) -> (planet : Planet):
+end
+
+# @dev Mapping between player address and planet ID.
+# @params The player address
+@storage_var
+func _planet_to_owner(address : felt) -> (planet_id : Uint256):
+end
+
+@storage_var
+func _players_spent_resources(address : felt) -> (spent_resources : felt):
+end
 ##################################################################################
 #                              COMPONENTS ADDRESSES                              #
 ##################################################################################
@@ -67,7 +91,7 @@ end
 ##################################################################################
 
 @storage_var
-func shipyard_level() -> (level : felt):
+func shipyard_level(planet_id : Uint256) -> (level : felt):
 end
 
 # TODO: this need to be changed

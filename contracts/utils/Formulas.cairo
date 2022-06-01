@@ -6,7 +6,7 @@ from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
 from contracts.utils.constants import TRUE, FALSE
-from contracts.utils.library import _players_spent_resources
+from contracts.Ogame.storage import _players_spent_resources
 
 ##############
 # Production #
