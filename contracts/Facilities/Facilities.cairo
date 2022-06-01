@@ -22,6 +22,14 @@ from contracts.Facilities.library import (
 )
 from contracts.Ogame.IOgame import IOgame
 
+@constructor
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ogame_address : felt
+):
+    _ogame_address.write(ogame_address)
+    return ()
+end
+
 @external
 func _shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt

@@ -36,7 +36,6 @@ end
 
 # @dev Temporary struct to represent a fleet.
 struct Fleet:
-    member shipyard : felt
     member cargo : felt
     member recycler : felt
     member espionage_probe : felt

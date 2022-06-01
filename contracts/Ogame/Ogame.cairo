@@ -1093,7 +1093,6 @@ func get_fleet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     caller : felt
 ) -> (result : Fleet):
     let (planet_id) = _planet_to_owner.read(caller)
-    let (shipyard) = shipyard_level.read(planet_id)
     let (cargo_ship) = _ships_cargo.read(planet_id)
     let (recycler_ship) = _ships_recycler.read(planet_id)
     let (espionage_probe) = _ships_espionage_probe.read(planet_id)
@@ -1103,7 +1102,7 @@ func get_fleet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     let (battleship) = _ships_battleship.read(planet_id)
     let (deathstar) = _ships_deathstar.read(planet_id)
     return (
-        Fleet(shipyard, cargo_ship, recycler_ship, espionage_probe, solar_satellite, light_fighter, cruiser, battleship, deathstar),
+        Fleet(cargo_ship, recycler_ship, espionage_probe, solar_satellite, light_fighter, cruiser, battleship, deathstar),
     )
 end
 
@@ -1145,7 +1144,7 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
     _impulse_drive.write(planet_id, preset_techs.impulse_drive)
 
     # Fleet setup
-    shipyard_level.write(planet_id, preset_fleet.shipyard)
+    shipyard_level.write(planet_id, 10)
     _ships_cargo.write(planet_id, preset_fleet.cargo)
     _ships_recycler.write(planet_id, preset_fleet.recycler)
     _ships_espionage_probe.write(planet_id, preset_fleet.espionage_probe)

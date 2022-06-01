@@ -91,10 +91,10 @@ func _cargo_ship_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 2"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 2"):
         assert_le(2, shipyard_level)
     end
-    with_attr error_message("combustion drive must be at level 2"):
+    with_attr error_message("SHIPYARD::COMBUSTION DRIVE MUST BE AT LEVEL 2"):
         assert_le(2, tech_levels.combustion_drive)
     end
     return (TRUE)
@@ -106,13 +106,13 @@ func _recycler_ship_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 4"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 4"):
         assert_le(4, shipyard_level)
     end
-    with_attr error_message("combustion drive must be at level 6"):
+    with_attr error_message("SHIPYARD::COMBUSTION DRIVE MUST BE AT LEVEL 2 6"):
         assert_le(6, tech_levels.combustion_drive)
     end
-    with_attr error_message("shielding technology must be at level 2"):
+    with_attr error_message("SHIPYARD::SHIELDING TECHNOLOGY MUST BE AT LEVEL 2"):
         assert_le(2, tech_levels.shielding_tech)
     end
     return (TRUE)
@@ -124,13 +124,13 @@ func _espionage_probe_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 3"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 3"):
         assert_le(3, shipyard_level)
     end
-    with_attr error_message("combustion drive must be at level 3"):
+    with_attr error_message("SHIPYARD::COMBUSTION DRIVE MUST BE AT LEVEL 3"):
         assert_le(3, tech_levels.combustion_drive)
     end
-    with_attr error_message("espionage technology must be at level 2"):
+    with_attr error_message("SHIPYARD::ESPIONAGE TECHNOLOGY MUST BE AT LEVEL 2"):
         assert_le(2, tech_levels.espionage_tech)
     end
     return (TRUE)
@@ -142,7 +142,7 @@ func _solar_satellite_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 1"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
     end
     return (TRUE)
@@ -154,10 +154,10 @@ func _light_fighter_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 1"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
     end
-    with_attr error_message("combustion drive must be at level 1"):
+    with_attr error_message("SHIPYARD::COMBUSTION DRIVE MUST BE AT LEVEL 1"):
         assert_le(1, tech_levels.combustion_drive)
     end
     return (TRUE)
@@ -169,13 +169,13 @@ func _cruiser_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 5"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 5"):
         assert_le(5, shipyard_level)
     end
-    with_attr error_message("ion technology must be at level 2"):
+    with_attr error_message("SHIPYARD::ION TECH MUST BE AT LEVEL 2"):
         assert_le(2, tech_levels.ion_tech)
     end
-    with_attr error_message("impulse drive must be at level 4"):
+    with_attr error_message("SHIPYARD::IMPULSE DRIVE MUST BE AT LEVEL 4"):
         assert_le(4, tech_levels.impulse_drive)
     end
     return (TRUE)
@@ -187,10 +187,10 @@ func _battleship_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 7"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 7"):
         assert_le(7, shipyard_level)
     end
-    with_attr error_message("hyperspace drive must be at level 4"):
+    with_attr error_message("SHIPYARD::HYPERSPACE DRIVE MUST BE AT LEVEL 4"):
         assert_le(4, tech_levels.hyperspace_drive)
     end
     return (TRUE)
@@ -202,16 +202,17 @@ func _deathstar_requirements_check{
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
-    with_attr error_message("shipyard must be at level 12"):
+    with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 12"):
         assert_le(12, shipyard_level)
     end
-    with_attr error_message("hyperspace tech must be at level 6"):
+    with_attr error_message("SHIPYARD::HYPERSPACE TECH MUST BE AT LEVEL 6"):
         assert_le(6, tech_levels.hyperspace_tech)
     end
-    with_attr error_message("hyperspace drive must be at level 7"):
-        assert_le(7, tech_levels.espionage_tech)
+    with_attr error_message("SHIPYARD::HYPERSPACE DRIVE MUST BE AT LEVEL 7"):
+        assert_le(7, tech_levels.hyperspace_drive)
     end
-    with_attr error_message("hyperspace drive must be at level 7"):
+    # TODO: add graviton tech here
+    with_attr error_message("SHIPYARD::HYPERSPACE DRIVE MUST BE AT LEVEL 7"):
         assert_le(7, tech_levels.espionage_tech)
     end
     return (TRUE)

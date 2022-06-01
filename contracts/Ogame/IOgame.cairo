@@ -102,4 +102,10 @@ namespace IOgame:
 
     func robot_factory_upgrade_complete():
     end
+
+    func shipyard_upgrade_start() -> (end_time : felt):
+    end
+
+    func shipyard_factory_upgrade_complete():
+    end
 end

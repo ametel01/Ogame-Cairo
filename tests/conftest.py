@@ -19,7 +19,7 @@ ERC20_FILE = os.path.join("contracts", "Tokens", "erc20",
 MINTER_FILE = os.path.join("contracts", "Minter", "erc721_minter.cairo")
 LAB_FILE = os.path.join("contracts", "ResearchLab", "ResearchLab.cairo")
 SHIPYARD_FILE = os.path.join("contracts", "Shipyard", "Shipyard.cairo")
-FACILITIES_FILE = os.path.join("contrcacts", "Facilities","Facilities.cairo" )
+FACILITIES_FILE = os.path.join("contracts", "Facilities","Facilities.cairo" )
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128-1
@@ -123,7 +123,7 @@ async def facilities(starknet, game):
 
 @pytest_asyncio.fixture
 async def deploy_game_v1(minter, erc721, game, admin, user_one,
-                         metal, crystal, deuterium, research_lab, shipyard):
+                         metal, crystal, deuterium, facilities, research_lab, shipyard):
 
     # Submit NFT contract address to minter.
     await owner.send_transaction(admin,
@@ -148,7 +148,7 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
 
     await owner.send_transaction(admin,
                                  game.contract_address,
-                                 'set_modules_addresses', [0, research_lab.contract_address, shipyard.contract_address])
+                                 'set_modules_addresses', [facilities.contract_address, research_lab.contract_address, shipyard.contract_address])
 
     await user1.send_transaction(user_one,
                                  game.contract_address,

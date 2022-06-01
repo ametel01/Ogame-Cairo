@@ -93,7 +93,7 @@ func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
 ):
     alloc_locals
     let (metal_available, crystal_available, deuterium_available) = _get_available_resources(caller)
-    with_attr error_message("not enough resources"):
+    with_attr error_message("FACILITIES::NOT ENOUGH RESOURCES!!!"):
         let (enough_metal) = is_le(metal_required, metal_available)
         assert enough_metal = TRUE
         let (enough_crystal) = is_le(crystal_required, crystal_available)
@@ -123,7 +123,7 @@ func _check_building_que_not_busy{
 }(caller : felt):
     let (que_status) = facilities_timelock.read(caller)
     let current_timelock = que_status.lock_end
-    with_attr error_message("FACILITIES::Que is busy"):
+    with_attr error_message("FACILITIES::QUE IS BUSY!!!"):
         assert current_timelock = 0
     end
     return ()
@@ -133,7 +133,7 @@ func _check_trying_to_complete_the_right_facility{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, BUILDING_ID : felt):
     let (is_qued) = facility_qued.read(caller, BUILDING_ID)
-    with_attr error_message("FACILITIES::Tried to complete the wrong ship"):
+    with_attr error_message("FACILITIES::TRIED TO COMPLET THE WRONG FACILITY!!!"):
         assert is_qued = TRUE
     end
     return ()
@@ -148,7 +148,7 @@ func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (que_details) = facilities_timelock.read(caller)
     let timelock_end = que_details.lock_end
     let (waited_enough) = is_le(timelock_end, time_now)
-    with_attr error_message("FACILITIES::Timelock not yet expired"):
+    with_attr error_message("FACILITIES::TIMELOCK NOT YET EXPIRED!!!"):
         assert waited_enough = TRUE
     end
     return ()
