@@ -70,10 +70,6 @@ end
 func crystal_address() -> (address : felt):
 end
 
-@storage_var
-func deuterium_address() -> (address : felt):
-end
-
 # @dev Stores the timestamp of the end of the timelock for buildings upgrades.
 # @params The address of the player.
 @storage_var
@@ -338,8 +334,8 @@ func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let (ogame_address) = _ogame_address.read()
     let (metal_address) = IOgame.get_metal_address(ogame_address)
-    let (crystal_address) = IOgame.crystal_address(ogame_address)
-    let (deuterium_address) = IOgame.deuterium_address(ogame_address)
+    let (crystal_address) = IOgame.get_crystal_address(ogame_address)
+    let (deuterium_address) = IOgame.get_deuterium_address(ogame_address)
     let (metal_available) = IERC20.balanceOf(metal_address, caller)
     let (crystal_available) = IERC20.balanceOf(crystal_address, caller)
     let (deuterium_available) = IERC20.balanceOf(deuterium_address, caller)
