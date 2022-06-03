@@ -5,7 +5,7 @@ from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
-from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID, 
+from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.ResearchLab.IResearchLab import IResearchLab
 from contracts.Shipyard.IShipyard import IShipyard
