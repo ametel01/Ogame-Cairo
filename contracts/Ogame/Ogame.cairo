@@ -5,7 +5,7 @@ from starkware.cairo.common.math import assert_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
-from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID, SHIPYARD_BUILDING_ID
+from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID, 
 from contracts.FacilitiesManager import _start_robot_factory_upgrade, _end_robot_factory_upgrade
 from contracts.ResearchLab.IResearchLab import IResearchLab
 from contracts.Shipyard.IShipyard import IShipyard
@@ -277,7 +277,7 @@ end
 ##########################################################################################
 
 @external
-func erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+func set_erc20_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     metal_token : felt, crystal_token : felt, deuterium_token : felt
 ):
     Ownable_only_owner()
@@ -369,6 +369,39 @@ func solar_plant_upgrade_complete{
     return ()
 end
 
+##############################################################################################
+#                              FACILITIES EXTERNALS FUNCS                                    #
+##############################################################################################
+
+@external
+func robot_factory_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (_facilities_address) = facilities_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IFacilities._robot_factory_upgrade_start(_facilities_address, caller)
+    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func robot_factory_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (_facilities_address) = facilities_address.read()
+    let (success) = IFacilities._robot_factory_upgrade_complete(_facilities_address, caller)
+    assert success = TRUE
+    let (current_robot_factory_level) = robot_factory_level.read(planet_id)
+    robot_factory_level.write(planet_id, current_robot_factory_level + 1)
+    return ()
+end
+
 @external
 func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (caller) = get_caller_address()
@@ -380,10 +413,6 @@ func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
-    let que_details = BuildingQue(SHIPYARD_BUILDING_ID, time_unlocked)
-    buildings_timelock.write(caller, que_details)
-    building_qued.write(caller, SHIPYARD_BUILDING_ID, TRUE)
-
     return ()
 end
 
@@ -396,8 +425,6 @@ func shipyard_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     assert success = TRUE
     let (current_shipyard_level) = shipyard_level.read(planet_id)
     shipyard_level.write(planet_id, current_shipyard_level + 1)
-    reset_timelock(caller)
-    reset_building_que(caller, SHIPYARD_BUILDING_ID)
     return ()
 end
 

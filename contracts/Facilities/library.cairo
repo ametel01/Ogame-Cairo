@@ -4,10 +4,12 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.pow import pow
 from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math import assert_le
 from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.Formulas import formulas_buildings_production_time
+from contracts.ResearchLab.library import _get_tech_levels
 
 ##############################################################################################
 #                                   CONSTANTS                                                #
@@ -56,12 +58,95 @@ end
 func facility_qued(address : felt, id : felt) -> (is_qued : felt):
 end
 
+# ###################################################################################################
+#                                FACILITIES REQUIREMENTS CHECHS                                     #
+#####################################################################################################
+
+func _shipyard_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+        ogame_address, caller
+    )
+    with_attr error_message("FACILITIES::ROBOT FACTORY MUST BE AT LEVEL 2"):
+        assert_le(2, robot_factory_level)
+    end
+    return (TRUE)
+end
+
+func _nanite_factory_requirements_check{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (response : felt):
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+        ogame_address, caller
+    )
+    let (tech_levels) = _get_tech_levels(caller)
+    with_attr error_message("FACILITIES::ROBOT FACTORY MUST BE AT LEVEL 10"):
+        assert_le(10, robot_factory_level)
+    end
+    with_attr error_message("FACILITIES::COMPUTER TECH MUST BE AT LEVEL 10"):
+        assert_le(10, tech_levels.computer_tech)
+    end
+    return (TRUE)
+end
+
+# ###################################################################################################
+#                                FACILITIES COST CALCULATION                                        #
+#####################################################################################################
+
+func robot_factory_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    current_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 400
+    let base_crystal = 120
+    let base_deuterium = 200
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
 func shipyard_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     let base_metal = 400
     let base_crystal = 200
     let base_deuterium = 100
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    current_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 200
+    let base_crystal = 400
+    let base_deuterium = 200
+    if current_level == 0:
+        tempvar syscall_ptr = syscall_ptr
+        return (base_metal, base_crystal, base_deuterium)
+    else:
+        let (multiplier) = pow(2, current_level)
+        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
+    end
+end
+
+func nanite_factory_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    current_level : felt
+) -> (metal : felt, crystal : felt, deuterium : felt):
+    let base_metal = 1000000
+    let base_crystal = 500000
+    let base_deuterium = 100000
     if current_level == 0:
         tempvar syscall_ptr = syscall_ptr
         return (base_metal, base_crystal, base_deuterium)
@@ -111,10 +196,10 @@ func _reset_facilities_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     return ()
 end
 
-func _reset_shipyard_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    address : felt, id : felt
+func _reset_facilities_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, building_id : felt
 ):
-    facility_qued.write(address, id, FALSE)
+    facility_qued.write(address, building_id, FALSE)
     return ()
 end
 
@@ -133,7 +218,7 @@ func _check_trying_to_complete_the_right_facility{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt, BUILDING_ID : felt):
     let (is_qued) = facility_qued.read(caller, BUILDING_ID)
-    with_attr error_message("FACILITIES::TRIED TO COMPLET THE WRONG FACILITY!!!"):
+    with_attr error_message("FACILITIES::TRIED TO COMPLETE THE WRONG FACILITY!!!"):
         assert is_qued = TRUE
     end
     return ()
