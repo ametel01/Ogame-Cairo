@@ -7,7 +7,7 @@ namespace IFacilities:
     ):
     end
 
-    func _robot_factory_upgrade_complete(success : felt):
+    func _robot_factory_upgrade_complete(caller : felt) -> (success : felt):
     end
 
     func _shipyard_upgrade_start(caller : felt) -> (
