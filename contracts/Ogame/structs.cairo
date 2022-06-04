@@ -15,16 +15,10 @@ struct Energy:
     # member satellites : felt
 end
 
-# @dev Stores the level of the facilities.
-struct Facilities:
-    member robot_factory : felt
-end
-
 # @dev The main planet struct.
 struct Planet:
     member mines : MineLevels
     member energy : Energy
-    member facilities : Facilities
 end
 
 # @dev Used to handle costs.

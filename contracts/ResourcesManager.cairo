@@ -8,7 +8,7 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Safemath import uint256_checked_add
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.constants import UINT256_DECIMALS
-from contracts.Ogame.structs import MineLevels, Energy, Facilities, Planet
+from contracts.Ogame.structs import MineLevels, Energy, Planet
 from contracts.utils.library import resources_timer, FALSE
 from contracts.utils.Formulas import (
     _consumption,

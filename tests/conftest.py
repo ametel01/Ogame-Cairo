@@ -142,7 +142,7 @@ async def deploy_game_v1(minter, erc721, game, admin, user_one,
 
     await owner.send_transaction(admin,
                                  game.contract_address,
-                                 'erc20_addresses', [metal.contract_address,
+                                 'set_erc20_addresses', [metal.contract_address,
                                                      crystal.contract_address,
                                                      deuterium.contract_address])
 

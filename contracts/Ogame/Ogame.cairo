@@ -76,16 +76,8 @@ from contracts.Ogame.storage import (
     _ships_battleship,
     _ships_deathstar,
 )
-from contracts.Ogame.structs import (
-    TechLevels,
-    BuildingQue,
-    Cost,
-    Planet,
-    MineLevels,
-    Energy,
-    Facilities,
-    Fleet,
-)
+from contracts.Ogame.structs import TechLevels, BuildingQue, Cost, Planet, MineLevels, Energy, Fleet
+
 #########################################################################################
 #                                   Constructor                                         #
 #########################################################################################
@@ -1143,16 +1135,12 @@ func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}
 ):
     let (caller) = get_caller_address()
     let (time_now) = get_block_timestamp()
-    let planet = Planet(
-        MineLevels(metal=25, crystal=23, deuterium=21),
-        Energy(solar_plant=30),
-        Facilities(robot_factory=20),
-    )
+    let planet = Planet(MineLevels(metal=25, crystal=23, deuterium=21), Energy(solar_plant=30))
     let planet_id = Uint256(1, 0)
     _planet_to_owner.write(caller, planet_id)
     _planets.write(planet_id, planet)
     # Techs setups
-    robot_factory_level.write(planet_id, 20)
+    robot_factory_level.write(planet_id, 10)
     research_lab_level.write(planet_id, preset_techs.research_lab)
     _energy_tech.write(planet_id, preset_techs.energy_tech)
     _laser_tech.write(planet_id, preset_techs.laser_tech)
