@@ -290,17 +290,17 @@ end
 #                       @external TO BE REMOVED BEFORE DEPLOYMENT                                       #
 #########################################################################################################
 
-@external
-func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    let (caller) = get_caller_address()
-    let (time_now) = get_block_timestamp()
-    let planet = Planet(
-        MineLevels(metal=25, crystal=23, deuterium=21),
-        Energy(solar_plant=30),
-        Facilities(robot_factory=20),
-    )
-    let planet_id = Uint256(1, 0)
-    _planet_to_owner.write(caller, planet_id)
-    _planets.write(planet_id, planet)
-    return ()
-end
+# @external
+# func GOD_MODE{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+#     let (caller) = get_caller_address()
+#     let (time_now) = get_block_timestamp()
+#     let planet = Planet(
+#         MineLevels(metal=25, crystal=23, deuterium=21),
+#         Energy(solar_plant=30),
+#         Facilities(robot_factory=20),
+#     )
+#     let planet_id = Uint256(1, 0)
+#     _planet_to_owner.write(caller, planet_id)
+#     _planets.write(planet_id, planet)
+#     return ()
+# end
