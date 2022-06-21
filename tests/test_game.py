@@ -47,9 +47,37 @@ async def test_account(deploy_game_v1):
 async def test_collect_resources(starknet, deploy_game_v1):
     (_, ogame, _, metal, crystal, deuterium, user_one) = deploy_game_v1
 
+    # await user1.send_transaction(user_one,
+    #                              ogame.contract_address,
+    #                              'GOD_MODE',
+    #                              [])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
-                                 'GOD_MODE',
+                                 'solar_plant_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR)
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'solar_plant_upgrade_complete',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_start',
+                                 [])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*2)
+    
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'robot_factory_upgrade_start',
+                                 [])
+
+    await user1.send_transaction(user_one,
+                                 ogame.contract_address,
+                                 'metal_upgrade_complete',
                                  [])
 
     update_starknet_block(
@@ -59,7 +87,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [8625, 4414, 1651, 2594])
+    assert_equals(data.result.response, [397, 255, 100, 11])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*5)
         
@@ -67,7 +95,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [41126, 20874, 7858, 2594])
+    assert_equals(data.result.response, [528, 255, 100, 11])
 
     
     # User collect resources.
@@ -81,7 +109,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [41126, 20874, 7858, 2594])
+    assert_equals(data.result.response, [528, 255, 100, 11])
 
   
     

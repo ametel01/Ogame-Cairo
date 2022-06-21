@@ -33,7 +33,7 @@ func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let expected = 778
     assert actual = expected
     let (actual) = _resources_production_formula(30, 50)
-    let expected = 8126
+    let expected = 176086
     assert actual = expected
     # Test for crystal production scaled to 10k
     let (actual) = _resources_production_formula(20, 2)
@@ -43,7 +43,7 @@ func test_resources_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let expected = 518
     assert actual = expected
     let (actual) = _resources_production_formula(20, 50)
-    let expected = 5417
+    let expected = 117390
     assert actual = expected
     # Test for deuterium production scaled to 10k
     let (actual) = _resources_production_formula(10, 2)
