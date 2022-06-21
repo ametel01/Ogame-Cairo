@@ -16,9 +16,11 @@ from contracts.Facilities.library import (
     _get_available_resources,
     shipyard_upgrade_cost,
     robot_factory_upgrade_cost,
+    research_lab_upgrade_cost,
     _shipyard_requirements_check,
     SHIPYARD_ID,
     ROBOT_FACTORY_ID,
+    RESEARCH_LAB_ID,
     _check_enough_resources,
     _check_building_que_not_busy,
     _set_facilities_timelock_and_que,
@@ -98,6 +100,39 @@ func _robot_factory_upgrade_complete{
     _check_trying_to_complete_the_right_facility(caller, ROBOT_FACTORY_ID)
     _check_waited_enough(caller)
     _reset_facilities_que(caller, ROBOT_FACTORY_ID)
+    _reset_facilities_timelock(caller)
+    return (TRUE)
+end
+
+@external
+func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+) -> (metal : felt, crystal : felt, deuterium : felt, time_unlocked : felt):
+    alloc_locals
+    assert_not_zero(caller)
+    _check_building_que_not_busy(caller)
+    let (ogame_address) = _ogame_address.read()
+    let (_, _, _, _, robot_factory_level, research_lab_level, _) = IOgame.get_structures_levels(
+        ogame_address, caller
+    )
+    let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
+        research_lab_level
+    )
+    _check_enough_resources(caller, metal_required, crystal_required, deuterium_required)
+    let (time_unlocked) = _set_facilities_timelock_and_que(
+        caller, RESEARCH_LAB_ID, metal_required, crystal_required, deuterium_required
+    )
+    return (metal_required, crystal_required, deuterium_required, time_unlocked)
+end
+
+@external
+func _research_lab_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}(caller : felt) -> (success : felt):
+    alloc_locals
+    _check_trying_to_complete_the_right_facility(caller, RESEARCH_LAB_ID)
+    _check_waited_enough(caller)
+    _reset_facilities_que(caller, RESEARCH_LAB_ID)
     _reset_facilities_timelock(caller)
     return (TRUE)
 end

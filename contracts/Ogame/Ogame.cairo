@@ -419,6 +419,35 @@ func shipyard_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     return ()
 end
 
+@external
+func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ):
+    let (caller) = get_caller_address()
+    let (_facilities_address) = facilities_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IFacilities._research_lab_upgrade_start(_facilities_address, caller)
+    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func research_lab_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (_facilities_address) = facilities_address.read()
+    let (success) = IFacilities._research_lab_upgrade_complete(_facilities_address, caller)
+    assert success = TRUE
+    let (current_research_lab_level) = research_lab_level.read(planet_id)
+    research_lab_level.write(planet_id, current_research_lab_level + 1)
+    return ()
+end
+
 ##############################################################################################
 #                              RESEARCH EXTERNALS FUNCS                                      #
 ##############################################################################################
