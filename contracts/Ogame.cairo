@@ -28,7 +28,6 @@ from contracts.utils.library import (
     Cost,
     _number_of_planets,
     _planets,
-    _planet_to_owner,
     erc721_token_address,
     erc20_metal_address,
     erc20_crystal_address,
@@ -46,7 +45,7 @@ from contracts.utils.Formulas import (
     formulas_calculate_player_points,
 )
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
-
+from contracts.token.erc721.interfaces.IERC721 import IERC721
 #########################################################################################
 #                                       Getters                                         #
 #########################################################################################
@@ -63,7 +62,8 @@ end
 func owner_of{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     address : felt
 ) -> (planet_id : Uint256):
-    let (id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (id) = IERC721.ownerToPlanet(erc721_address, address)
     return (id)
 end
 
@@ -109,7 +109,8 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     solar_plant : felt,
     robot_factory : felt,
 ):
-    let (id) = _planet_to_owner.read(your_address)
+    let (erc721_address) = erc721_token_address.read()
+    let (id) = IERC721.ownerToPlanet(erc721_address, your_address)
     let (planet) = _planets.read(id)
     let metal = planet.mines.metal
     let crystal = planet.mines.crystal
@@ -130,7 +131,8 @@ func resources_available{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     your_address : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt, energy : felt):
     alloc_locals
-    let (id) = _planet_to_owner.read(your_address)
+    let (erc721_address) = erc721_token_address.read()
+    let (id) = IERC721.ownerToPlanet(erc721_address, your_address)
     let (planet) = _planets.read(id)
     let (metal_available, crystal_available, deuterium_available) = _calculate_available_resources(
         your_address
@@ -214,7 +216,8 @@ end
 func collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     let (address) = get_caller_address()
     assert_not_zero(address)
-    let (id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (id) = IERC721.ownerToPlanet(erc721_address, address)
     _collect_resources(address)
     return ()
 end

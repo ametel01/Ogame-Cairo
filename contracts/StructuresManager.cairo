@@ -38,7 +38,6 @@ from contracts.utils.Formulas import (
 )
 from contracts.utils.library import (
     Cost,
-    _planet_to_owner,
     _number_of_planets,
     _planets,
     Planet,
@@ -69,7 +68,8 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     alloc_locals
     let (time_now) = get_block_timestamp()
     # One address can only have one planet at this stage.
-    let (has_already_planet) = _planet_to_owner.read(caller)
+    let (erc721_address) = erc721_token_address.read()
+    let (has_already_planet) = IERC721.balanceOf(erc721_address, caller)
     assert has_already_planet = Uint256(0, 0)
     let planet = Planet(
         MineLevels(metal=0, crystal=0, deuterium=0),
@@ -84,7 +84,6 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     _resources_timer.write(new_planet_id, time_now)
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, caller, new_planet_id)
-    _planet_to_owner.write(caller, new_planet_id)
     _planets.write(new_planet_id, planet)
     _number_of_planets.write(new_id)
     planet_genereted.emit(new_planet_id)
@@ -139,7 +138,8 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
     with_attr error_message("Tryed to complete the wrong structure"):
         assert is_qued = TRUE
     end
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let (cue_details) = buildings_timelock.read(address)
     let timelock_end = cue_details.lock_end
@@ -209,7 +209,8 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     with_attr error_message("Tryed to complete the wrong structure"):
         assert is_qued = TRUE
     end
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let (cue_details) = buildings_timelock.read(address)
     let timelock_end = cue_details.lock_end
@@ -279,7 +280,8 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     with_attr error_message("Tryed to complete the wrong structure"):
         assert is_qued = TRUE
     end
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let (cue_details) = buildings_timelock.read(address)
     let timelock_end = cue_details.lock_end
@@ -350,7 +352,8 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     with_attr error_message("Tryed to complete the wrong structure"):
         assert is_qued = TRUE
     end
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let (cue_details) = buildings_timelock.read(address)
     let timelock_end = cue_details.lock_end
@@ -385,7 +388,8 @@ func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     up_robot_factory : Cost,
 ):
     alloc_locals
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal

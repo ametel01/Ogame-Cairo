@@ -40,6 +40,10 @@ end
 func ERC721_operator_approvals(owner : felt, operator : felt) -> (res : felt):
 end
 
+@storage_var
+func owner_to_id(owner : felt) -> (tokenId : Uint256):
+end
+
 #
 # Events
 #
@@ -324,6 +328,7 @@ func _transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     let (owner_bal) = ERC721_balances.read(_from)
     let (new_balance) = uint256_sub(owner_bal, Uint256(1, 0))
     ERC721_balances.write(_from, new_balance)
+    owner_to_id.write(to, token_id)
 
     # Increase receiver balance
     let (receiver_bal) = ERC721_balances.read(to)

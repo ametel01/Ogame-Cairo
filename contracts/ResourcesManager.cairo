@@ -9,7 +9,6 @@ from contracts.utils.Safemath import uint256_checked_add
 from contracts.token.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.constants import UINT256_DECIMALS
 from contracts.utils.library import (
-    _planet_to_owner,
     _planets,
     Planet,
     erc20_metal_address,
@@ -20,6 +19,7 @@ from contracts.utils.library import (
     Energy,
     Facilities,
     FALSE,
+    erc721_token_address,
 )
 from contracts.utils.Formulas import (
     _consumption,
@@ -31,12 +31,14 @@ from contracts.utils.Formulas import (
     formulas_production_scaler,
     _solar_production_formula,
 )
+from contracts.token.erc721.interfaces.IERC721 import IERC721
 
 func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    let (planet_id) = _planet_to_owner.read(caller)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, caller)
     let (planet) = _planets.read(planet_id)
     let (time_start) = _resources_timer.read(planet_id)
     let metal_level = planet.mines.metal
@@ -108,7 +110,8 @@ func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         crystal_amount=crystal_produced,
         deuterium_amount=deuterium_produced,
     )
-    let (planet_id) = _planet_to_owner.read(caller)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, caller)
     let (time_now) = get_block_timestamp()
     _resources_timer.write(planet_id, time_now)
     return ()

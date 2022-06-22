@@ -7,6 +7,7 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
+from contracts.token.erc721.interfaces.IERC721 import IERC721
 ##########################################################################################
 #                                               Structs                                  #
 ##########################################################################################
@@ -87,12 +88,6 @@ end
 func _planets(planet_id : Uint256) -> (planet : Planet):
 end
 
-# @dev Mapping between player address and planet ID.
-# @params The player address
-@storage_var
-func _planet_to_owner(address : felt) -> (planet_id : Uint256):
-end
-
 @storage_var
 func _players_spent_resources(address : felt) -> (spent_resources : felt):
 end
@@ -167,7 +162,8 @@ func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     planet : Planet
 ):
     let (address) = get_caller_address()
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (res) = _planets.read(planet_id)
     return (planet=res)
 end

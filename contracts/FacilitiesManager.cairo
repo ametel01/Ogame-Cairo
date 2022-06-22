@@ -14,7 +14,6 @@ from contracts.ResourcesManager import _pay_resources_erc20
 from contracts.utils.constants import ROBOT_FACTORY_BUILDING_ID
 from contracts.utils.library import (
     Cost,
-    _planet_to_owner,
     _number_of_planets,
     _planets,
     Planet,
@@ -40,6 +39,7 @@ from contracts.utils.Formulas import (
     formulas_robot_factory_building,
     formulas_buildings_production_time,
 )
+from contracts.token.erc721.interfaces.IERC721 import IERC721
 
 func _start_robot_factory_upgrade{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
@@ -93,7 +93,8 @@ func _end_robot_factory_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (address) = get_caller_address()
     let (is_qued) = building_qued.read(address, 5)
     assert is_qued = TRUE
-    let (planet_id) = _planet_to_owner.read(address)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, address)
     let (planet) = _planets.read(planet_id)
     let (que_details) = buildings_timelock.read(address)
     let timelock_end = que_details.lock_end
