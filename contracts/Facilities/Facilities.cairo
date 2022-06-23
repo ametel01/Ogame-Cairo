@@ -18,9 +18,12 @@ from contracts.Facilities.library import (
     robot_factory_upgrade_cost,
     research_lab_upgrade_cost,
     _shipyard_requirements_check,
+    nanite_factory_upgrade_cost,
+    _nanite_factory_requirements_check,
     SHIPYARD_ID,
     ROBOT_FACTORY_ID,
     RESEARCH_LAB_ID,
+    NANITE_FACTORY_ID,
     _check_enough_resources,
     _check_building_que_not_busy,
     _set_facilities_timelock_and_que,
@@ -144,6 +147,7 @@ func _nanite_factary_upgrade_start{
     alloc_locals
     assert_not_zero(caller)
     _check_building_que_not_busy(caller)
+    _nanite_factory_requirements_check(caller)
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, robot_factory_level, _, nanite_factory_level) = IOgame.get_structures_levels(
         ogame_address, caller
