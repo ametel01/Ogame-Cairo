@@ -86,7 +86,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     _check_que_not_busy(ogame_address, caller)
     let (planet_id) = IOgame.owner_of(ogame_address, caller)
     let (tech_levels) = IOgame.get_tech_levels(ogame_address, caller)
-    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let current_lab_level = tech_levels.research_lab

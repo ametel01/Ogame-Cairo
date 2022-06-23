@@ -66,7 +66,7 @@ func _shipyard_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     with_attr error_message("FACILITIES::ROBOT FACTORY MUST BE AT LEVEL 2"):
@@ -79,7 +79,7 @@ func _nanite_factory_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (tech_levels) = _get_tech_levels(caller)
@@ -249,7 +249,7 @@ func _set_facilities_timelock_and_que{
     deuterium_required : felt,
 ) -> (time_unlocked : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (build_time) = formulas_buildings_production_time(

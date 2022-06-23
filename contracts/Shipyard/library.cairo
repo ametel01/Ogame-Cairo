@@ -89,7 +89,7 @@ func _cargo_ship_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 2"):
         assert_le(2, shipyard_level)
@@ -104,7 +104,7 @@ func _recycler_ship_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 4"):
         assert_le(4, shipyard_level)
@@ -122,7 +122,7 @@ func _espionage_probe_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 3"):
         assert_le(3, shipyard_level)
@@ -140,7 +140,7 @@ func _solar_satellite_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
@@ -152,7 +152,7 @@ func _light_fighter_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
@@ -167,7 +167,7 @@ func _cruiser_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     caller : felt
 ) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 5"):
         assert_le(5, shipyard_level)
@@ -185,7 +185,7 @@ func _battleship_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 7"):
         assert_le(7, shipyard_level)
@@ -200,7 +200,7 @@ func _deathstar_requirements_check{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (tech_levels) = _get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 12"):
         assert_le(12, shipyard_level)
@@ -463,7 +463,7 @@ func _set_shipyard_timelock_and_que{
     deuterium_required : felt,
 ):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, _, shipyard_level) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
     let (build_time) = _ships_production_time(metal_required, crystal_required, shipyard_level)
     let (time_now) = get_block_timestamp()
     let time_end = time_now + build_time

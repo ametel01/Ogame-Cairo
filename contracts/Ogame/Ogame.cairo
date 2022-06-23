@@ -51,6 +51,7 @@ from contracts.Ogame.storage import (
     shipyard_level,
     robot_factory_level,
     research_lab_level,
+    nanite_factory_level,
     buildings_timelock,
     building_qued,
     _energy_tech,
@@ -176,6 +177,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     robot_factory : felt,
     research_lab : felt,
     shipyard : felt,
+    nanite_factory : felt,
 ):
     let (planet_id) = _planet_to_owner.read(caller)
     let (planet) = _planets.read(planet_id)
@@ -186,6 +188,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let (robot_factory) = robot_factory_level.read(planet_id)
     let (research_lab) = research_lab_level.read(planet_id)
     let (shipyard) = shipyard_level.read(planet_id)
+    let (nanite) = nanite_factory_level.read(planet_id)
     return (
         metal_mine=metal,
         crystal_mine=crystal,
@@ -194,6 +197,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         robot_factory=robot_factory,
         research_lab=research_lab,
         shipyard=shipyard,
+        nanite_factory = nanite
     )
 end
 
@@ -445,6 +449,36 @@ func research_lab_upgrade_complete{
     assert success = TRUE
     let (current_research_lab_level) = research_lab_level.read(planet_id)
     research_lab_level.write(planet_id, current_research_lab_level + 1)
+    return ()
+end
+
+@external
+func nanite_factory_upgrade_start{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (_facilities_address) = facilities_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IFacilities._nanite_factory_upgrade_start(_facilities_address, caller)
+    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
+    return ()
+end
+
+@external
+func nanite_factory_upgrade_complete{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+}():
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (_facilities_address) = facilities_address.read()
+    let (success) = IFacilities._nanite_factory_upgrade_complete(_facilities_address, caller)
+    assert success = TRUE
+    let (current_nanite_factory_level) = nanite_factory_level.read(planet_id)
+    nanite_factory_level.write(planet_id, current_nanite_factory_level + 1)
     return ()
 end
 

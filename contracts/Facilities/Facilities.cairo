@@ -49,7 +49,7 @@ func _shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     _check_building_que_not_busy(caller)
     _shipyard_requirements_check(caller)
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, shipyard_level) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, shipyard_level, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (metal_required, crystal_required, deuterium_required) = shipyard_upgrade_cost(
@@ -82,7 +82,7 @@ func _robot_factory_upgrade_start{
     assert_not_zero(caller)
     _check_building_que_not_busy(caller)
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (metal_required, crystal_required, deuterium_required) = robot_factory_upgrade_cost(
@@ -115,7 +115,7 @@ func _research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     assert_not_zero(caller)
     _check_building_que_not_busy(caller)
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, research_lab_level, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, research_lab_level, _, _) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (metal_required, crystal_required, deuterium_required) = research_lab_upgrade_cost(
@@ -141,7 +141,7 @@ func _research_lab_upgrade_complete{
 end
 
 @external
-func _nanite_factary_upgrade_start{
+func _nanite_factory_upgrade_start{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (metal : felt, crystal : felt, deuterium : felt, time_unlocked : felt):
     alloc_locals
@@ -149,9 +149,9 @@ func _nanite_factary_upgrade_start{
     _check_building_que_not_busy(caller)
     _nanite_factory_requirements_check(caller)
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, nanite_factory_level) = IOgame.get_structures_levels(
-        ogame_address, caller
-    )
+    let (
+        _, _, _, _, robot_factory_level, _, _, nanite_factory_level
+    ) = IOgame.get_structures_levels(ogame_address, caller)
     let (metal_required, crystal_required, deuterium_required) = nanite_factory_upgrade_cost(
         nanite_factory_level
     )

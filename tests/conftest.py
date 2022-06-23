@@ -122,7 +122,7 @@ async def facilities(starknet, game):
         constructor_calldata=[game.contract_address])
 
 @pytest_asyncio.fixture
-async def deploy_game_v1(minter, erc721, game, admin, user_one,
+async def deploy_game_v2(minter, erc721, game, admin, user_one,
                          metal, crystal, deuterium, facilities, research_lab, shipyard):
 
     # Submit NFT contract address to minter.

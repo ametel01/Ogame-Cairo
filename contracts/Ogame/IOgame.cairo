@@ -32,6 +32,7 @@ namespace IOgame:
         robot_factory : felt,
         research_lab : felt,
         shipyard : felt,
+        nanite_factory : felt,
     ):
     end
 

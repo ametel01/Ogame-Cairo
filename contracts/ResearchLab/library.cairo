@@ -636,7 +636,9 @@ func _set_research_timelock_and_que{
     deuterium_required : felt,
 ):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _) = IOgame.get_structures_levels(ogame_address, caller)
+    let (_, _, _, _, _, research_lab_level, _, _) = IOgame.get_structures_levels(
+        ogame_address, caller
+    )
     let (research_time) = formulas_buildings_production_time(
         metal_required, crystal_required, research_lab_level
     )
