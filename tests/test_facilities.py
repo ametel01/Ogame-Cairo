@@ -162,7 +162,7 @@ async def test_nanite_factory(starknet, deploy_game_v2):
     assert_equals(data.result.response, [365533, 191586, 160768, 2594])
     update_starknet_block(
 
-        starknet=starknet, block_timestamp=360000*3+415010)
+        starknet=starknet, block_timestamp= 4752000)
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'nanite_factory_upgrade_complete',
