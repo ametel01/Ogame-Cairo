@@ -206,6 +206,7 @@ func transferOwnership{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     return (new_owner=new_owner)
 end
 
+@external
 func ownerToPlanet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     owner : felt
 ) -> (tokenId : Uint256):

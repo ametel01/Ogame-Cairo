@@ -70,10 +70,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR*2)
     
-    await user1.send_transaction(user_one,
-                                 ogame.contract_address,
-                                 'robot_factory_upgrade_start',
-                                 [])
+
 
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
