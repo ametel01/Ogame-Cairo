@@ -74,21 +74,6 @@ end
 #                                GENERAL TECH COST FUNCS                                            #
 #####################################################################################################
 
-func research_lab_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    current_level : felt
-) -> (metal : felt, crystal : felt, deuterium : felt):
-    let base_metal = 200
-    let base_crystal = 400
-    let base_deuterium = 200
-    if current_level == 0:
-        tempvar syscall_ptr = syscall_ptr
-        return (base_metal, base_crystal, base_deuterium)
-    else:
-        let (multiplier) = pow(2, current_level)
-        return (base_metal * multiplier, base_crystal * multiplier, base_deuterium * multiplier)
-    end
-end
-
 func _energy_tech_upgrade_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     current_level : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
@@ -640,7 +625,7 @@ func _set_research_timelock_and_que{
         ogame_address, caller
     )
     let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level
+        metal_required, crystal_required, research_lab_level, 1
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time

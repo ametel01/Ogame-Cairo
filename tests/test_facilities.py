@@ -139,13 +139,13 @@ async def test_nanite_factory(starknet, deploy_game_v2):
                                  [20, 8, 0, 0, 10, 8, 4, 0,     3, 5, 5, 10, 0, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0])
 
     update_starknet_block(
-        starknet=starknet, block_timestamp=360000*100)
+        starknet=starknet, block_timestamp=TIME_ELAPS_SIX_HOURS*28)
     
     data = await user1.send_transaction(user_one,
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [2437560500, 1234440300, 465480100, 2594])
+    assert_equals(data.result.response, [1365533, 691586, 260768, 2594])
     await user1.send_transaction(user_one,
                                  ogame.contract_address,
                                  'collect_resources',
@@ -159,7 +159,7 @@ async def test_nanite_factory(starknet, deploy_game_v2):
                                         ogame.contract_address,
                                         'resources_available',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [1215940, 700380, 105620, 2594])
+    assert_equals(data.result.response, [365533, 191586, 160768, 2594])
     update_starknet_block(
 
         starknet=starknet, block_timestamp=360000*3+415010)
@@ -171,4 +171,4 @@ async def test_nanite_factory(starknet, deploy_game_v2):
                                         ogame.contract_address,
                                         'get_structures_levels',
                                         [user_one.contract_address])
-    assert_equals(data.result.response, [25, 23, 21, 30, 11, 20, 10, 1])
+    assert_equals(data.result.response, [25, 23, 21, 30, 10, 20, 10, 1])

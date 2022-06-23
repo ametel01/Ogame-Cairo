@@ -163,7 +163,7 @@ func _nanite_factory_upgrade_start{
 end
 
 @external
-func nanite_factory_upgrade_complete{
+func _nanite_factory_upgrade_complete{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(caller : felt) -> (success : felt):
     alloc_locals

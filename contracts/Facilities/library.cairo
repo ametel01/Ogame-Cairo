@@ -249,11 +249,11 @@ func _set_facilities_timelock_and_que{
     deuterium_required : felt,
 ) -> (time_unlocked : felt):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, robot_factory_level, _, _, nanite_level) = IOgame.get_structures_levels(
         ogame_address, caller
     )
     let (build_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, robot_factory_level
+        metal_required, crystal_required, robot_factory_level, nanite_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + build_time
