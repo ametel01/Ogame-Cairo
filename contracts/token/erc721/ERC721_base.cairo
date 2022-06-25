@@ -381,7 +381,7 @@ func _single_ownership_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     alloc_locals
     let (balance) = ERC721_balances.read(caller)
     with_attr error_message("ERC721: each account can only own 1 token"):
-        let (pass_condition) = is_le(balance.low, 1)
+        let (pass_condition) = is_le(balance.low, 0)
         assert pass_condition = TRUE
     end
     return ()
