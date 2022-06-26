@@ -8,16 +8,7 @@ from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.Tokens.erc721.interfaces.IERC721 import IERC721
 from contracts.utils.formulas import Formulas
-from contracts.Facilities.library import (
-    _get_available_resources,
-    _check_enough_resources,
-    _reset_facilities_timelock,
-    _reset_facilities_que,
-    _check_building_que_not_busy,
-    _check_trying_to_complete_the_right_facility,
-    _check_waited_enough,
-    _set_facilities_timelock_and_que,
-)
+from contracts.Facilities.library import Facilities
 from contracts.Ogame.storage import erc721_token_address, _planets, _resources_timer
 
 #########################################################################################
