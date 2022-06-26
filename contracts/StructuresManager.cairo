@@ -94,7 +94,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_required, crystal_required) = Formulas.metal_building_cost(
         metal_mine_level=current_mine_level
     )
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = Formulas.buildings_production_time(metal_required, crystal_required, 0)
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -163,7 +163,7 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let current_mine_level = planet.mines.crystal
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
-    let (building_time) = formulas_buildings_production_time(
+    let (building_time) = Formulas.buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
     let (metal_address) = erc20_metal_address.read()
@@ -234,7 +234,7 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let current_mine_level = planet.mines.deuterium
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
-    let (building_time) = formulas_buildings_production_time(
+    let (building_time) = Formulas.buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
     let (metal_address) = erc20_metal_address.read()
@@ -306,7 +306,7 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let current_plant_level = planet.energy.solar_plant
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
-    let (building_time) = formulas_buildings_production_time(
+    let (building_time) = Formulas.buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
     let (metal_address) = erc20_metal_address.read()
