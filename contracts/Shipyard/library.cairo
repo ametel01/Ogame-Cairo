@@ -7,10 +7,9 @@ from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from starkware.cairo.common.pow import pow
-from contracts.ResearchLab.library import _get_tech_levels
+from contracts.ResearchLab.library import ResearchLab
 from contracts.Ogame.structs import TechLevels
 from starkware.starknet.common.syscalls import get_block_timestamp
-from contracts.utils.Formulas import formulas_buildings_production_time
 
 #########################################################################################
 #                                           CONSTANTS                                   #
@@ -90,7 +89,7 @@ func _cargo_ship_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 2"):
         assert_le(2, shipyard_level)
     end
@@ -105,7 +104,7 @@ func _recycler_ship_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 4"):
         assert_le(4, shipyard_level)
     end
@@ -123,7 +122,7 @@ func _espionage_probe_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 3"):
         assert_le(3, shipyard_level)
     end
@@ -141,7 +140,7 @@ func _solar_satellite_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
     end
@@ -153,7 +152,7 @@ func _light_fighter_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 1"):
         assert_le(1, shipyard_level)
     end
@@ -168,7 +167,7 @@ func _cruiser_requirements_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
 ) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 5"):
         assert_le(5, shipyard_level)
     end
@@ -186,7 +185,7 @@ func _battleship_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 7"):
         assert_le(7, shipyard_level)
     end
@@ -201,7 +200,7 @@ func _deathstar_requirements_check{
 }(caller : felt) -> (response : felt):
     let (ogame_address) = _ogame_address.read()
     let (_, _, _, _, _, _, shipyard_level, _) = IOgame.get_structures_levels(ogame_address, caller)
-    let (tech_levels) = _get_tech_levels(caller)
+    let (tech_levels) = ResearchLab.get_tech_levels(caller)
     with_attr error_message("SHIPYARD::SHIPYARD MUST BE AT LEVEL 12"):
         assert_le(12, shipyard_level)
     end

@@ -20,22 +20,7 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
-from contracts.utils.Formulas import (
-    formulas_metal_mine,
-    formulas_crystal_mine,
-    formulas_deuterium_mine,
-    formulas_metal_building,
-    formulas_crystal_building,
-    formulas_deuterium_building,
-    formulas_solar_plant,
-    formulas_solar_plant_building,
-    formulas_robot_factory_building,
-    _consumption,
-    _consumption_deuterium,
-    _production_limiter,
-    formulas_production_scaler,
-    formulas_buildings_production_time,
-)
+from contracts.utils.formulas import Formulas
 from contracts.Ogame.storage import robot_factory_level
 from contracts.utils.library import (
     Cost,
@@ -106,7 +91,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.metal
     let robot_factory_level = planet.facilities.robot_factory
-    let (metal_required, crystal_required) = formulas_metal_building(
+    let (metal_required, crystal_required) = Formulas.metal_building_cost(
         metal_mine_level=current_mine_level
     )
     let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)

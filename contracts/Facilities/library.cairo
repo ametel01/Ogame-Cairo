@@ -9,7 +9,7 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.utils.formulas import Formulas
-from contracts.ResearchLab.library import _get_tech_levels
+from contracts.ResearchLab.library import ResearchLab
 
 ##############################################################################################
 #                                   STRUCTS                                                  #
@@ -83,7 +83,7 @@ namespace Facilities:
         let (_, _, _, _, robot_factory_level, _, _, _) = IOgame.get_structures_levels(
             ogame_address, caller
         )
-        let (tech_levels) = _get_tech_levels(caller)
+        let (tech_levels) = ResearchLab.get_tech_levels(caller)
         with_attr error_message("FACILITIES::ROBOT FACTORY MUST BE AT LEVEL 10"):
             assert_le(10, robot_factory_level)
         end
