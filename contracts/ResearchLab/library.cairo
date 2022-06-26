@@ -9,7 +9,7 @@ from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.Ogame.structs import TechLevels
-from contracts.utils.Formulas import formulas_buildings_production_time
+from contracts.utils.formulas import Formulas
 from starkware.starknet.common.syscalls import get_block_timestamp
 
 #########################################################################################
@@ -621,11 +621,11 @@ func _set_research_timelock_and_que{
     deuterium_required : felt,
 ):
     let (ogame_address) = _ogame_address.read()
-    let (_, _, _, _, _, research_lab_level, _, _) = IOgame.get_structures_levels(
+    let (_, _, _, _, _, research_lab_level, _, nanite_level) = IOgame.get_structures_levels(
         ogame_address, caller
     )
-    let (research_time) = formulas_buildings_production_time(
-        metal_required, crystal_required, research_lab_level, 1
+    let (research_time) = Formulas.buildings_production_time(
+        metal_required, crystal_required, research_lab_level, nanite_level
     )
     let (time_now) = get_block_timestamp()
     let time_end = time_now + research_time
