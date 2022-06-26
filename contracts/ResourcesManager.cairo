@@ -21,17 +21,9 @@ from contracts.utils.library import (
     FALSE,
     erc721_token_address,
 )
-from contracts.utils.Formulas import (
-    _consumption,
-    _consumption_deuterium,
-    formulas_metal_mine,
-    formulas_crystal_mine,
-    formulas_deuterium_mine,
-    formulas_solar_plant,
-    formulas_production_scaler,
-    _solar_production_formula,
-)
-from contracts.token.erc721.interfaces.IERC721 import IERC721
+
+from contracts.utils.formulas import Formulas
+from contracts.Tokens.erc721.interfaces.IERC721 import IERC721
 
 func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
@@ -44,24 +36,26 @@ func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let metal_level = planet.mines.metal
     let crystal_level = planet.mines.crystal
     let deuterium_level = planet.mines.deuterium
-    let (energy_required_metal) = _consumption(metal_level)
-    let (energy_required_crystal) = _consumption(crystal_level)
-    let (energy_required_deuterium) = _consumption_deuterium(deuterium_level)
+    let (energy_required_metal) = Formulas.consumption_energy(metal_level)
+    let (energy_required_crystal) = Formulas.consumption_energy(crystal_level)
+    let (energy_required_deuterium) = Formulas.consumption_energy(deuterium_level)
     let total_energy_required = energy_required_metal + energy_required_crystal + energy_required_deuterium
     let solar_plant_level = planet.energy.solar_plant
-    let (energy_available) = formulas_solar_plant(solar_plant_level)
+    let (energy_available) = Formulas.solar_plant_production(solar_plant_level)
     let (enough_energy) = is_le(total_energy_required, energy_available)
     # Calculate amount of resources produced.
-    let (metal_produced) = formulas_metal_mine(last_timestamp=time_start, mine_level=metal_level)
-    let (crystal_produced) = formulas_crystal_mine(
+    let (metal_produced) = Formulas.metal_mine_production(
+        last_timestamp=time_start, mine_level=metal_level
+    )
+    let (crystal_produced) = Formulas.crystal_mine_production(
         last_timestamp=time_start, mine_level=crystal_level
     )
-    let (deuterium_produced) = formulas_deuterium_mine(
+    let (deuterium_produced) = Formulas.deuterium_mine_production(
         last_timestamp=time_start, mine_level=deuterium_level
     )
     # If energy available < than energy required scale down amount produced.
     if enough_energy == FALSE:
-        let (actual_metal, actual_crystal, actual_deuterium) = formulas_production_scaler(
+        let (actual_metal, actual_crystal, actual_deuterium) = Formulas.energy_production_scaler(
             net_metal=metal_produced,
             net_crystal=crystal_produced,
             net_deuterium=deuterium_produced,
@@ -153,11 +147,11 @@ func _get_net_energy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
     metal_level : felt, crystal_level : felt, deuterium_level : felt, solar_plant_level : felt
 ) -> (net_energy : felt):
     alloc_locals
-    let (metal_consumption) = _consumption(metal_level)
-    let (crystal_consumption) = _consumption(crystal_level)
-    let (deuterium_consumption) = _consumption_deuterium(deuterium_level)
+    let (metal_consumption) = Formulas.consumption_energy(metal_level)
+    let (crystal_consumption) = Formulas.consumption_energy(crystal_level)
+    let (deuterium_consumption) = Formulas.consumption_energy_deuterium(deuterium_level)
     let total_energy_required = metal_consumption + crystal_consumption + deuterium_consumption
-    let (energy_available) = _solar_production_formula(solar_plant_level)
+    let (energy_available) = Formulas.solar_plant_production(solar_plant_level)
     let (not_negative_energy) = is_le(total_energy_required, energy_available)
     if not_negative_energy == FALSE:
         return (0)
