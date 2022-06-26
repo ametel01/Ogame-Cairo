@@ -2,11 +2,12 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
 from contracts.Tokens.erc721.interfaces.IERC721 import IERC721
-from contracts.utils.Formulas import formulas_buildings_production_time
+from contracts.utils.formulas import Formulas
 from contracts.Facilities.library import (
     _get_available_resources,
     _check_enough_resources,
@@ -17,6 +18,7 @@ from contracts.Facilities.library import (
     _check_waited_enough,
     _set_facilities_timelock_and_que,
 )
+from contracts.Ogame.storage import erc721_token_address, _planets, _resources_timer
 
 #########################################################################################
 #                                           CONSTANTS                                   #
@@ -57,7 +59,7 @@ func deuterium_address() -> (address : felt):
 end
 
 #########################################################################################
-#                                           INTUERNALS                                  #
+#                                           INTERNALS                                  #
 #########################################################################################
 
 func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -105,4 +107,70 @@ func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         let deuterium = deuterium_produced
         return (metal, crystal, deuterium)
     end
+end
+
+func _collect_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+):
+    let (metal_produced, crystal_produced, deuterium_produced) = _calculate_production(caller)
+    _receive_resources_erc20(
+        to=caller,
+        metal_amount=metal_produced,
+        crystal_amount=crystal_produced,
+        deuterium_amount=deuterium_produced,
+    )
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, caller)
+    let (time_now) = get_block_timestamp()
+    _resources_timer.write(planet_id, time_now)
+    return ()
+end
+
+func _receive_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    to : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt
+):
+    let (metal_address) = erc20_metal_address.read()
+    let (crystal_address) = erc20_crystal_address.read()
+    let (deuterium_address) = erc20_deuterium_address.read()
+    let metal = Uint256(metal_amount * UINT256_DECIMALS, 0)
+    let crystal = Uint256(crystal_amount * UINT256_DECIMALS, 0)
+    let deuterium = Uint256(deuterium_amount * UINT256_DECIMALS, 0)
+    IERC20.mint(metal_address, to, metal)
+    IERC20.mint(crystal_address, to, crystal)
+    IERC20.mint(deuterium_address, to, deuterium)
+    return ()
+end
+
+func _pay_resources_erc20{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    address : felt, metal_amount : felt, crystal_amount : felt, deuterium_amount : felt
+):
+    assert_not_zero(address)
+    let (metal_address) = erc20_metal_address.read()
+    let (crystal_address) = erc20_crystal_address.read()
+    let (deuterium_address) = erc20_deuterium_address.read()
+    let metal = Uint256(metal_amount * UINT256_DECIMALS, 0)
+    let crystal = Uint256(crystal_amount * UINT256_DECIMALS, 0)
+    let deuterium = Uint256(deuterium_amount * UINT256_DECIMALS, 0)
+    IERC20.burn(metal_address, address, metal)
+    IERC20.burn(crystal_address, address, crystal)
+    IERC20.burn(deuterium_address, address, deuterium)
+    return ()
+end
+
+func _get_net_energy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    metal_level : felt, crystal_level : felt, deuterium_level : felt, solar_plant_level : felt
+) -> (net_energy : felt):
+    alloc_locals
+    let (metal_consumption) = _consumption(metal_level)
+    let (crystal_consumption) = _consumption(crystal_level)
+    let (deuterium_consumption) = _consumption_deuterium(deuterium_level)
+    let total_energy_required = metal_consumption + crystal_consumption + deuterium_consumption
+    let (energy_available) = _solar_production_formula(solar_plant_level)
+    let (not_negative_energy) = is_le(total_energy_required, energy_available)
+    if not_negative_energy == FALSE:
+        return (0)
+    else:
+        let res = energy_available - total_energy_required
+    end
+    return (res)
 end

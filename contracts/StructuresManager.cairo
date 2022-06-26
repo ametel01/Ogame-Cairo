@@ -36,25 +36,7 @@ from contracts.utils.Formulas import (
     formulas_production_scaler,
     formulas_buildings_production_time,
 )
-<<<<<<< HEAD
-
-from contracts.utils.library import planet_genereted, structure_updated, buildings_timelock
-from contracts.Ogame.library import reset_timelock, reset_building_que, _get_planet
-from contracts.Ogame.structs import MineLevels, Cost, Planet, Energy, BuildingQue
-from contracts.Ogame.storage import (
-    _resources_timer,
-    _players_spent_resources,
-    _planet_to_owner,
-    _number_of_planets,
-    _planets,
-    erc721_token_address,
-    erc20_metal_address,
-    erc20_crystal_address,
-    building_qued,
-    robot_factory_level,
-)
-from contracts.Ogame.library import _check_que_not_busy
-=======
+from contracts.Ogame.storage import robot_factory_level
 from contracts.utils.library import (
     Cost,
     _number_of_planets,
@@ -77,7 +59,6 @@ from contracts.utils.library import (
     erc20_crystal_address,
     _resources_timer,
 )
->>>>>>> origin/v0.1
 
 # Used to create the first planet for a player. It does register the new planet in the contract storage
 # and send the NFT to the caller. At the moment planets IDs are incremental +1. TODO: implement a
@@ -91,25 +72,17 @@ func _generate_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_ch
     let (erc721_address) = erc721_token_address.read()
     let (has_already_planet) = IERC721.balanceOf(erc721_address, caller)
     assert has_already_planet = Uint256(0, 0)
-<<<<<<< HEAD
-    let planet = Planet(MineLevels(metal=0, crystal=0, deuterium=0), Energy(solar_plant=0))
-=======
     let planet = Planet(
         MineLevels(metal=0, crystal=0, deuterium=0),
         Energy(solar_plant=0),
         Facilities(robot_factory=0),
     )
->>>>>>> origin/v0.1
     # Transfer ERC721 to caller
     let (erc721_address) = erc721_token_address.read()
     let (last_id) = _number_of_planets.read()
     let new_id = last_id + 1
     let new_planet_id = Uint256(new_id, 0)
-<<<<<<< HEAD
-    _resources_timer.write(new_planet_id, 0)
-=======
     _resources_timer.write(new_planet_id, time_now)
->>>>>>> origin/v0.1
     let (erc721_owner) = IERC721.ownerOf(erc721_address, new_planet_id)
     IERC721.transferFrom(erc721_address, erc721_owner, caller, new_planet_id)
     _planets.write(new_planet_id, planet)
@@ -136,11 +109,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_required, crystal_required) = formulas_metal_building(
         metal_mine_level=current_mine_level
     )
-<<<<<<< HEAD
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 1, 1)
-=======
     let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0)
->>>>>>> origin/v0.1
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -187,10 +156,7 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-<<<<<<< HEAD
-=======
         Facilities(robot_factory=planet.facilities.robot_factory),
->>>>>>> origin/v0.1
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -212,13 +178,9 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let current_mine_level = planet.mines.crystal
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
-<<<<<<< HEAD
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0, 0)
-=======
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
->>>>>>> origin/v0.1
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -265,10 +227,7 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         crystal=planet.mines.crystal + 1,
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant),
-<<<<<<< HEAD
-=======
         Facilities(robot_factory=planet.facilities.robot_factory),
->>>>>>> origin/v0.1
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -290,13 +249,9 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let current_mine_level = planet.mines.deuterium
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
-<<<<<<< HEAD
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0, 0)
-=======
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
->>>>>>> origin/v0.1
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -343,10 +298,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium + 1),
         Energy(solar_plant=planet.energy.solar_plant),
-<<<<<<< HEAD
-=======
         Facilities(robot_factory=planet.facilities.robot_factory),
->>>>>>> origin/v0.1
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)
@@ -369,13 +321,9 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let current_plant_level = planet.energy.solar_plant
     let robot_factory_level = planet.facilities.robot_factory
     let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
-<<<<<<< HEAD
-    let (building_time) = formulas_buildings_production_time(metal_required, crystal_required, 0, 0)
-=======
     let (building_time) = formulas_buildings_production_time(
         metal_required, crystal_required, robot_factory_level
     )
->>>>>>> origin/v0.1
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -422,10 +370,7 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         crystal=planet.mines.crystal,
         deuterium=planet.mines.deuterium),
         Energy(solar_plant=planet.energy.solar_plant + 1),
-<<<<<<< HEAD
-=======
         Facilities(robot_factory=planet.facilities.robot_factory),
->>>>>>> origin/v0.1
     )
     _planets.write(planet_id, new_planet)
     reset_timelock(address)

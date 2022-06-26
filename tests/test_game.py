@@ -36,7 +36,7 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [500 * 10**18, 0])
 =======
     assert_equals(data.result.response, [500000000000000000000, 0])
@@ -48,7 +48,7 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [300 * 10**18, 0])
 =======
     assert_equals(data.result.response, [300000000000000000000, 0])
@@ -60,7 +60,7 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [100 * 10**18, 0])
 =======
     assert_equals(data.result.response, [100000000000000000000, 0])
@@ -107,7 +107,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
         "resources_available",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [500, 300, 100, 0])
 
     await user1.send_transaction(
@@ -134,7 +134,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
         "resources_available",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [425, 270, 100, 22])
 
     response = await user1.send_transaction(
@@ -202,7 +202,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
         user_one, ogame.contract_address, "collect_resources", []
     )
 
-<<<<<<< HEAD
+<< 
     await user1.send_transaction(
         user_one, ogame.contract_address, "deuterium_upgrade_start", []
     )
@@ -221,7 +221,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
         "resources_available",
         [user_one.contract_address],
     )
-<<<<<<< HEAD
+<< 
     assert_equals(data.result.response, [45, 144, 105, 4])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 205
@@ -264,7 +264,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
 async def test_structures_upgrades(starknet, deploy_game_v1):
     (_, ogame, _, _, _, _, user_one, research_lab) = deploy_game_v1
 
-<<<<<<< HEAD
+<< 
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',
@@ -319,7 +319,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     )
 
     # Assert metal mine level is increasead.
-<<<<<<< HEAD
+<< 
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',
@@ -340,7 +340,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     await user1.send_transaction(
         user_one, ogame.contract_address, "collect_resources", []
     )
-<<<<<<< HEAD
+<< 
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'resources_available',
@@ -471,7 +471,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
         user_one, ogame.contract_address, "deuterium_upgrade_complete", []
     )
     update_starknet_block(
-<<<<<<< HEAD
+<< 
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 1150
 =======
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 130
@@ -486,7 +486,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     )
 
     update_starknet_block(
-<<<<<<< HEAD
+<< 
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 1151
 =======
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 131
@@ -496,7 +496,7 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     await user1.send_transaction(
         user_one, ogame.contract_address, "robot_factory_upgrade_complete", []
     )
-<<<<<<< HEAD
+<< 
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',

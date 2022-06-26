@@ -291,22 +291,36 @@ namespace Formulas:
         end
     end
 
-    func formulas_buildings_production_time{
+    func buildings_production_time{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(metal_cost : felt, crystal_cost : felt, robot_level : felt) -> (time_required : felt):
-        let fact1 = metal_cost + crystal_cost
-        let fact2 = fact1 * 1000
-        let fact3 = robot_level + 1
-        let fact4 = 2500 * fact3
-        let (fact5, _) = unsigned_div_rem(fact2, fact4)
-        let fact6 = fact5 * 3600
-        let (res, _) = unsigned_div_rem(fact6, 1000)
+    }(metal_cost : felt, crystal_cost : felt, robot_level : felt, nanite_level) -> (
+        time_required : felt
+    ):
+        if nanite_level == 0:
+            let fact1 = metal_cost + crystal_cost
+            let fact2 = fact1 * 1000
+            let fact3 = robot_level + 1
+            let fact4 = 2500 * fact3
+            let (fact5, _) = unsigned_div_rem(fact2, fact4)
+            let fact6 = fact5 * 3600
+            let (res, _) = unsigned_div_rem(fact6, 1000)
+        else:
+            let fact1 = metal_cost + crystal_cost
+            let fact2 = fact1 * 1000
+            let fact3 = robot_level + 1
+            let fact4a = 2500 * fact3
+            let (fact4b) = pow(2, nanite_level)
+            let fact4 = fact4a * fact4b
+            let (fact5, _) = unsigned_div_rem(fact2, fact4)
+            let fact6 = fact5 * 3600
+            let (res, _) = unsigned_div_rem(fact6, 1000)
+        end
         return (time_required=res)
     end
 
-    func formulas_calculate_player_points{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(address : felt) -> (points : felt):
+    func calculate_player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt
+    ) -> (points : felt):
         let (total_spent) = _players_spent_resources.read(address)
         let (points, _) = unsigned_div_rem(total_spent, 1000)
         return (points)

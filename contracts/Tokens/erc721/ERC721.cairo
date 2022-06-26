@@ -8,7 +8,7 @@ from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.constants import TRUE
 
-from openzeppelin.token.erc721.library import (
+from contracts.Tokens.erc721.ERC721_base import (
     ERC721_name,
     ERC721_symbol,
     ERC721_balanceOf,

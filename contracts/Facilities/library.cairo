@@ -12,15 +12,6 @@ from contracts.utils.formulas import Formulas
 from contracts.ResearchLab.library import _get_tech_levels
 
 ##############################################################################################
-#                                   CONSTANTS                                                #
-# ############################################################################################
-
-const ROBOT_FACTORY_ID = 21
-const SHIPYARD_ID = 22
-const RESEARCH_LAB_ID = 23
-const NANITE_FACTORY_ID = 24
-
-##############################################################################################
 #                                   STRUCTS                                                  #
 # ############################################################################################
 
@@ -63,7 +54,16 @@ end
 #####################################################################################################
 
 namespace Facilities:
-    func _shipyard_requirements_check{
+    ##############################################################################################
+    #                                   CONSTANTS                                                #
+    # ############################################################################################
+
+    const ROBOT_FACTORY_ID = 21
+    const SHIPYARD_ID = 22
+    const RESEARCH_LAB_ID = 23
+    const NANITE_FACTORY_ID = 24
+
+    func shipyard_requirements_check{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(caller : felt) -> (response : felt):
         let (ogame_address) = _ogame_address.read()
@@ -76,7 +76,7 @@ namespace Facilities:
         return (TRUE)
     end
 
-    func _nanite_factory_requirements_check{
+    func nanite_factory_requirements_check{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(caller : felt) -> (response : felt):
         let (ogame_address) = _ogame_address.read()
@@ -161,9 +161,9 @@ namespace Facilities:
     #                                   TO BE MOVED TO A GENERALISED LIB                         #
     # ############################################################################################
 
-    func _get_available_resources{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(caller : felt) -> (metal : felt, crystal : felt, deuterium : felt):
+    func get_available_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        caller : felt
+    ) -> (metal : felt, crystal : felt, deuterium : felt):
         let (ogame_address) = _ogame_address.read()
         let (metal_address) = IOgame.get_metal_address(ogame_address)
         let (crystal_address) = IOgame.get_crystal_address(ogame_address)
@@ -174,11 +174,11 @@ namespace Facilities:
         return (metal_available.low, crystal_available.low, deuterium_available.low)
     end
 
-    func _check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    func check_enough_resources{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         caller : felt, metal_required : felt, crystal_required : felt, deuterium_required : felt
     ):
         alloc_locals
-        let (metal_available, crystal_available, deuterium_available) = _get_available_resources(
+        let (metal_available, crystal_available, deuterium_available) = get_available_resources(
             caller
         )
         with_attr error_message("FACILITIES::NOT ENOUGH RESOURCES!!!"):
@@ -192,21 +192,21 @@ namespace Facilities:
         return ()
     end
 
-    func _reset_facilities_timelock{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(address : felt):
+    func reset_timelock{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        address : felt
+    ):
         facilities_timelock.write(address, FacilitiesQue(0, 0))
         return ()
     end
 
-    func _reset_facilities_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    func reset_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         address : felt, building_id : felt
     ):
         facility_qued.write(address, building_id, FALSE)
         return ()
     end
 
-    func _check_building_que_not_busy{
+    func check_building_que_not_busy{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(caller : felt):
         let (que_status) = facilities_timelock.read(caller)
@@ -217,7 +217,7 @@ namespace Facilities:
         return ()
     end
 
-    func _check_trying_to_complete_the_right_facility{
+    func check_trying_to_complete_the_right_facility{
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(caller : felt, BUILDING_ID : felt):
         let (is_qued) = facility_qued.read(caller, BUILDING_ID)
@@ -227,7 +227,7 @@ namespace Facilities:
         return ()
     end
 
-    func _check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    func check_waited_enough{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         caller : felt
     ):
         alloc_locals
@@ -242,9 +242,7 @@ namespace Facilities:
         return ()
     end
 
-    func _set_facilities_timelock_and_que{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(
+    func set_timelock_and_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         caller : felt,
         BUILDING_ID : felt,
         metal_required : felt,

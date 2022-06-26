@@ -2,16 +2,14 @@
 
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.bool import FALSE
 from starkware.starknet.common.syscalls import (
     get_block_timestamp,
     get_contract_address,
     get_caller_address,
 )
-<<<<<<< HEAD
-from contracts.Ogame.structs import Planet, BuildingQue
-from contracts.Ogame.storage import _planet_to_owner, _planets
-=======
-from contracts.token.erc721.interfaces.IERC721 import IERC721
+from contracts.Tokens.erc721.interfaces.IERC721 import IERC721
+
 ##########################################################################################
 #                                               Structs                                  #
 ##########################################################################################
@@ -76,14 +74,11 @@ struct BuildingQue:
     member id : felt
     member lock_end : felt
 end
->>>>>>> origin/v0.1
 
 ##########################################################################################
 #                                       Storage                                          #
 ##########################################################################################
 
-<<<<<<< HEAD
-=======
 # @dev Returns the total number of planets present in the universe.
 @storage_var
 func _number_of_planets() -> (n : felt):
@@ -99,7 +94,6 @@ end
 func _players_spent_resources(address : felt) -> (spent_resources : felt):
 end
 
->>>>>>> origin/v0.1
 # @dev Returns the address of the game's ERC721 contract.
 @storage_var
 func erc721_token_address() -> (address : felt):
@@ -172,17 +166,8 @@ func structure_updated(metal_used : felt, crystal_used : felt, deuterium_used : 
 end
 
 ##########################################################################################
-#                                               Constants                                #
-##########################################################################################
-
-const TRUE = 1
-const FALSE = 0
-
-##########################################################################################
 #                                               Functions                                #
 ##########################################################################################
-<<<<<<< HEAD
-=======
 
 func _get_planet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     planet : Planet
@@ -207,4 +192,3 @@ func reset_building_que{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
     building_qued.write(address, id, FALSE)
     return ()
 end
->>>>>>> origin/v0.1

@@ -13,7 +13,7 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 OGAME_FILE = os.path.join("contracts", "Ogame", "Ogame.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
-<<<<<<< HEAD
+<< 
 ERC721_FILE = os.path.join("contracts", "Tokens", "erc721", "ERC721.cairo")
 ERC20_FILE = os.path.join(
     "contracts", "Tokens", "erc20", "ERC20_Mintable.cairo"
@@ -67,7 +67,7 @@ async def user_two(starknet):
 @pytest_asyncio.fixture
 async def game(starknet, erc721, admin):
     return await starknet.deploy(
-<<<<<<< HEAD
+<< 
         source=OGAME_FILE,
 =======
         source=CONTRACT_FILE,
@@ -93,7 +93,7 @@ async def erc721(starknet, minter):
 
 
 @pytest_asyncio.fixture
-<<<<<<< HEAD
+<< 
 =======
 async def erc721_2(starknet, admin):
     return await starknet.deploy(
@@ -167,7 +167,7 @@ async def minter(starknet, admin):
 
 
 @pytest_asyncio.fixture
-<<<<<<< HEAD
+<< 
 async def research_lab(starknet, game):
     return await starknet.deploy(
         source=LAB_FILE, constructor_calldata=[game.contract_address]
@@ -231,7 +231,7 @@ async def deploy_game_v1(
     await owner.send_transaction(
         admin,
         game.contract_address,
-<<<<<<< HEAD
+<< 
         "set_erc20_addresses",
 =======
         "erc20_addresses",
@@ -243,7 +243,7 @@ async def deploy_game_v1(
         ],
     )
 
-<<<<<<< HEAD
+<< 
     await owner.send_transaction(
         admin,
         game.contract_address,
