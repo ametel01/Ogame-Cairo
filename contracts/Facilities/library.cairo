@@ -8,7 +8,7 @@ from starkware.cairo.common.math import assert_le
 from starkware.cairo.common.bool import TRUE, FALSE
 from contracts.Ogame.IOgame import IOgame
 from contracts.Tokens.erc20.interfaces.IERC20 import IERC20
-from contracts.utils.Formulas import formulas_buildings_production_time
+from contracts.utils.formulas import Formulas
 from contracts.ResearchLab.library import _get_tech_levels
 
 ##############################################################################################
@@ -252,7 +252,7 @@ func _set_facilities_timelock_and_que{
     let (_, _, _, _, robot_factory_level, _, _, nanite_level) = IOgame.get_structures_levels(
         ogame_address, caller
     )
-    let (build_time) = formulas_buildings_production_time(
+    let (build_time) = Formulas.buildings_production_time(
         metal_required, crystal_required, robot_factory_level, nanite_level
     )
     let (time_now) = get_block_timestamp()
