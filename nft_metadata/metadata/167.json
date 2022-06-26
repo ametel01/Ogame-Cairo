@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/2.webp",
     "tokenId": 167,
     "name": "NFT_OGM #167",
@@ -14,6 +15,23 @@
         {
             "trait_type": "type",
             "value": "Ammonia planet"
+=======
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/2.png",
+    "tokenId": 167,
+    "name": "NoGame v0.1 #167",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 149
+        },
+        {
+            "trait_type": "temperature",
+            "value": 195
+        },
+        {
+            "trait_type": "type",
+            "value": "Brown dwarf"
+>>>>>>> origin/v0.1
         },
         {
             "trait_type": "position",

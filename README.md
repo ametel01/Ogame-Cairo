@@ -16,12 +16,23 @@ OGame is a browser-based, money-management and space-war themed massively multip
 4. Add energy production requirements for mines. :heavy_check_mark:
 5. Add time constraints for buildings upgrades. :heavy_check_mark:
 6. Implementation of Robot Factory. :heavy_check_mark:
+<<<<<<< HEAD
 7. Add research lab. :heavy_check_mark:
 8. Add technologies. :heavy_check_mark:
 9. Add Shipyard. :heavy_check_mark:
 10. Add ships.
 11. Implement logic for space travel between planets.
 12. Implement lagic for ships combat.
+=======
+7. Add research lab.
+8. Add technologies.
+9. Allow creation of colonies.
+10. Implement logic for space travel between planets.
+11. Implementation of basic ships:
+
+-   Small Cargo
+-   Light Fighter
+>>>>>>> origin/v0.1
 
 This will most likely keep me busy for a while. The rest of the roadmap is yet to be decided.
 
@@ -36,7 +47,7 @@ nile deploy erc721_minter --network goerli [owner.contract_address]
 2. Deploy ERC721:
 
 ```sh
-nile deploy --network goerli ERC721 0x6f67616d6556302e31 0x4f474d302e31 [minter.contract_address] 3 0x68747470733a2f2f676174657761792e70696e6174612e 0x636c6f75642f697066732f516d56696a7632465a547841706e4e54 0x356250384355356466724e573336733239784a566a636b6b736e36733733
+nile deploy --network goerli ERC721 0x4e6f47616d6520 0x4f474d302e31 [minter.contract_address] 54 105 112 102 115 58 47 47 81 109 98 87 78 103 117 89 106 85 115 53 101 50 102 55 88 119 113 65 106 54 121 72 69 119 111 74 109 104 89 78 121 72 78 78 90 122 105 102 56 78 109 56 53 68 47
 ```
 
 3. On minter contract invoke setNftAddress with ERC721 as parameter.

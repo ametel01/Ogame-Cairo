@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/7.webp",
     "tokenId": 652,
     "name": "NFT_OGM #652",
@@ -14,6 +15,23 @@
         {
             "trait_type": "type",
             "value": "Helium planet"
+=======
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/7.png",
+    "tokenId": 652,
+    "name": "NoGame v0.1 #652",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 173
+        },
+        {
+            "trait_type": "temperature",
+            "value": 75
+        },
+        {
+            "trait_type": "type",
+            "value": "Brown dwarf"
+>>>>>>> origin/v0.1
         },
         {
             "trait_type": "position",

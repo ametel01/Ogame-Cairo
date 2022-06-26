@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 artifacts/
+nft_metadata/metadata/
 build/
 develop-eggs/
 dist/

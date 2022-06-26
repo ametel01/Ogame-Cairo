@@ -16,7 +16,8 @@ namespace IERC721:
     end
 
     func safeTransferFrom(
-            _from : felt, to : felt, tokenId : Uint256, data_len : felt, data : felt*):
+        _from : felt, to : felt, tokenId : Uint256, data_len : felt, data : felt*
+    ):
     end
 
     func transferFrom(_from : felt, to : felt, tokenId : Uint256):
@@ -35,5 +36,8 @@ namespace IERC721:
     end
 
     func mint(to : felt, token_id : Uint256):
+    end
+
+    func ownerToPlanet(owner : felt) -> (tokenId : Uint256):
     end
 end

@@ -1,366 +1,764 @@
 [
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": 222,
         "type": "Chthonian planet",
+=======
+        "size": 165,
+        "temperature": 237,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 1
     },
     {
+<<<<<<< HEAD
         "size": 117,
         "temperature": 194,
         "type": "Ammonia planet",
+=======
+        "size": 130,
+        "temperature": 204,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 2
     },
     {
         "size": 118,
+<<<<<<< HEAD
         "temperature": 143,
         "type": "Brown dwarf",
+=======
+        "temperature": 135,
+        "type": "Ocean planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 3
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 74,
+=======
+        "size": 142,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 4
     },
     {
+<<<<<<< HEAD
         "size": 203,
         "temperature": 85,
         "type": "Brown dwarf",
+=======
+        "size": 223,
+        "temperature": 76,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 5
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 79,
+=======
+        "size": 166,
+        "temperature": 88,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 6
     },
     {
+<<<<<<< HEAD
         "size": 180,
         "temperature": 66,
         "type": "Eccentric Jupiter",
+=======
+        "size": 244,
+        "temperature": 62,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 7
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 54,
         "type": "Chthonian planet",
+=======
+        "size": 200,
+        "temperature": 32,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 8
     },
     {
+<<<<<<< HEAD
         "size": 218,
         "temperature": 41,
         "type": "Brown dwarf",
+=======
+        "size": 164,
+        "temperature": 47,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 9
     },
     {
+<<<<<<< HEAD
         "size": 156,
         "temperature": 18,
         "type": "Chthonian planet",
+=======
+        "size": 206,
+        "temperature": 28,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 10
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 26,
+=======
+        "size": 144,
+        "temperature": 22,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 11
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": 21,
         "type": "Chthonian planet",
+=======
+        "size": 135,
+        "temperature": 11,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 12
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": -24,
         "type": "Chthonian planet",
+=======
+        "size": 135,
+        "temperature": -29,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 13
     },
     {
+<<<<<<< HEAD
         "size": 101,
         "temperature": -75,
+=======
+        "size": 142,
+        "temperature": -51,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 14
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -119,
         "type": "Eccentric Jupiter",
+=======
+        "size": 95,
+        "temperature": -109,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 15
     },
     {
         "size": 170,
+<<<<<<< HEAD
         "temperature": 233,
         "type": "Chthonian planet",
+=======
+        "temperature": 227,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 16
     },
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": 207,
         "type": "Chthonian planet",
+=======
+        "size": 124,
+        "temperature": 202,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 17
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 159,
+=======
+        "size": 178,
+        "temperature": 131,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 18
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 105,
         "type": "Brown dwarf",
+=======
+        "size": 197,
+        "temperature": 81,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 19
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 86,
         "type": "Chthonian planet",
+=======
+        "size": 165,
+        "temperature": 69,
+        "type": "Forest planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 20
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 87,
         "type": "Brown dwarf",
+=======
+        "size": 161,
+        "temperature": 78,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 21
     },
     {
+<<<<<<< HEAD
         "size": 227,
         "temperature": 61,
         "type": "Helium planet",
+=======
+        "size": 224,
+        "temperature": 66,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 22
     },
     {
+<<<<<<< HEAD
         "size": 223,
         "temperature": 61,
         "type": "Eccentric Jupiter",
+=======
+        "size": 234,
+        "temperature": 40,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 23
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 42,
         "type": "Carbon planet",
+=======
+        "size": 185,
+        "temperature": 55,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 24
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 34,
         "type": "Gas giant",
+=======
+        "size": 152,
+        "temperature": 16,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 25
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 6,
         "type": "Brown dwarf",
+=======
+        "size": 144,
+        "temperature": 3,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 26
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 16,
+=======
+        "size": 170,
+        "temperature": 6,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 27
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": -14,
+=======
+        "size": 149,
+        "temperature": -28,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 28
     },
     {
+<<<<<<< HEAD
         "size": 130,
         "temperature": -74,
         "type": "Chthonian planet",
+=======
+        "size": 150,
+        "temperature": -63,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 29
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": -125,
         "type": "Brown dwarf",
+=======
+        "size": 108,
+        "temperature": -126,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 30
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 251,
         "type": "Brown dwarf",
+=======
+        "size": 160,
+        "temperature": 258,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 31
     },
     {
+<<<<<<< HEAD
         "size": 115,
         "temperature": 175,
         "type": "Brown dwarf",
+=======
+        "size": 104,
+        "temperature": 207,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 32
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": 135,
         "type": "Eccentric Jupiter",
+=======
+        "size": 174,
+        "temperature": 132,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 33
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 95,
+=======
+        "size": 187,
+        "temperature": 96,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 4,
         "tokenId": 34
     },
     {
+<<<<<<< HEAD
         "size": 210,
         "temperature": 74,
+=======
+        "size": 214,
+        "temperature": 65,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 35
     },
     {
+<<<<<<< HEAD
         "size": 229,
         "temperature": 70,
+=======
+        "size": 167,
+        "temperature": 85,
+>>>>>>> origin/v0.1
         "type": "Gas giant",
         "position": 6,
         "tokenId": 36
     },
     {
+<<<<<<< HEAD
         "size": 244,
         "temperature": 61,
         "type": "Chthonian planet",
+=======
+        "size": 189,
+        "temperature": 51,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 37
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 50,
+=======
+        "size": 209,
+        "temperature": 32,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 38
     },
     {
+<<<<<<< HEAD
         "size": 193,
         "temperature": 54,
         "type": "Brown dwarf",
+=======
+        "size": 177,
+        "temperature": 29,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 39
     },
     {
+<<<<<<< HEAD
         "size": 186,
         "temperature": 11,
         "type": "Helium planet",
+=======
+        "size": 171,
+        "temperature": 14,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 40
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 29,
         "type": "Gas giant",
+=======
+        "size": 162,
+        "temperature": 9,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 41
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 27,
+=======
+        "size": 144,
+        "temperature": -2,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 42
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": -12,
         "type": "Eccentric Jupiter",
+=======
+        "size": 122,
+        "temperature": -21,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 43
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": -86,
         "type": "Brown dwarf",
+=======
+        "size": 114,
+        "temperature": -82,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 44
     },
     {
+<<<<<<< HEAD
         "size": 120,
         "temperature": -103,
+=======
+        "size": 145,
+        "temperature": -96,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 45
     },
     {
+<<<<<<< HEAD
         "size": 129,
         "temperature": 248,
+=======
+        "size": 103,
+        "temperature": 227,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 1,
         "tokenId": 46
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 179,
+=======
+        "size": 167,
+        "temperature": 205,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 47
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 146,
         "type": "Brown dwarf",
+=======
+        "size": 139,
+        "temperature": 144,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 48
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": 70,
         "type": "Earth analog",
+=======
+        "size": 118,
+        "temperature": 81,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 49
     },
     {
+<<<<<<< HEAD
         "size": 197,
         "temperature": 97,
         "type": "Eccentric Jupiter",
+=======
+        "size": 174,
+        "temperature": 75,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 50
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 78,
         "type": "Chthonian planet",
+=======
+        "size": 205,
+        "temperature": 86,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 51
     },
     {
+<<<<<<< HEAD
+=======
+        "size": 162,
+        "temperature": 49,
+        "type": "Forest planet",
+        "position": 7,
+        "tokenId": 52
+    },
+    {
+        "size": 206,
+        "temperature": 35,
+        "type": "Brown dwarf",
+        "position": 8,
+        "tokenId": 53
+    },
+    {
+        "size": 207,
+        "temperature": 20,
+        "type": "Eccentric Jupiter",
+        "position": 9,
+        "tokenId": 54
+    },
+    {
+        "size": 197,
+        "temperature": 49,
+        "type": "Brown dwarf",
+        "position": 10,
+        "tokenId": 55
+    },
+    {
+        "size": 198,
+        "temperature": 1,
+        "type": "Brown dwarf",
+        "position": 11,
+        "tokenId": 56
+    },
+    {
+        "size": 135,
+        "temperature": 16,
+        "type": "Brown dwarf",
+        "position": 12,
+        "tokenId": 57
+    },
+    {
+        "size": 155,
+        "temperature": -11,
+        "type": "Brown dwarf",
+        "position": 13,
+        "tokenId": 58
+    },
+    {
+        "size": 104,
+        "temperature": -81,
+        "type": "Brown dwarf",
+        "position": 14,
+        "tokenId": 59
+    },
+    {
+        "size": 145,
+        "temperature": -128,
+        "type": "Brown dwarf",
+        "position": 15,
+        "tokenId": 60
+    },
+    {
+        "size": 132,
+        "temperature": 223,
+        "type": "Eccentric Jupiter",
+        "position": 1,
+        "tokenId": 61
+    },
+    {
+        "size": 125,
+        "temperature": 192,
+        "type": "Brown dwarf",
+        "position": 2,
+        "tokenId": 62
+    },
+    {
+        "size": 115,
+        "temperature": 145,
+        "type": "Brown dwarf",
+        "position": 3,
+        "tokenId": 63
+    },
+    {
+        "size": 134,
+        "temperature": 92,
+        "type": "Brown dwarf",
+        "position": 4,
+        "tokenId": 64
+    },
+    {
+        "size": 213,
+        "temperature": 64,
+        "type": "Brown dwarf",
+        "position": 5,
+        "tokenId": 65
+    },
+    {
+        "size": 227,
+        "temperature": 71,
+        "type": "Brown dwarf",
+        "position": 6,
+        "tokenId": 66
+    },
+    {
+>>>>>>> origin/v0.1
         "size": 239,
         "temperature": 70,
         "type": "Brown dwarf",
         "position": 7,
+<<<<<<< HEAD
         "tokenId": 52
     },
     {
@@ -472,1893 +870,3406 @@
         "size": 156,
         "temperature": 62,
         "type": "Eccentric Jupiter",
+=======
+        "tokenId": 67
+    },
+    {
+        "size": 167,
+        "temperature": 53,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 68
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 44,
         "type": "Chthonian planet",
+=======
+        "size": 183,
+        "temperature": 23,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 69
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 46,
+=======
+        "size": 226,
+        "temperature": 10,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 70
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 18,
         "type": "Chthonian planet",
+=======
+        "size": 190,
+        "temperature": 32,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 71
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": -7,
         "type": "Eccentric Jupiter",
+=======
+        "size": 148,
+        "temperature": 21,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 72
     },
     {
+<<<<<<< HEAD
         "size": 134,
         "temperature": -50,
         "type": "Chthonian planet",
+=======
+        "size": 171,
+        "temperature": -13,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 73
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": -68,
+=======
+        "size": 124,
+        "temperature": -61,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 74
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": -112,
+=======
+        "size": 103,
+        "temperature": -102,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 75
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 225,
         "type": "Brown dwarf",
+=======
+        "size": 116,
+        "temperature": 259,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 76
     },
     {
+<<<<<<< HEAD
         "size": 107,
         "temperature": 203,
         "type": "Eccentric Jupiter",
+=======
+        "size": 112,
+        "temperature": 186,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 77
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 142,
         "type": "Brown dwarf",
+=======
+        "size": 128,
+        "temperature": 140,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 78
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": 75,
         "type": "Chthonian planet",
+=======
+        "size": 207,
+        "temperature": 70,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 79
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 93,
         "type": "Chthonian planet",
+=======
+        "size": 192,
+        "temperature": 61,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 80
     },
     {
+<<<<<<< HEAD
         "size": 234,
         "temperature": 79,
         "type": "Chthonian planet",
+=======
+        "size": 172,
+        "temperature": 83,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 81
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 61,
+=======
+        "size": 170,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 82
     },
     {
         "size": 198,
+<<<<<<< HEAD
         "temperature": 51,
+=======
+        "temperature": 59,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 83
     },
     {
+<<<<<<< HEAD
         "size": 238,
         "temperature": 36,
         "type": "Brown dwarf",
+=======
+        "size": 182,
+        "temperature": 22,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 84
     },
     {
+<<<<<<< HEAD
         "size": 209,
         "temperature": 30,
         "type": "Chthonian planet",
+=======
+        "size": 206,
+        "temperature": 19,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 85
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 30,
+=======
+        "size": 170,
+        "temperature": 20,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 86
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 9,
         "type": "Brown dwarf",
+=======
+        "size": 181,
+        "temperature": 6,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 87
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": -46,
+=======
+        "size": 138,
+        "temperature": -22,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 88
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": -84,
+=======
+        "size": 105,
+        "temperature": -64,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 89
     },
     {
+<<<<<<< HEAD
         "size": 100,
         "temperature": -114,
         "type": "Eccentric Jupiter",
+=======
+        "size": 113,
+        "temperature": -105,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 90
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 259,
         "type": "Brown dwarf",
+=======
+        "size": 156,
+        "temperature": 252,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 91
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 185,
+=======
+        "size": 124,
+        "temperature": 201,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 92
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": 158,
         "type": "Brown dwarf",
+=======
+        "size": 162,
+        "temperature": 123,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 93
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": 92,
         "type": "Eccentric Jupiter",
+=======
+        "size": 200,
+        "temperature": 77,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 94
     },
     {
+<<<<<<< HEAD
         "size": 223,
         "temperature": 98,
+=======
+        "size": 172,
+        "temperature": 94,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 5,
         "tokenId": 95
     },
     {
+<<<<<<< HEAD
         "size": 217,
         "temperature": 77,
         "type": "Chthonian planet",
+=======
+        "size": 203,
+        "temperature": 75,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 96
     },
     {
+<<<<<<< HEAD
         "size": 197,
         "temperature": 57,
+=======
+        "size": 216,
+        "temperature": 50,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 97
     },
     {
+<<<<<<< HEAD
         "size": 221,
         "temperature": 56,
+=======
+        "size": 181,
+        "temperature": 35,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 98
     },
     {
+<<<<<<< HEAD
         "size": 160,
+=======
+        "size": 242,
+>>>>>>> origin/v0.1
         "temperature": 26,
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 99
     },
     {
+<<<<<<< HEAD
         "size": 213,
         "temperature": 28,
         "type": "Eccentric Jupiter",
+=======
+        "size": 192,
+        "temperature": 48,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 100
     },
     {
+<<<<<<< HEAD
         "size": 201,
         "temperature": 38,
         "type": "Helium planet",
+=======
+        "size": 147,
+        "temperature": 18,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 101
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 29,
         "type": "Eccentric Jupiter",
+=======
+        "size": 148,
+        "temperature": -7,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 102
     },
     {
+<<<<<<< HEAD
         "size": 169,
         "temperature": -35,
         "type": "Carbon planet",
+=======
+        "size": 124,
+        "temperature": -19,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 103
     },
     {
+<<<<<<< HEAD
         "size": 105,
         "temperature": -89,
+=======
+        "size": 167,
+        "temperature": -51,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 104
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": -98,
         "type": "Brown dwarf",
+=======
+        "size": 151,
+        "temperature": -120,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 105
     },
     {
+<<<<<<< HEAD
         "size": 169,
         "temperature": 234,
         "type": "Chthonian planet",
+=======
+        "size": 142,
+        "temperature": 233,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 106
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 189,
         "type": "Chthonian planet",
+=======
+        "size": 168,
+        "temperature": 186,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 107
     },
     {
+<<<<<<< HEAD
         "size": 115,
         "temperature": 139,
+=======
+        "size": 174,
+        "temperature": 141,
+>>>>>>> origin/v0.1
         "type": "Gas giant",
         "position": 3,
         "tokenId": 108
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 108,
+=======
+        "size": 166,
+        "temperature": 91,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 109
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 77,
         "type": "Helium planet",
+=======
+        "size": 142,
+        "temperature": 96,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 110
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": 74,
         "type": "Helium planet",
+=======
+        "size": 181,
+        "temperature": 73,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 111
     },
     {
+<<<<<<< HEAD
         "size": 243,
         "temperature": 49,
+=======
+        "size": 179,
+        "temperature": 42,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 112
     },
     {
+<<<<<<< HEAD
         "size": 230,
         "temperature": 53,
         "type": "Chthonian planet",
+=======
+        "size": 234,
+        "temperature": 69,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 113
     },
     {
+<<<<<<< HEAD
         "size": 180,
         "temperature": 45,
+=======
+        "size": 242,
+        "temperature": 26,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 114
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": 27,
         "type": "Gas giant",
+=======
+        "size": 219,
+        "temperature": 19,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 115
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 2,
         "type": "Brown dwarf",
+=======
+        "size": 207,
+        "temperature": 38,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 116
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": 18,
         "type": "Chthonian planet",
+=======
+        "size": 157,
+        "temperature": 7,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 117
     },
     {
+<<<<<<< HEAD
         "size": 157,
         "temperature": -34,
+=======
+        "size": 122,
+        "temperature": -47,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 118
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": -75,
         "type": "Brown dwarf",
+=======
+        "size": 157,
+        "temperature": -87,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 119
     },
     {
+<<<<<<< HEAD
         "size": 105,
         "temperature": -94,
+=======
+        "size": 150,
+        "temperature": -126,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 120
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 241,
         "type": "Chthonian planet",
+=======
+        "size": 144,
+        "temperature": 251,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 121
     },
     {
+<<<<<<< HEAD
         "size": 157,
         "temperature": 173,
         "type": "Brown dwarf",
+=======
+        "size": 150,
+        "temperature": 189,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 122
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 125,
         "type": "Gas giant",
+=======
+        "size": 165,
+        "temperature": 153,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 123
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 91,
         "type": "Chthonian planet",
+=======
+        "size": 196,
+        "temperature": 80,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 124
     },
     {
+<<<<<<< HEAD
         "size": 183,
         "temperature": 90,
         "type": "Brown dwarf",
+=======
+        "size": 154,
+        "temperature": 63,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 125
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 81,
         "type": "Brown dwarf",
+=======
+        "size": 186,
+        "temperature": 87,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 126
     },
     {
+<<<<<<< HEAD
         "size": 208,
         "temperature": 79,
+=======
+        "size": 192,
+        "temperature": 60,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 127
     },
     {
+<<<<<<< HEAD
         "size": 182,
         "temperature": 65,
         "type": "Chthonian planet",
+=======
+        "size": 195,
+        "temperature": 66,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 128
     },
     {
+<<<<<<< HEAD
         "size": 231,
         "temperature": 21,
         "type": "Brown dwarf",
+=======
+        "size": 183,
+        "temperature": 29,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 129
     },
     {
+<<<<<<< HEAD
         "size": 203,
         "temperature": 28,
+=======
+        "size": 143,
+        "temperature": 49,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 130
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 28,
         "type": "Earth analog",
+=======
+        "size": 147,
+        "temperature": 19,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 131
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": 10,
+=======
+        "size": 170,
+        "temperature": -4,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 132
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": -40,
+=======
+        "size": 153,
+        "temperature": -46,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 133
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": -70,
         "type": "Chthonian planet",
+=======
+        "size": 109,
+        "temperature": -70,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 134
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": -122,
         "type": "Carbon planet",
+=======
+        "size": 126,
+        "temperature": -112,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 135
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": 242,
+=======
+        "size": 170,
+        "temperature": 259,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 136
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 176,
         "type": "Brown dwarf",
+=======
+        "size": 133,
+        "temperature": 195,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 137
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 120,
+=======
+        "size": 120,
+        "temperature": 156,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 138
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 103,
         "type": "Brown dwarf",
+=======
+        "size": 207,
+        "temperature": 80,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 139
     },
     {
+<<<<<<< HEAD
         "size": 214,
         "temperature": 60,
         "type": "Chthonian planet",
+=======
+        "size": 221,
+        "temperature": 94,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 140
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 89,
         "type": "Chthonian planet",
+=======
+        "size": 182,
+        "temperature": 88,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 141
     },
     {
+<<<<<<< HEAD
         "size": 179,
         "temperature": 52,
         "type": "Gas giant",
+=======
+        "size": 218,
+        "temperature": 40,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 142
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 51,
         "type": "Chthonian planet",
+=======
+        "size": 202,
+        "temperature": 48,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 143
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 37,
         "type": "Brown dwarf",
+=======
+        "size": 241,
+        "temperature": 54,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 144
     },
     {
+<<<<<<< HEAD
         "size": 201,
         "temperature": 28,
+=======
+        "size": 194,
+        "temperature": 44,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 145
     },
     {
+<<<<<<< HEAD
         "size": 198,
         "temperature": 1,
+=======
+        "size": 154,
+        "temperature": 24,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 146
     },
     {
+<<<<<<< HEAD
         "size": 128,
         "temperature": 0,
+=======
+        "size": 160,
+        "temperature": 29,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 147
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": -22,
+=======
+        "size": 152,
+        "temperature": -47,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 148
     },
     {
+<<<<<<< HEAD
         "size": 123,
         "temperature": -85,
+=======
+        "size": 135,
+        "temperature": -88,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 14,
         "tokenId": 149
     },
     {
+<<<<<<< HEAD
         "size": 112,
         "temperature": -100,
         "type": "Brown dwarf",
+=======
+        "size": 99,
+        "temperature": -112,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 150
     },
     {
+<<<<<<< HEAD
         "size": 107,
         "temperature": 225,
         "type": "Chthonian planet",
+=======
+        "size": 94,
+        "temperature": 253,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 151
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 205,
+=======
+        "size": 144,
+        "temperature": 174,
+>>>>>>> origin/v0.1
         "type": "Eccentric Jupiter",
         "position": 2,
         "tokenId": 152
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": 148,
         "type": "Chthonian planet",
+=======
+        "size": 127,
+        "temperature": 148,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 153
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 104,
         "type": "Carbon planet",
+=======
+        "size": 136,
+        "temperature": 98,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 154
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 75,
         "type": "Ammonia planet",
+=======
+        "size": 184,
+        "temperature": 66,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 155
     },
     {
+<<<<<<< HEAD
         "size": 186,
         "temperature": 74,
         "type": "Chthonian planet",
+=======
+        "size": 181,
+        "temperature": 87,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 156
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 49,
         "type": "Carbon planet",
+=======
+        "size": 205,
+        "temperature": 56,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 157
     },
     {
+<<<<<<< HEAD
         "size": 208,
         "temperature": 61,
         "type": "Helium planet",
+=======
+        "size": 202,
+        "temperature": 38,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 158
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 42,
         "type": "Brown dwarf",
+=======
+        "size": 178,
+        "temperature": 23,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 159
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 19,
         "type": "Chthonian planet",
+=======
+        "size": 191,
+        "temperature": 29,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 160
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 23,
         "type": "Gas giant",
+=======
+        "size": 193,
+        "temperature": 35,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 161
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 7,
+=======
+        "size": 135,
+        "temperature": 25,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 12,
         "tokenId": 162
     },
     {
+<<<<<<< HEAD
         "size": 121,
         "temperature": -48,
         "type": "Brown dwarf",
+=======
+        "size": 139,
+        "temperature": -32,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 163
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": -74,
         "type": "Carbon planet",
+=======
+        "size": 123,
+        "temperature": -79,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 164
     },
     {
+<<<<<<< HEAD
         "size": 103,
         "temperature": -113,
+=======
+        "size": 124,
+        "temperature": -128,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 165
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": 241,
         "type": "Brown dwarf",
+=======
+        "size": 154,
+        "temperature": 225,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 166
     },
     {
+<<<<<<< HEAD
         "size": 116,
         "temperature": 187,
         "type": "Ammonia planet",
+=======
+        "size": 149,
+        "temperature": 195,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 167
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 159,
+=======
+        "size": 154,
+        "temperature": 156,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 168
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 97,
+=======
+        "size": 198,
+        "temperature": 102,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 169
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 63,
         "type": "Brown dwarf",
+=======
+        "size": 197,
+        "temperature": 70,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 170
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 83,
         "type": "Brown dwarf",
+=======
+        "size": 174,
+        "temperature": 84,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 171
     },
     {
+<<<<<<< HEAD
         "size": 245,
         "temperature": 43,
+=======
+        "size": 222,
+        "temperature": 74,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 172
     },
     {
+<<<<<<< HEAD
         "size": 223,
         "temperature": 56,
+=======
+        "size": 175,
+        "temperature": 67,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 8,
         "tokenId": 173
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 52,
+=======
+        "size": 176,
+        "temperature": 35,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 9,
         "tokenId": 174
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 13,
         "type": "Ammonia planet",
+=======
+        "size": 159,
+        "temperature": 13,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 175
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 23,
+=======
+        "size": 176,
+        "temperature": 26,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 176
     },
     {
+<<<<<<< HEAD
         "size": 183,
         "temperature": -2,
+=======
+        "size": 142,
+        "temperature": 27,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 177
     },
     {
+<<<<<<< HEAD
         "size": 132,
         "temperature": -32,
+=======
+        "size": 160,
+        "temperature": -48,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 178
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": -63,
         "type": "Ocean planet",
+=======
+        "size": 118,
+        "temperature": -68,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 179
     },
     {
+<<<<<<< HEAD
         "size": 109,
         "temperature": -122,
         "type": "Brown dwarf",
+=======
+        "size": 112,
+        "temperature": -100,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 180
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 224,
         "type": "Eccentric Jupiter",
+=======
+        "size": 106,
+        "temperature": 250,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 181
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": 170,
         "type": "Brown dwarf",
+=======
+        "size": 144,
+        "temperature": 188,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 182
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": 155,
         "type": "Brown dwarf",
+=======
+        "size": 132,
+        "temperature": 153,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 183
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 100,
+=======
+        "size": 164,
+        "temperature": 98,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 184
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": 94,
+=======
+        "size": 225,
+        "temperature": 88,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 185
     },
     {
+<<<<<<< HEAD
         "size": 206,
         "temperature": 86,
         "type": "Gas giant",
+=======
+        "size": 172,
+        "temperature": 86,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 186
     },
     {
+<<<<<<< HEAD
         "size": 233,
         "temperature": 64,
+=======
+        "size": 209,
+        "temperature": 52,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 187
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 42,
+=======
+        "size": 216,
+        "temperature": 44,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 188
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 37,
         "type": "Carbon planet",
+=======
+        "size": 227,
+        "temperature": 20,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 189
     },
     {
+<<<<<<< HEAD
         "size": 215,
         "temperature": 16,
         "type": "Chthonian planet",
+=======
+        "size": 194,
+        "temperature": 32,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 190
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 34,
         "type": "Gas giant",
+=======
+        "size": 184,
+        "temperature": 30,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 191
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 20,
         "type": "Earth analog",
+=======
+        "size": 129,
+        "temperature": 3,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 192
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": -26,
+=======
+        "size": 168,
+        "temperature": -21,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 193
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -85,
         "type": "Brown dwarf",
+=======
+        "size": 106,
+        "temperature": -56,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 194
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -116,
+=======
+        "size": 96,
+        "temperature": -107,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 195
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": 239,
+=======
+        "size": 123,
+        "temperature": 235,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 196
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 181,
+=======
+        "size": 144,
+        "temperature": 204,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 2,
         "tokenId": 197
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 159,
         "type": "Forest planet",
+=======
+        "size": 179,
+        "temperature": 144,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 198
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 82,
         "type": "Brown dwarf",
+=======
+        "size": 143,
+        "temperature": 78,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 199
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 90,
         "type": "Brown dwarf",
+=======
+        "size": 149,
+        "temperature": 94,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 200
     },
     {
+<<<<<<< HEAD
         "size": 212,
         "temperature": 81,
         "type": "Brown dwarf",
+=======
+        "size": 220,
+        "temperature": 83,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 201
     },
     {
+<<<<<<< HEAD
         "size": 228,
         "temperature": 74,
         "type": "Helium planet",
+=======
+        "size": 203,
+        "temperature": 48,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 202
     },
     {
+<<<<<<< HEAD
         "size": 218,
         "temperature": 36,
         "type": "Brown dwarf",
+=======
+        "size": 170,
+        "temperature": 51,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 203
     },
     {
+<<<<<<< HEAD
         "size": 217,
         "temperature": 34,
         "type": "Brown dwarf",
+=======
+        "size": 166,
+        "temperature": 45,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 204
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 25,
         "type": "Eccentric Jupiter",
+=======
+        "size": 213,
+        "temperature": 42,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 205
     },
     {
+<<<<<<< HEAD
         "size": 209,
         "temperature": 13,
+=======
+        "size": 194,
+        "temperature": 33,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 11,
         "tokenId": 206
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 25,
+=======
+        "size": 184,
+        "temperature": 6,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 207
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": -20,
+=======
+        "size": 134,
+        "temperature": -23,
+>>>>>>> origin/v0.1
         "type": "Helium planet",
         "position": 13,
         "tokenId": 208
     },
     {
+<<<<<<< HEAD
         "size": 107,
+=======
+        "size": 126,
+>>>>>>> origin/v0.1
         "temperature": -70,
         "type": "Chthonian planet",
         "position": 14,
         "tokenId": 209
     },
     {
+<<<<<<< HEAD
         "size": 100,
         "temperature": -114,
         "type": "Chthonian planet",
+=======
+        "size": 131,
+        "temperature": -93,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 210
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 253,
+=======
+        "size": 121,
+        "temperature": 224,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 211
     },
     {
+<<<<<<< HEAD
         "size": 121,
         "temperature": 206,
         "type": "Chthonian planet",
+=======
+        "size": 124,
+        "temperature": 192,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 212
     },
     {
+<<<<<<< HEAD
         "size": 172,
         "temperature": 122,
         "type": "Brown dwarf",
+=======
+        "size": 177,
+        "temperature": 156,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 213
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": 87,
         "type": "Brown dwarf",
+=======
+        "size": 120,
+        "temperature": 83,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 214
     },
     {
+<<<<<<< HEAD
         "size": 206,
         "temperature": 99,
         "type": "Brown dwarf",
+=======
+        "size": 161,
+        "temperature": 87,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 215
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 80,
+=======
+        "size": 212,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 216
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 79,
         "type": "Gas giant",
+=======
+        "size": 200,
+        "temperature": 68,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 217
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 39,
         "type": "Eccentric Jupiter",
+=======
+        "size": 177,
+        "temperature": 44,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 218
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 40,
         "type": "Ammonia planet",
+=======
+        "size": 223,
+        "temperature": 59,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 219
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": 42,
         "type": "Eccentric Jupiter",
+=======
+        "size": 190,
+        "temperature": 41,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 220
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 21,
         "type": "Earth analog",
+=======
+        "size": 190,
+        "temperature": 22,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 221
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": 6,
         "type": "Brown dwarf",
+=======
+        "size": 175,
+        "temperature": 28,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 222
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": -34,
+=======
+        "size": 118,
+        "temperature": -22,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 223
     },
     {
+<<<<<<< HEAD
         "size": 110,
         "temperature": -65,
         "type": "Brown dwarf",
+=======
+        "size": 137,
+        "temperature": -75,
+        "type": "Ocean planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 224
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": -115,
+=======
+        "size": 118,
+        "temperature": -117,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 225
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": 241,
         "type": "Carbon planet",
+=======
+        "size": 149,
+        "temperature": 245,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 226
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": 178,
+=======
+        "size": 143,
+        "temperature": 170,
+>>>>>>> origin/v0.1
         "type": "Eccentric Jupiter",
         "position": 2,
         "tokenId": 227
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": 135,
         "type": "Chthonian planet",
+=======
+        "size": 171,
+        "temperature": 157,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 228
     },
     {
+<<<<<<< HEAD
         "size": 139,
         "temperature": 73,
+=======
+        "size": 158,
+        "temperature": 87,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 229
     },
     {
+<<<<<<< HEAD
         "size": 226,
         "temperature": 94,
+=======
+        "size": 205,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 230
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 88,
+=======
+        "size": 164,
+        "temperature": 89,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 231
     },
     {
+<<<<<<< HEAD
         "size": 239,
         "temperature": 50,
         "type": "Brown dwarf",
+=======
+        "size": 193,
+        "temperature": 59,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 232
     },
     {
+<<<<<<< HEAD
         "size": 234,
         "temperature": 35,
         "type": "Chthonian planet",
+=======
+        "size": 223,
+        "temperature": 32,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 233
     },
     {
+<<<<<<< HEAD
         "size": 198,
         "temperature": 32,
+=======
+        "size": 209,
+        "temperature": 59,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 234
     },
     {
+<<<<<<< HEAD
         "size": 193,
         "temperature": 26,
         "type": "Helium planet",
+=======
+        "size": 226,
+        "temperature": 11,
+        "type": "Forest planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 235
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 32,
+=======
+        "size": 171,
+        "temperature": 13,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 236
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 25,
         "type": "Helium planet",
+=======
+        "size": 159,
+        "temperature": -10,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 237
     },
     {
+<<<<<<< HEAD
         "size": 122,
+=======
+        "size": 133,
+>>>>>>> origin/v0.1
         "temperature": -50,
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 238
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": -56,
+=======
+        "size": 154,
+        "temperature": -55,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 239
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -115,
         "type": "Eccentric Jupiter",
+=======
+        "size": 150,
+        "temperature": -101,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 240
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": 239,
         "type": "Carbon planet",
+=======
+        "size": 153,
+        "temperature": 234,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 241
     },
     {
+<<<<<<< HEAD
         "size": 125,
         "temperature": 190,
         "type": "Gas giant",
+=======
+        "size": 165,
+        "temperature": 206,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 242
     },
     {
+<<<<<<< HEAD
         "size": 140,
         "temperature": 158,
+=======
+        "size": 153,
+        "temperature": 130,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 3,
         "tokenId": 243
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 76,
         "type": "Ammonia planet",
+=======
+        "size": 155,
+        "temperature": 106,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 244
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 61,
         "type": "Chthonian planet",
+=======
+        "size": 181,
+        "temperature": 69,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 245
     },
     {
+<<<<<<< HEAD
         "size": 231,
         "temperature": 89,
         "type": "Brown dwarf",
+=======
+        "size": 174,
+        "temperature": 85,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 246
     },
     {
+<<<<<<< HEAD
         "size": 210,
         "temperature": 57,
         "type": "Brown dwarf",
+=======
+        "size": 152,
+        "temperature": 52,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 247
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 37,
+=======
+        "size": 179,
+        "temperature": 59,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 248
     },
     {
+<<<<<<< HEAD
         "size": 221,
         "temperature": 43,
+=======
+        "size": 204,
+        "temperature": 57,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 249
     },
     {
+<<<<<<< HEAD
         "size": 201,
         "temperature": 36,
         "type": "Chthonian planet",
+=======
+        "size": 179,
+        "temperature": 46,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 250
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 10,
         "type": "Carbon planet",
+=======
+        "size": 164,
+        "temperature": 12,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 251
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 5,
+=======
+        "size": 185,
+        "temperature": 15,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 252
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": -26,
         "type": "Helium planet",
+=======
+        "size": 144,
+        "temperature": -24,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 253
     },
     {
+<<<<<<< HEAD
         "size": 110,
         "temperature": -57,
         "type": "Brown dwarf",
+=======
+        "size": 131,
+        "temperature": -74,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 254
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": -115,
         "type": "Chthonian planet",
+=======
+        "size": 114,
+        "temperature": -99,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 255
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": 243,
         "type": "Brown dwarf",
+=======
+        "size": 166,
+        "temperature": 226,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 256
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": 171,
         "type": "Brown dwarf",
+=======
+        "size": 155,
+        "temperature": 187,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 257
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 150,
         "type": "Eccentric Jupiter",
+=======
+        "size": 172,
+        "temperature": 144,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 258
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 104,
+=======
+        "size": 159,
+        "temperature": 73,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 259
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 65,
         "type": "Brown dwarf",
+=======
+        "size": 230,
+        "temperature": 67,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 260
     },
     {
+<<<<<<< HEAD
         "size": 193,
         "temperature": 73,
         "type": "Gas giant",
+=======
+        "size": 232,
+        "temperature": 74,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 261
     },
     {
+<<<<<<< HEAD
         "size": 182,
         "temperature": 57,
+=======
+        "size": 221,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 262
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 64,
         "type": "Brown dwarf",
+=======
+        "size": 164,
+        "temperature": 57,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 263
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 49,
         "type": "Brown dwarf",
+=======
+        "size": 167,
+        "temperature": 59,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 264
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 18,
         "type": "Brown dwarf",
+=======
+        "size": 176,
+        "temperature": 34,
+        "type": "Ocean planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 265
     },
     {
+<<<<<<< HEAD
         "size": 183,
         "temperature": 4,
         "type": "Brown dwarf",
+=======
+        "size": 179,
+        "temperature": 14,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 266
     },
     {
+<<<<<<< HEAD
         "size": 174,
         "temperature": 21,
         "type": "Eccentric Jupiter",
+=======
+        "size": 175,
+        "temperature": 11,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 267
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": -44,
+=======
+        "size": 136,
+        "temperature": -12,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 268
     },
     {
+<<<<<<< HEAD
         "size": 112,
         "temperature": -68,
+=======
+        "size": 144,
+        "temperature": -60,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 269
     },
     {
+<<<<<<< HEAD
         "size": 113,
         "temperature": -117,
         "type": "Carbon planet",
+=======
+        "size": 125,
+        "temperature": -106,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 270
     },
     {
+<<<<<<< HEAD
         "size": 128,
         "temperature": 250,
         "type": "Ammonia planet",
+=======
+        "size": 124,
+        "temperature": 233,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 271
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 176,
+=======
+        "size": 141,
+        "temperature": 171,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 272
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 133,
         "type": "Brown dwarf",
+=======
+        "size": 132,
+        "temperature": 138,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 273
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 89,
         "type": "Brown dwarf",
+=======
+        "size": 204,
+        "temperature": 84,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 274
     },
     {
+<<<<<<< HEAD
         "size": 227,
         "temperature": 94,
         "type": "Eccentric Jupiter",
+=======
+        "size": 176,
+        "temperature": 90,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 275
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 77,
         "type": "Ammonia planet",
+=======
+        "size": 208,
+        "temperature": 86,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 276
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 48,
+=======
+        "size": 190,
+        "temperature": 75,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 277
     },
     {
+<<<<<<< HEAD
         "size": 176,
+=======
+        "size": 159,
+>>>>>>> origin/v0.1
         "temperature": 36,
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 278
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 59,
         "type": "Forest planet",
+=======
+        "size": 168,
+        "temperature": 37,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 279
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 18,
+=======
+        "size": 154,
+        "temperature": 46,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 280
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 7,
         "type": "Helium planet",
+=======
+        "size": 174,
+        "temperature": 12,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 281
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": -4,
         "type": "Chthonian planet",
+=======
+        "size": 160,
+        "temperature": -9,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 282
     },
     {
+<<<<<<< HEAD
         "size": 123,
         "temperature": -35,
+=======
+        "size": 144,
+        "temperature": -18,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 283
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": -77,
         "type": "Chthonian planet",
+=======
+        "size": 153,
+        "temperature": -84,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 284
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -117,
+=======
+        "size": 123,
+        "temperature": -121,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 285
     },
     {
+<<<<<<< HEAD
         "size": 105,
         "temperature": 235,
+=======
+        "size": 160,
+        "temperature": 256,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 286
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": 198,
+=======
+        "size": 164,
+        "temperature": 185,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 287
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 159,
         "type": "Brown dwarf",
+=======
+        "size": 129,
+        "temperature": 123,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 288
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 71,
+=======
+        "size": 166,
+        "temperature": 85,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 289
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 98,
+=======
+        "size": 211,
+        "temperature": 66,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 290
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 78,
+=======
+        "size": 187,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 291
     },
     {
+<<<<<<< HEAD
         "size": 202,
         "temperature": 67,
+=======
+        "size": 162,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 292
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 36,
         "type": "Chthonian planet",
+=======
+        "size": 178,
+        "temperature": 55,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 293
     },
     {
+<<<<<<< HEAD
         "size": 225,
         "temperature": 23,
         "type": "Gas giant",
+=======
+        "size": 209,
+        "temperature": 23,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 294
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 30,
         "type": "Brown dwarf",
+=======
+        "size": 159,
+        "temperature": 21,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 295
     },
     {
+<<<<<<< HEAD
         "size": 189,
+=======
+        "size": 161,
+>>>>>>> origin/v0.1
         "temperature": 26,
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 296
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": 10,
         "type": "Chthonian planet",
+=======
+        "size": 183,
+        "temperature": 4,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 297
     },
     {
+<<<<<<< HEAD
         "size": 134,
         "temperature": -30,
         "type": "Chthonian planet",
+=======
+        "size": 146,
+        "temperature": -47,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 298
     },
     {
+<<<<<<< HEAD
         "size": 100,
         "temperature": -85,
+=======
+        "size": 120,
+        "temperature": -63,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 299
     },
     {
+<<<<<<< HEAD
         "size": 120,
         "temperature": -116,
+=======
+        "size": 142,
+        "temperature": -122,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 15,
         "tokenId": 300
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 235,
         "type": "Chthonian planet",
+=======
+        "size": 115,
+        "temperature": 257,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 301
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": 208,
         "type": "Chthonian planet",
+=======
+        "size": 144,
+        "temperature": 173,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 302
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 126,
+=======
+        "size": 171,
+        "temperature": 127,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 303
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 92,
         "type": "Gas giant",
+=======
+        "size": 204,
+        "temperature": 97,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 304
     },
     {
+<<<<<<< HEAD
         "size": 176,
         "temperature": 74,
+=======
+        "size": 134,
+        "temperature": 93,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 305
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 84,
+=======
+        "size": 209,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 306
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 60,
+=======
+        "size": 202,
+        "temperature": 57,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 307
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 38,
         "type": "Chthonian planet",
+=======
+        "size": 223,
+        "temperature": 46,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 308
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 20,
         "type": "Ammonia planet",
+=======
+        "size": 237,
+        "temperature": 48,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 309
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": 32,
         "type": "Brown dwarf",
+=======
+        "size": 153,
+        "temperature": 12,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 310
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 35,
         "type": "Brown dwarf",
+=======
+        "size": 195,
+        "temperature": 20,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 311
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": -9,
         "type": "Eccentric Jupiter",
+=======
+        "size": 143,
+        "temperature": 26,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 312
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": -32,
         "type": "Carbon planet",
+=======
+        "size": 128,
+        "temperature": -19,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 313
     },
     {
+<<<<<<< HEAD
         "size": 140,
         "temperature": -72,
+=======
+        "size": 104,
+        "temperature": -62,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 314
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": -118,
         "type": "Eccentric Jupiter",
+=======
+        "size": 108,
+        "temperature": -108,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 315
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 236,
         "type": "Brown dwarf",
+=======
+        "size": 156,
+        "temperature": 222,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 316
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 175,
         "type": "Brown dwarf",
+=======
+        "size": 118,
+        "temperature": 196,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 317
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": 151,
         "type": "Helium planet",
+=======
+        "size": 153,
+        "temperature": 120,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 318
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": 74,
+=======
+        "size": 124,
+        "temperature": 101,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 319
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": 69,
+=======
+        "size": 139,
+        "temperature": 91,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 320
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 80,
         "type": "Brown dwarf",
+=======
+        "size": 220,
+        "temperature": 75,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 321
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 64,
         "type": "Gas giant",
+=======
+        "size": 214,
+        "temperature": 67,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 322
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 59,
         "type": "Brown dwarf",
+=======
+        "size": 226,
+        "temperature": 67,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 323
     },
     {
+<<<<<<< HEAD
         "size": 169,
         "temperature": 37,
+=======
+        "size": 191,
+        "temperature": 30,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 324
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 36,
+=======
+        "size": 150,
+        "temperature": 46,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 325
     },
     {
         "size": 195,
+<<<<<<< HEAD
         "temperature": 33,
         "type": "Helium planet",
+=======
+        "temperature": 0,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 326
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": -4,
         "type": "Brown dwarf",
+=======
+        "size": 142,
+        "temperature": 13,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 327
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -34,
+=======
+        "size": 141,
+        "temperature": -28,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 328
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -71,
+=======
+        "size": 146,
+        "temperature": -57,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 329
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": -98,
+=======
+        "size": 94,
+        "temperature": -124,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 330
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": 247,
+=======
+        "size": 137,
+        "temperature": 236,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 331
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": 183,
         "type": "Chthonian planet",
+=======
+        "size": 143,
+        "temperature": 190,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 332
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 131,
         "type": "Chthonian planet",
+=======
+        "size": 160,
+        "temperature": 142,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 333
     },
     {
+<<<<<<< HEAD
         "size": 207,
         "temperature": 77,
         "type": "Brown dwarf",
+=======
+        "size": 186,
+        "temperature": 77,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 334
     },
     {
+<<<<<<< HEAD
         "size": 206,
         "temperature": 95,
         "type": "Eccentric Jupiter",
+=======
+        "size": 158,
+        "temperature": 69,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 335
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 88,
         "type": "Brown dwarf",
+=======
+        "size": 186,
+        "temperature": 70,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 336
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": 45,
+=======
+        "size": 231,
+        "temperature": 49,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 337
     },
     {
+<<<<<<< HEAD
         "size": 232,
         "temperature": 46,
         "type": "Brown dwarf",
@@ -2464,2788 +4375,5149 @@
         "tokenId": 352
     },
     {
+=======
+>>>>>>> origin/v0.1
         "size": 180,
         "temperature": 45,
         "type": "Brown dwarf",
         "position": 8,
+<<<<<<< HEAD
         "tokenId": 353
     },
     {
         "size": 215,
         "temperature": 57,
         "type": "Brown dwarf",
+=======
+        "tokenId": 338
+    },
+    {
+        "size": 171,
+        "temperature": 26,
+        "type": "Brown dwarf",
+        "position": 9,
+        "tokenId": 339
+    },
+    {
+        "size": 170,
+        "temperature": 23,
+        "type": "Brown dwarf",
+        "position": 10,
+        "tokenId": 340
+    },
+    {
+        "size": 169,
+        "temperature": 29,
+        "type": "Brown dwarf",
+        "position": 11,
+        "tokenId": 341
+    },
+    {
+        "size": 143,
+        "temperature": 7,
+        "type": "Brown dwarf",
+        "position": 12,
+        "tokenId": 342
+    },
+    {
+        "size": 166,
+        "temperature": -11,
+        "type": "Earth analog",
+        "position": 13,
+        "tokenId": 343
+    },
+    {
+        "size": 162,
+        "temperature": -64,
+        "type": "Chthonian planet",
+        "position": 14,
+        "tokenId": 344
+    },
+    {
+        "size": 144,
+        "temperature": -94,
+        "type": "Chthonian planet",
+        "position": 15,
+        "tokenId": 345
+    },
+    {
+        "size": 129,
+        "temperature": 235,
+        "type": "Eccentric Jupiter",
+        "position": 1,
+        "tokenId": 346
+    },
+    {
+        "size": 142,
+        "temperature": 185,
+        "type": "Helium planet",
+        "position": 2,
+        "tokenId": 347
+    },
+    {
+        "size": 181,
+        "temperature": 156,
+        "type": "Brown dwarf",
+        "position": 3,
+        "tokenId": 348
+    },
+    {
+        "size": 129,
+        "temperature": 76,
+        "type": "Brown dwarf",
+        "position": 4,
+        "tokenId": 349
+    },
+    {
+        "size": 231,
+        "temperature": 86,
+        "type": "Brown dwarf",
+        "position": 5,
+        "tokenId": 350
+    },
+    {
+        "size": 196,
+        "temperature": 82,
+        "type": "Brown dwarf",
+        "position": 6,
+        "tokenId": 351
+    },
+    {
+        "size": 157,
+        "temperature": 77,
+        "type": "Brown dwarf",
+        "position": 7,
+        "tokenId": 352
+    },
+    {
+        "size": 221,
+        "temperature": 60,
+        "type": "Brown dwarf",
+        "position": 8,
+        "tokenId": 353
+    },
+    {
+        "size": 199,
+        "temperature": 26,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 354
     },
     {
+<<<<<<< HEAD
         "size": 174,
         "temperature": 14,
         "type": "Gas giant",
+=======
+        "size": 187,
+        "temperature": 26,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 355
     },
     {
+<<<<<<< HEAD
         "size": 193,
         "temperature": 6,
         "type": "Gas giant",
+=======
+        "size": 200,
+        "temperature": 9,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 356
     },
     {
+<<<<<<< HEAD
         "size": 157,
         "temperature": 10,
         "type": "Chthonian planet",
+=======
+        "size": 158,
+        "temperature": 17,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 357
     },
     {
+<<<<<<< HEAD
         "size": 115,
         "temperature": -21,
+=======
+        "size": 127,
+        "temperature": -50,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 358
     },
     {
+<<<<<<< HEAD
         "size": 106,
         "temperature": -76,
         "type": "Ammonia planet",
+=======
+        "size": 110,
+        "temperature": -61,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 359
     },
     {
+<<<<<<< HEAD
         "size": 150,
         "temperature": -104,
         "type": "Eccentric Jupiter",
+=======
+        "size": 151,
+        "temperature": -129,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 360
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 220,
+=======
+        "size": 130,
+        "temperature": 235,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 361
     },
     {
+<<<<<<< HEAD
         "size": 140,
         "temperature": 171,
         "type": "Eccentric Jupiter",
+=======
+        "size": 132,
+        "temperature": 171,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 362
     },
     {
+<<<<<<< HEAD
         "size": 113,
         "temperature": 144,
+=======
+        "size": 147,
+        "temperature": 155,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 363
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 94,
         "type": "Forest planet",
+=======
+        "size": 121,
+        "temperature": 99,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 364
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": 61,
         "type": "Brown dwarf",
+=======
+        "size": 168,
+        "temperature": 62,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 365
     },
     {
         "size": 205,
+<<<<<<< HEAD
         "temperature": 85,
+=======
+        "temperature": 76,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 366
     },
     {
+<<<<<<< HEAD
         "size": 198,
         "temperature": 76,
         "type": "Brown dwarf",
+=======
+        "size": 206,
+        "temperature": 54,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 367
     },
     {
+<<<<<<< HEAD
         "size": 236,
         "temperature": 45,
         "type": "Chthonian planet",
+=======
+        "size": 176,
+        "temperature": 54,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 368
     },
     {
+<<<<<<< HEAD
         "size": 178,
         "temperature": 43,
         "type": "Chthonian planet",
+=======
+        "size": 232,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 369
     },
     {
+<<<<<<< HEAD
         "size": 228,
         "temperature": 21,
+=======
+        "size": 222,
+        "temperature": 32,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 370
     },
     {
+<<<<<<< HEAD
         "size": 206,
         "temperature": 15,
         "type": "Chthonian planet",
+=======
+        "size": 160,
+        "temperature": 36,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 371
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 13,
         "type": "Chthonian planet",
+=======
+        "size": 180,
+        "temperature": 24,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 372
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": -20,
         "type": "Carbon planet",
+=======
+        "size": 155,
+        "temperature": -13,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 373
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": -60,
         "type": "Brown dwarf",
+=======
+        "size": 106,
+        "temperature": -71,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 374
     },
     {
+<<<<<<< HEAD
         "size": 97,
         "temperature": -115,
         "type": "Carbon planet",
+=======
+        "size": 120,
+        "temperature": -124,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 375
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 227,
+=======
+        "size": 119,
+        "temperature": 222,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 376
     },
     {
+<<<<<<< HEAD
         "size": 120,
         "temperature": 180,
         "type": "Helium planet",
+=======
+        "size": 149,
+        "temperature": 207,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 377
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": 158,
         "type": "Chthonian planet",
+=======
+        "size": 172,
+        "temperature": 136,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 378
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": 79,
         "type": "Chthonian planet",
+=======
+        "size": 178,
+        "temperature": 105,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 379
     },
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": 84,
         "type": "Carbon planet",
+=======
+        "size": 203,
+        "temperature": 95,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 380
     },
     {
+<<<<<<< HEAD
         "size": 217,
         "temperature": 86,
         "type": "Brown dwarf",
+=======
+        "size": 192,
+        "temperature": 82,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 381
     },
     {
+<<<<<<< HEAD
         "size": 232,
         "temperature": 54,
         "type": "Brown dwarf",
+=======
+        "size": 215,
+        "temperature": 47,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 382
     },
     {
+<<<<<<< HEAD
         "size": 224,
         "temperature": 35,
+=======
+        "size": 168,
+        "temperature": 58,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 383
     },
     {
+<<<<<<< HEAD
         "size": 178,
         "temperature": 29,
         "type": "Chthonian planet",
+=======
+        "size": 174,
+        "temperature": 22,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 384
     },
     {
+<<<<<<< HEAD
         "size": 212,
         "temperature": 17,
+=======
+        "size": 146,
+        "temperature": 44,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 385
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 7,
         "type": "Chthonian planet",
+=======
+        "size": 194,
+        "temperature": 30,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 386
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": -8,
         "type": "Forest planet",
+=======
+        "size": 173,
+        "temperature": 23,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 387
     },
     {
+<<<<<<< HEAD
         "size": 123,
         "temperature": -25,
         "type": "Gas giant",
+=======
+        "size": 165,
+        "temperature": -41,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 388
     },
     {
+<<<<<<< HEAD
         "size": 139,
         "temperature": -84,
         "type": "Brown dwarf",
+=======
+        "size": 124,
+        "temperature": -79,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 389
     },
     {
+<<<<<<< HEAD
         "size": 107,
         "temperature": -118,
         "type": "Brown dwarf",
+=======
+        "size": 146,
+        "temperature": -125,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 390
     },
     {
         "size": 143,
+<<<<<<< HEAD
         "temperature": 233,
         "type": "Brown dwarf",
+=======
+        "temperature": 236,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 391
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 182,
         "type": "Ammonia planet",
+=======
+        "size": 150,
+        "temperature": 180,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 392
     },
     {
+<<<<<<< HEAD
         "size": 172,
         "temperature": 129,
         "type": "Brown dwarf",
+=======
+        "size": 167,
+        "temperature": 122,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 393
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": 89,
         "type": "Brown dwarf",
+=======
+        "size": 202,
+        "temperature": 79,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 394
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 88,
+=======
+        "size": 145,
+        "temperature": 78,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 395
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 82,
         "type": "Brown dwarf",
+=======
+        "size": 160,
+        "temperature": 85,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 396
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 46,
         "type": "Brown dwarf",
+=======
+        "size": 203,
+        "temperature": 78,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 397
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 34,
         "type": "Eccentric Jupiter",
+=======
+        "size": 161,
+        "temperature": 57,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 398
     },
     {
+<<<<<<< HEAD
         "size": 178,
         "temperature": 32,
         "type": "Brown dwarf",
+=======
+        "size": 216,
+        "temperature": 27,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 399
     },
     {
+<<<<<<< HEAD
         "size": 229,
         "temperature": 22,
         "type": "Chthonian planet",
+=======
+        "size": 176,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 400
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 27,
         "type": "Brown dwarf",
+=======
+        "size": 148,
+        "temperature": 11,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 401
     },
     {
+<<<<<<< HEAD
         "size": 125,
         "temperature": -4,
         "type": "Brown dwarf",
+=======
+        "size": 146,
+        "temperature": 17,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 402
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": -31,
         "type": "Chthonian planet",
+=======
+        "size": 133,
+        "temperature": -15,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 403
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": -80,
         "type": "Chthonian planet",
+=======
+        "size": 157,
+        "temperature": -77,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 404
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": -130,
+=======
+        "size": 152,
+        "temperature": -99,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 405
     },
     {
+<<<<<<< HEAD
         "size": 139,
         "temperature": 231,
+=======
+        "size": 148,
+        "temperature": 224,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 406
     },
     {
         "size": 116,
+<<<<<<< HEAD
         "temperature": 181,
+=======
+        "temperature": 204,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 407
     },
     {
+<<<<<<< HEAD
         "size": 178,
         "temperature": 131,
         "type": "Brown dwarf",
+=======
+        "size": 174,
+        "temperature": 144,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 408
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 100,
         "type": "Brown dwarf",
+=======
+        "size": 161,
+        "temperature": 98,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 409
     },
     {
+<<<<<<< HEAD
         "size": 178,
         "temperature": 66,
         "type": "Eccentric Jupiter",
+=======
+        "size": 206,
+        "temperature": 88,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 410
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 70,
         "type": "Eccentric Jupiter",
+=======
+        "size": 235,
+        "temperature": 71,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 411
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 61,
         "type": "Brown dwarf",
+=======
+        "size": 173,
+        "temperature": 44,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 412
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 63,
+=======
+        "size": 232,
+        "temperature": 53,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 413
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 25,
+=======
+        "size": 203,
+        "temperature": 53,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 414
     },
     {
+<<<<<<< HEAD
         "size": 202,
         "temperature": 30,
+=======
+        "size": 150,
+        "temperature": 46,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 10,
         "tokenId": 415
     },
     {
+<<<<<<< HEAD
         "size": 156,
         "temperature": 8,
+=======
+        "size": 141,
+        "temperature": 34,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 416
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": -9,
+=======
+        "size": 180,
+        "temperature": -7,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 417
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -16,
+=======
+        "size": 171,
+        "temperature": -35,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 418
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": -88,
+=======
+        "size": 138,
+        "temperature": -81,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 14,
         "tokenId": 419
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -96,
+=======
+        "size": 159,
+        "temperature": -103,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 420
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 223,
         "type": "Brown dwarf",
+=======
+        "size": 171,
+        "temperature": 249,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 421
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 203,
         "type": "Brown dwarf",
+=======
+        "size": 174,
+        "temperature": 200,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 422
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 131,
         "type": "Brown dwarf",
+=======
+        "size": 142,
+        "temperature": 147,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 423
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": 80,
         "type": "Chthonian planet",
+=======
+        "size": 161,
+        "temperature": 91,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 424
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 70,
         "type": "Brown dwarf",
+=======
+        "size": 139,
+        "temperature": 63,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 425
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 82,
+=======
+        "size": 189,
+        "temperature": 73,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 426
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 48,
         "type": "Brown dwarf",
+=======
+        "size": 226,
+        "temperature": 50,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 427
     },
     {
+<<<<<<< HEAD
         "size": 225,
         "temperature": 59,
         "type": "Brown dwarf",
+=======
+        "size": 223,
+        "temperature": 47,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 428
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 20,
+=======
+        "size": 158,
+        "temperature": 35,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 429
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 41,
         "type": "Chthonian planet",
+=======
+        "size": 222,
+        "temperature": 26,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 430
     },
     {
+<<<<<<< HEAD
         "size": 150,
         "temperature": 27,
         "type": "Brown dwarf",
+=======
+        "size": 169,
+        "temperature": 24,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 431
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 6,
         "type": "Chthonian planet",
+=======
+        "size": 138,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 432
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": -11,
+=======
+        "size": 164,
+        "temperature": -26,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 433
     },
     {
+<<<<<<< HEAD
         "size": 115,
         "temperature": -65,
+=======
+        "size": 129,
+        "temperature": -66,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 434
     },
     {
+<<<<<<< HEAD
         "size": 138,
+=======
+        "size": 107,
+>>>>>>> origin/v0.1
         "temperature": -114,
         "type": "Chthonian planet",
         "position": 15,
         "tokenId": 435
     },
     {
+<<<<<<< HEAD
         "size": 111,
         "temperature": 228,
+=======
+        "size": 156,
+        "temperature": 255,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 1,
         "tokenId": 436
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 190,
         "type": "Eccentric Jupiter",
+=======
+        "size": 138,
+        "temperature": 193,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 437
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": 130,
         "type": "Brown dwarf",
+=======
+        "size": 150,
+        "temperature": 148,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 438
     },
     {
+<<<<<<< HEAD
         "size": 200,
         "temperature": 98,
         "type": "Chthonian planet",
+=======
+        "size": 150,
+        "temperature": 75,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 439
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 67,
         "type": "Ammonia planet",
+=======
+        "size": 194,
+        "temperature": 89,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 440
     },
     {
+<<<<<<< HEAD
         "size": 194,
         "temperature": 74,
+=======
+        "size": 224,
+        "temperature": 75,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 441
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 75,
         "type": "Eccentric Jupiter",
+=======
+        "size": 222,
+        "temperature": 70,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 442
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 32,
+=======
+        "size": 201,
+        "temperature": 66,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 443
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 32,
         "type": "Chthonian planet",
+=======
+        "size": 196,
+        "temperature": 51,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 444
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 32,
         "type": "Carbon planet",
+=======
+        "size": 154,
+        "temperature": 36,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 445
     },
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": 20,
+=======
+        "size": 191,
+        "temperature": 35,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 11,
         "tokenId": 446
     },
     {
         "size": 159,
+<<<<<<< HEAD
         "temperature": -2,
         "type": "Brown dwarf",
+=======
+        "temperature": 13,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 447
     },
     {
+<<<<<<< HEAD
         "size": 116,
         "temperature": -37,
         "type": "Chthonian planet",
+=======
+        "size": 139,
+        "temperature": -30,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 448
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": -67,
         "type": "Gas giant",
+=======
+        "size": 140,
+        "temperature": -56,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 449
     },
     {
+<<<<<<< HEAD
         "size": 92,
         "temperature": -94,
         "type": "Brown dwarf",
+=======
+        "size": 160,
+        "temperature": -101,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 450
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 232,
+=======
+        "size": 120,
+        "temperature": 244,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 451
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 194,
+=======
+        "size": 129,
+        "temperature": 192,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 452
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 137,
+=======
+        "size": 139,
+        "temperature": 129,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 453
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 91,
         "type": "Chthonian planet",
+=======
+        "size": 166,
+        "temperature": 99,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 454
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 82,
         "type": "Chthonian planet",
+=======
+        "size": 177,
+        "temperature": 86,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 455
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 83,
         "type": "Carbon planet",
+=======
+        "size": 170,
+        "temperature": 89,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 456
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 48,
+=======
+        "size": 241,
+        "temperature": 42,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 7,
         "tokenId": 457
     },
     {
+<<<<<<< HEAD
         "size": 228,
         "temperature": 33,
         "type": "Brown dwarf",
+=======
+        "size": 195,
+        "temperature": 63,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 458
     },
     {
+<<<<<<< HEAD
         "size": 225,
         "temperature": 52,
         "type": "Eccentric Jupiter",
+=======
+        "size": 199,
+        "temperature": 47,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 459
     },
     {
+<<<<<<< HEAD
         "size": 224,
         "temperature": 22,
         "type": "Ammonia planet",
+=======
+        "size": 156,
+        "temperature": 45,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 460
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": 33,
         "type": "Brown dwarf",
+=======
+        "size": 138,
+        "temperature": 39,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 461
     },
     {
+<<<<<<< HEAD
         "size": 135,
         "temperature": 22,
         "type": "Chthonian planet",
+=======
+        "size": 132,
+        "temperature": 11,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 462
     },
     {
+<<<<<<< HEAD
         "size": 143,
         "temperature": -29,
         "type": "Helium planet",
+=======
+        "size": 164,
+        "temperature": -27,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 463
     },
     {
+<<<<<<< HEAD
         "size": 116,
         "temperature": -82,
         "type": "Chthonian planet",
+=======
+        "size": 105,
+        "temperature": -56,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 464
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": -95,
         "type": "Chthonian planet",
+=======
+        "size": 163,
+        "temperature": -114,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 465
     },
     {
+<<<<<<< HEAD
         "size": 98,
         "temperature": 237,
+=======
+        "size": 134,
+        "temperature": 236,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 466
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 176,
         "type": "Chthonian planet",
+=======
+        "size": 107,
+        "temperature": 209,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 467
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 148,
         "type": "Brown dwarf",
+=======
+        "size": 131,
+        "temperature": 156,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 468
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 106,
+=======
+        "size": 162,
+        "temperature": 74,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 469
     },
     {
+<<<<<<< HEAD
         "size": 182,
         "temperature": 91,
         "type": "Chthonian planet",
+=======
+        "size": 207,
+        "temperature": 84,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 470
     },
     {
+<<<<<<< HEAD
         "size": 219,
         "temperature": 71,
         "type": "Brown dwarf",
+=======
+        "size": 202,
+        "temperature": 86,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 471
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": 68,
         "type": "Helium planet",
+=======
+        "size": 192,
+        "temperature": 78,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 472
     },
     {
+<<<<<<< HEAD
         "size": 210,
         "temperature": 53,
         "type": "Chthonian planet",
+=======
+        "size": 232,
+        "temperature": 62,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 473
     },
     {
+<<<<<<< HEAD
         "size": 213,
         "temperature": 56,
         "type": "Eccentric Jupiter",
+=======
+        "size": 192,
+        "temperature": 32,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 474
     },
     {
+<<<<<<< HEAD
         "size": 187,
         "temperature": 40,
         "type": "Carbon planet",
+=======
+        "size": 229,
+        "temperature": 19,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 475
     },
     {
+<<<<<<< HEAD
         "size": 183,
         "temperature": 10,
         "type": "Chthonian planet",
+=======
+        "size": 179,
+        "temperature": 11,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 476
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": -4,
         "type": "Helium planet",
+=======
+        "size": 165,
+        "temperature": 11,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 477
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": -49,
         "type": "Brown dwarf",
+=======
+        "size": 150,
+        "temperature": -11,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 478
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": -90,
         "type": "Brown dwarf",
+=======
+        "size": 128,
+        "temperature": -56,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 479
     },
     {
+<<<<<<< HEAD
         "size": 101,
         "temperature": -93,
+=======
+        "size": 109,
+        "temperature": -110,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 480
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": 221,
         "type": "Brown dwarf",
+=======
+        "size": 143,
+        "temperature": 258,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 481
     },
     {
+<<<<<<< HEAD
         "size": 134,
         "temperature": 190,
         "type": "Helium planet",
+=======
+        "size": 140,
+        "temperature": 182,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 482
     },
     {
+<<<<<<< HEAD
         "size": 150,
         "temperature": 151,
+=======
+        "size": 116,
+        "temperature": 129,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 483
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 75,
         "type": "Gas giant",
+=======
+        "size": 169,
+        "temperature": 85,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 484
     },
     {
+<<<<<<< HEAD
         "size": 209,
         "temperature": 91,
         "type": "Helium planet",
+=======
+        "size": 198,
+        "temperature": 73,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 485
     },
     {
+<<<<<<< HEAD
         "size": 202,
         "temperature": 75,
         "type": "Chthonian planet",
+=======
+        "size": 197,
+        "temperature": 85,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 486
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": 75,
+=======
+        "size": 243,
+        "temperature": 67,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 487
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 34,
+=======
+        "size": 184,
+        "temperature": 56,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 488
     },
     {
+<<<<<<< HEAD
         "size": 232,
         "temperature": 43,
+=======
+        "size": 241,
+        "temperature": 28,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 489
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 40,
         "type": "Ammonia planet",
+=======
+        "size": 145,
+        "temperature": 22,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 490
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 34,
         "type": "Eccentric Jupiter",
+=======
+        "size": 200,
+        "temperature": 10,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 491
     },
     {
+<<<<<<< HEAD
         "size": 143,
         "temperature": 1,
         "type": "Forest planet",
+=======
+        "size": 138,
+        "temperature": 13,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 492
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": -39,
+=======
+        "size": 121,
+        "temperature": -35,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 13,
         "tokenId": 493
     },
     {
+<<<<<<< HEAD
         "size": 132,
         "temperature": -84,
         "type": "Forest planet",
+=======
+        "size": 121,
+        "temperature": -77,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 494
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": -108,
         "type": "Helium planet",
+=======
+        "size": 124,
+        "temperature": -105,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 495
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 242,
+=======
+        "size": 115,
+        "temperature": 244,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 496
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 175,
         "type": "Carbon planet",
+=======
+        "size": 154,
+        "temperature": 204,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 497
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": 158,
         "type": "Brown dwarf",
+=======
+        "size": 141,
+        "temperature": 149,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 498
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 100,
         "type": "Chthonian planet",
+=======
+        "size": 163,
+        "temperature": 76,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 499
     },
     {
+<<<<<<< HEAD
         "size": 213,
         "temperature": 81,
         "type": "Chthonian planet",
+=======
+        "size": 148,
+        "temperature": 91,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 500
     },
     {
+<<<<<<< HEAD
         "size": 167,
         "temperature": 73,
+=======
+        "size": 212,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 501
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": 46,
+=======
+        "size": 213,
+        "temperature": 55,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 502
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 54,
         "type": "Chthonian planet",
+=======
+        "size": 198,
+        "temperature": 44,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 503
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 29,
         "type": "Brown dwarf",
+=======
+        "size": 205,
+        "temperature": 33,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 504
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 49,
         "type": "Gas giant",
+=======
+        "size": 211,
+        "temperature": 13,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 505
     },
     {
+<<<<<<< HEAD
         "size": 157,
         "temperature": 38,
         "type": "Brown dwarf",
+=======
+        "size": 144,
+        "temperature": 32,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 506
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": 18,
         "type": "Eccentric Jupiter",
+=======
+        "size": 159,
+        "temperature": 6,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 507
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": -18,
         "type": "Helium planet",
+=======
+        "size": 140,
+        "temperature": -16,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 508
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": -77,
         "type": "Gas giant",
+=======
+        "size": 114,
+        "temperature": -72,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 509
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": -120,
         "type": "Chthonian planet",
+=======
+        "size": 113,
+        "temperature": -91,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 510
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 250,
+=======
+        "size": 134,
+        "temperature": 220,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 511
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": 188,
         "type": "Gas giant",
+=======
+        "size": 117,
+        "temperature": 188,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 512
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": 133,
         "type": "Chthonian planet",
+=======
+        "size": 163,
+        "temperature": 137,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 513
     },
     {
+<<<<<<< HEAD
         "size": 202,
         "temperature": 72,
         "type": "Chthonian planet",
+=======
+        "size": 118,
+        "temperature": 103,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 514
     },
     {
+<<<<<<< HEAD
         "size": 224,
         "temperature": 90,
+=======
+        "size": 216,
+        "temperature": 89,
+>>>>>>> origin/v0.1
         "type": "Eccentric Jupiter",
         "position": 5,
         "tokenId": 515
     },
     {
+<<<<<<< HEAD
         "size": 202,
         "temperature": 86,
+=======
+        "size": 164,
+        "temperature": 75,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 516
     },
     {
+<<<<<<< HEAD
         "size": 179,
         "temperature": 57,
+=======
+        "size": 208,
+        "temperature": 43,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 517
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 37,
         "type": "Brown dwarf",
+=======
+        "size": 184,
+        "temperature": 44,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 518
     },
     {
+<<<<<<< HEAD
         "size": 156,
         "temperature": 37,
+=======
+        "size": 240,
+        "temperature": 44,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 9,
         "tokenId": 519
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 28,
         "type": "Chthonian planet",
+=======
+        "size": 159,
+        "temperature": 40,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 520
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": 33,
         "type": "Brown dwarf",
+=======
+        "size": 176,
+        "temperature": 19,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 521
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": -5,
         "type": "Brown dwarf",
+=======
+        "size": 140,
+        "temperature": 2,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 522
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": -24,
         "type": "Ocean planet",
+=======
+        "size": 117,
+        "temperature": -14,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 523
     },
     {
+<<<<<<< HEAD
         "size": 127,
         "temperature": -51,
+=======
+        "size": 113,
+        "temperature": -76,
+>>>>>>> origin/v0.1
         "type": "Eccentric Jupiter",
         "position": 14,
         "tokenId": 524
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": -130,
+=======
+        "size": 154,
+        "temperature": -120,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 525
     },
     {
+<<<<<<< HEAD
         "size": 105,
         "temperature": 256,
         "type": "Brown dwarf",
+=======
+        "size": 146,
+        "temperature": 244,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 526
     },
     {
+<<<<<<< HEAD
         "size": 126,
         "temperature": 178,
         "type": "Chthonian planet",
+=======
+        "size": 143,
+        "temperature": 178,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 527
     },
     {
+<<<<<<< HEAD
         "size": 176,
         "temperature": 123,
+=======
+        "size": 129,
+        "temperature": 154,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 528
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 105,
         "type": "Earth analog",
+=======
+        "size": 134,
+        "temperature": 99,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 529
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 62,
         "type": "Chthonian planet",
+=======
+        "size": 216,
+        "temperature": 71,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 530
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 88,
+=======
+        "size": 164,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 531
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 57,
+=======
+        "size": 164,
+        "temperature": 48,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 532
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 42,
         "type": "Brown dwarf",
+=======
+        "size": 214,
+        "temperature": 37,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 533
     },
     {
+<<<<<<< HEAD
         "size": 196,
         "temperature": 42,
         "type": "Chthonian planet",
+=======
+        "size": 175,
+        "temperature": 24,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 534
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": 18,
         "type": "Brown dwarf",
+=======
+        "size": 218,
+        "temperature": 13,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 535
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 16,
         "type": "Brown dwarf",
+=======
+        "size": 204,
+        "temperature": 38,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 536
     },
     {
+<<<<<<< HEAD
         "size": 176,
         "temperature": 5,
+=======
+        "size": 171,
+        "temperature": 18,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 537
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": -26,
+=======
+        "size": 165,
+        "temperature": -22,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 538
     },
     {
+<<<<<<< HEAD
         "size": 125,
         "temperature": -65,
         "type": "Gas giant",
+=======
+        "size": 105,
+        "temperature": -90,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 539
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": -122,
         "type": "Chthonian planet",
+=======
+        "size": 121,
+        "temperature": -96,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 540
     },
     {
         "size": 125,
+<<<<<<< HEAD
         "temperature": 237,
         "type": "Chthonian planet",
+=======
+        "temperature": 240,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 541
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 197,
         "type": "Brown dwarf",
+=======
+        "size": 145,
+        "temperature": 195,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 542
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": 124,
+=======
+        "size": 174,
+        "temperature": 141,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 3,
         "tokenId": 543
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 84,
         "type": "Eccentric Jupiter",
+=======
+        "size": 172,
+        "temperature": 74,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 544
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 65,
         "type": "Gas giant",
+=======
+        "size": 195,
+        "temperature": 80,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 545
     },
     {
+<<<<<<< HEAD
         "size": 208,
         "temperature": 74,
         "type": "Brown dwarf",
+=======
+        "size": 171,
+        "temperature": 74,
+        "type": "Ocean planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 546
     },
     {
+<<<<<<< HEAD
         "size": 213,
         "temperature": 54,
         "type": "Brown dwarf",
+=======
+        "size": 207,
+        "temperature": 43,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 547
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 47,
+=======
+        "size": 157,
+        "temperature": 50,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 8,
         "tokenId": 548
     },
     {
+<<<<<<< HEAD
         "size": 219,
         "temperature": 48,
+=======
+        "size": 191,
+        "temperature": 55,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 549
     },
     {
+<<<<<<< HEAD
         "size": 208,
         "temperature": 11,
         "type": "Gas giant",
+=======
+        "size": 167,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 550
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": 5,
         "type": "Brown dwarf",
+=======
+        "size": 202,
+        "temperature": 12,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 551
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 15,
+=======
+        "size": 159,
+        "temperature": 9,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 552
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -24,
+=======
+        "size": 129,
+        "temperature": -50,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 553
     },
     {
+<<<<<<< HEAD
         "size": 118,
         "temperature": -83,
         "type": "Brown dwarf",
+=======
+        "size": 152,
+        "temperature": -74,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 554
     },
     {
+<<<<<<< HEAD
         "size": 146,
         "temperature": -120,
         "type": "Brown dwarf",
+=======
+        "size": 124,
+        "temperature": -130,
+        "type": "Forest planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 555
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 241,
         "type": "Brown dwarf",
+=======
+        "size": 116,
+        "temperature": 255,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 556
     },
     {
+<<<<<<< HEAD
         "size": 150,
         "temperature": 175,
         "type": "Ammonia planet",
+=======
+        "size": 113,
+        "temperature": 182,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 557
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": 137,
         "type": "Chthonian planet",
+=======
+        "size": 120,
+        "temperature": 140,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 558
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 103,
+=======
+        "size": 176,
+        "temperature": 70,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 4,
         "tokenId": 559
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 88,
         "type": "Chthonian planet",
+=======
+        "size": 164,
+        "temperature": 89,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 560
     },
     {
+<<<<<<< HEAD
         "size": 196,
         "temperature": 77,
         "type": "Brown dwarf",
+=======
+        "size": 231,
+        "temperature": 71,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 561
     },
     {
+<<<<<<< HEAD
         "size": 231,
         "temperature": 79,
         "type": "Ocean planet",
+=======
+        "size": 152,
+        "temperature": 70,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 562
     },
     {
+<<<<<<< HEAD
         "size": 235,
         "temperature": 40,
+=======
+        "size": 185,
+        "temperature": 41,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 563
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 28,
+=======
+        "size": 239,
+        "temperature": 51,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 564
     },
     {
+<<<<<<< HEAD
         "size": 220,
         "temperature": 41,
         "type": "Eccentric Jupiter",
+=======
+        "size": 143,
+        "temperature": 15,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 565
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 17,
         "type": "Brown dwarf",
+=======
+        "size": 179,
+        "temperature": 27,
+        "type": "Ocean planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 566
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 19,
+=======
+        "size": 137,
+        "temperature": 2,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 567
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": -23,
         "type": "Ammonia planet",
+=======
+        "size": 151,
+        "temperature": -20,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 568
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": -74,
+=======
+        "size": 120,
+        "temperature": -88,
+>>>>>>> origin/v0.1
         "type": "Helium planet",
         "position": 14,
         "tokenId": 569
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": -128,
         "type": "Brown dwarf",
+=======
+        "size": 110,
+        "temperature": -98,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 570
     },
     {
+<<<<<<< HEAD
         "size": 132,
         "temperature": 249,
         "type": "Brown dwarf",
+=======
+        "size": 135,
+        "temperature": 228,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 571
     },
     {
+<<<<<<< HEAD
         "size": 135,
         "temperature": 185,
         "type": "Chthonian planet",
+=======
+        "size": 146,
+        "temperature": 170,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 572
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": 149,
         "type": "Chthonian planet",
+=======
+        "size": 157,
+        "temperature": 143,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 573
     },
     {
+<<<<<<< HEAD
         "size": 140,
         "temperature": 104,
+=======
+        "size": 119,
+        "temperature": 70,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 574
     },
     {
+<<<<<<< HEAD
         "size": 189,
         "temperature": 94,
         "type": "Brown dwarf",
+=======
+        "size": 158,
+        "temperature": 73,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 575
     },
     {
+<<<<<<< HEAD
         "size": 211,
         "temperature": 83,
+=======
+        "size": 167,
+        "temperature": 80,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 6,
         "tokenId": 576
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 60,
+=======
+        "size": 168,
+        "temperature": 52,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 577
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 34,
         "type": "Chthonian planet",
+=======
+        "size": 160,
+        "temperature": 63,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 578
     },
     {
+<<<<<<< HEAD
         "size": 218,
         "temperature": 26,
+=======
+        "size": 214,
+        "temperature": 36,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 579
     },
     {
+<<<<<<< HEAD
         "size": 174,
         "temperature": 32,
+=======
+        "size": 158,
+        "temperature": 43,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 580
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": 31,
         "type": "Chthonian planet",
+=======
+        "size": 161,
+        "temperature": 10,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 581
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 28,
         "type": "Gas giant",
+=======
+        "size": 136,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 582
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": -33,
         "type": "Chthonian planet",
+=======
+        "size": 118,
+        "temperature": -32,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 583
     },
     {
+<<<<<<< HEAD
         "size": 132,
         "temperature": -79,
+=======
+        "size": 104,
+        "temperature": -89,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 584
     },
     {
+<<<<<<< HEAD
         "size": 104,
         "temperature": -93,
         "type": "Brown dwarf",
+=======
+        "size": 118,
+        "temperature": -124,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 585
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 252,
+=======
+        "size": 169,
+        "temperature": 258,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 586
     },
     {
+<<<<<<< HEAD
         "size": 164,
         "temperature": 179,
         "type": "Gas giant",
+=======
+        "size": 137,
+        "temperature": 173,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 587
     },
     {
+<<<<<<< HEAD
         "size": 129,
         "temperature": 153,
+=======
+        "size": 149,
+        "temperature": 135,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 3,
         "tokenId": 588
     },
     {
+<<<<<<< HEAD
         "size": 131,
         "temperature": 82,
         "type": "Gas giant",
+=======
+        "size": 123,
+        "temperature": 81,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 589
     },
     {
+<<<<<<< HEAD
         "size": 188,
         "temperature": 75,
         "type": "Gas giant",
+=======
+        "size": 165,
+        "temperature": 98,
+        "type": "Forest planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 590
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": 76,
+=======
+        "size": 153,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 591
     },
     {
+<<<<<<< HEAD
         "size": 193,
         "temperature": 54,
         "type": "Brown dwarf",
+=======
+        "size": 188,
+        "temperature": 50,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 592
     },
     {
+<<<<<<< HEAD
         "size": 239,
         "temperature": 52,
+=======
+        "size": 196,
+        "temperature": 54,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 593
     },
     {
+<<<<<<< HEAD
         "size": 240,
         "temperature": 54,
         "type": "Brown dwarf",
+=======
+        "size": 204,
+        "temperature": 23,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 594
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 31,
         "type": "Earth analog",
+=======
+        "size": 226,
+        "temperature": 34,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 595
     },
     {
+<<<<<<< HEAD
         "size": 140,
         "temperature": 9,
+=======
+        "size": 192,
+        "temperature": 10,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 596
     },
     {
+<<<<<<< HEAD
         "size": 172,
         "temperature": -6,
         "type": "Chthonian planet",
+=======
+        "size": 141,
+        "temperature": 6,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 597
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": -41,
         "type": "Eccentric Jupiter",
+=======
+        "size": 115,
+        "temperature": -44,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 598
     },
     {
+<<<<<<< HEAD
         "size": 130,
         "temperature": -81,
         "type": "Brown dwarf",
+=======
+        "size": 102,
+        "temperature": -54,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 599
     },
     {
+<<<<<<< HEAD
         "size": 95,
         "temperature": -113,
+=======
+        "size": 111,
+        "temperature": -107,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 600
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 228,
+=======
+        "size": 97,
+        "temperature": 250,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 601
     },
     {
+<<<<<<< HEAD
         "size": 129,
         "temperature": 170,
         "type": "Ammonia planet",
+=======
+        "size": 124,
+        "temperature": 171,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 602
     },
     {
+<<<<<<< HEAD
         "size": 174,
         "temperature": 157,
         "type": "Chthonian planet",
+=======
+        "size": 160,
+        "temperature": 153,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 603
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 77,
         "type": "Chthonian planet",
+=======
+        "size": 196,
+        "temperature": 79,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 604
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 92,
         "type": "Brown dwarf",
+=======
+        "size": 185,
+        "temperature": 96,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 605
     },
     {
+<<<<<<< HEAD
         "size": 176,
         "temperature": 86,
         "type": "Chthonian planet",
+=======
+        "size": 192,
+        "temperature": 79,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 606
     },
     {
+<<<<<<< HEAD
         "size": 232,
         "temperature": 49,
+=======
+        "size": 185,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 607
     },
     {
+<<<<<<< HEAD
         "size": 229,
         "temperature": 36,
         "type": "Brown dwarf",
+=======
+        "size": 176,
+        "temperature": 59,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 608
     },
     {
+<<<<<<< HEAD
         "size": 203,
         "temperature": 33,
         "type": "Carbon planet",
+=======
+        "size": 221,
+        "temperature": 53,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 609
     },
     {
+<<<<<<< HEAD
         "size": 143,
         "temperature": 29,
         "type": "Helium planet",
+=======
+        "size": 178,
+        "temperature": 28,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 610
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 21,
         "type": "Brown dwarf",
+=======
+        "size": 175,
+        "temperature": 7,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 611
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": 1,
         "type": "Eccentric Jupiter",
+=======
+        "size": 133,
+        "temperature": 19,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 612
     },
     {
+<<<<<<< HEAD
         "size": 119,
         "temperature": -30,
         "type": "Brown dwarf",
+=======
+        "size": 124,
+        "temperature": -47,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 613
     },
     {
+<<<<<<< HEAD
         "size": 160,
         "temperature": -69,
         "type": "Earth analog",
+=======
+        "size": 122,
+        "temperature": -56,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 614
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": -98,
+=======
+        "size": 93,
+        "temperature": -105,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 615
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": 230,
         "type": "Gas giant",
+=======
+        "size": 116,
+        "temperature": 239,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 616
     },
     {
+<<<<<<< HEAD
         "size": 114,
         "temperature": 179,
+=======
+        "size": 156,
+        "temperature": 181,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 2,
         "tokenId": 617
     },
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": 137,
         "type": "Brown dwarf",
+=======
+        "size": 142,
+        "temperature": 121,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 618
     },
     {
+<<<<<<< HEAD
         "size": 172,
         "temperature": 81,
+=======
+        "size": 152,
+        "temperature": 95,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 619
     },
     {
+<<<<<<< HEAD
         "size": 200,
         "temperature": 84,
         "type": "Brown dwarf",
+=======
+        "size": 174,
+        "temperature": 62,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 620
     },
     {
+<<<<<<< HEAD
         "size": 218,
         "temperature": 73,
         "type": "Brown dwarf",
+=======
+        "size": 192,
+        "temperature": 78,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 621
     },
     {
+<<<<<<< HEAD
         "size": 238,
         "temperature": 72,
         "type": "Brown dwarf",
+=======
+        "size": 245,
+        "temperature": 72,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 622
     },
     {
+<<<<<<< HEAD
         "size": 218,
         "temperature": 32,
+=======
+        "size": 167,
+        "temperature": 48,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 623
     },
     {
+<<<<<<< HEAD
         "size": 222,
         "temperature": 44,
         "type": "Chthonian planet",
+=======
+        "size": 167,
+        "temperature": 20,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 624
     },
     {
+<<<<<<< HEAD
         "size": 203,
         "temperature": 38,
         "type": "Chthonian planet",
+=======
+        "size": 169,
+        "temperature": 12,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 625
     },
     {
+<<<<<<< HEAD
         "size": 200,
         "temperature": 16,
+=======
+        "size": 179,
+        "temperature": 4,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 626
     },
     {
+<<<<<<< HEAD
         "size": 180,
         "temperature": 23,
         "type": "Brown dwarf",
+=======
+        "size": 165,
+        "temperature": 23,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 627
     },
     {
+<<<<<<< HEAD
         "size": 142,
+=======
+        "size": 168,
+>>>>>>> origin/v0.1
         "temperature": -28,
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 628
     },
     {
+<<<<<<< HEAD
         "size": 108,
         "temperature": -80,
         "type": "Chthonian planet",
+=======
+        "size": 154,
+        "temperature": -56,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 629
     },
     {
+<<<<<<< HEAD
         "size": 127,
         "temperature": -97,
         "type": "Brown dwarf",
+=======
+        "size": 145,
+        "temperature": -123,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 630
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 229,
         "type": "Chthonian planet",
+=======
+        "size": 122,
+        "temperature": 248,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 631
     },
     {
+<<<<<<< HEAD
         "size": 108,
         "temperature": 175,
+=======
+        "size": 147,
+        "temperature": 188,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 2,
         "tokenId": 632
     },
     {
+<<<<<<< HEAD
         "size": 125,
         "temperature": 124,
+=======
+        "size": 154,
+        "temperature": 138,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 633
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": 95,
         "type": "Gas giant",
+=======
+        "size": 164,
+        "temperature": 80,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 634
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 87,
+=======
+        "size": 210,
+        "temperature": 71,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 5,
         "tokenId": 635
     },
     {
+<<<<<<< HEAD
         "size": 228,
         "temperature": 87,
+=======
+        "size": 150,
+        "temperature": 72,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 6,
         "tokenId": 636
     },
     {
+<<<<<<< HEAD
         "size": 242,
         "temperature": 64,
+=======
+        "size": 207,
+        "temperature": 63,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 7,
         "tokenId": 637
     },
     {
+<<<<<<< HEAD
         "size": 224,
         "temperature": 55,
+=======
+        "size": 188,
+        "temperature": 34,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 638
     },
     {
+<<<<<<< HEAD
         "size": 209,
         "temperature": 31,
         "type": "Gas giant",
+=======
+        "size": 233,
+        "temperature": 44,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 639
     },
     {
+<<<<<<< HEAD
         "size": 170,
         "temperature": 35,
+=======
+        "size": 213,
+        "temperature": 11,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 640
     },
     {
+<<<<<<< HEAD
         "size": 179,
         "temperature": 2,
         "type": "Eccentric Jupiter",
+=======
+        "size": 205,
+        "temperature": 13,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 641
     },
     {
+<<<<<<< HEAD
         "size": 172,
         "temperature": 20,
+=======
+        "size": 143,
+        "temperature": -4,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 12,
         "tokenId": 642
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": -12,
+=======
+        "size": 129,
+        "temperature": -30,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 643
     },
     {
+<<<<<<< HEAD
         "size": 111,
         "temperature": -63,
         "type": "Chthonian planet",
+=======
+        "size": 131,
+        "temperature": -70,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 644
     },
     {
+<<<<<<< HEAD
         "size": 158,
         "temperature": -105,
+=======
+        "size": 153,
+        "temperature": -121,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 645
     },
     {
+<<<<<<< HEAD
         "size": 110,
         "temperature": 257,
         "type": "Eccentric Jupiter",
+=======
+        "size": 146,
+        "temperature": 241,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 646
     },
     {
+<<<<<<< HEAD
         "size": 153,
         "temperature": 189,
         "type": "Eccentric Jupiter",
+=======
+        "size": 169,
+        "temperature": 209,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 647
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 122,
+=======
+        "size": 154,
+        "temperature": 137,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 3,
         "tokenId": 648
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": 103,
+=======
+        "size": 197,
+        "temperature": 74,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 649
     },
     {
+<<<<<<< HEAD
         "size": 184,
         "temperature": 62,
         "type": "Eccentric Jupiter",
+=======
+        "size": 142,
+        "temperature": 68,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 650
     },
     {
+<<<<<<< HEAD
         "size": 226,
         "temperature": 71,
         "type": "Gas giant",
+=======
+        "size": 168,
+        "temperature": 81,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 651
     },
     {
+<<<<<<< HEAD
         "size": 231,
         "temperature": 43,
         "type": "Helium planet",
+=======
+        "size": 173,
+        "temperature": 75,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 652
     },
     {
+<<<<<<< HEAD
         "size": 225,
         "temperature": 32,
         "type": "Chthonian planet",
+=======
+        "size": 163,
+        "temperature": 50,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 653
     },
     {
+<<<<<<< HEAD
         "size": 220,
         "temperature": 50,
         "type": "Brown dwarf",
+=======
+        "size": 213,
+        "temperature": 45,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 654
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 30,
         "type": "Brown dwarf",
+=======
+        "size": 172,
+        "temperature": 25,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 655
     },
     {
+<<<<<<< HEAD
         "size": 151,
         "temperature": 36,
+=======
+        "size": 179,
+        "temperature": 17,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 656
     },
     {
+<<<<<<< HEAD
         "size": 134,
         "temperature": 0,
         "type": "Chthonian planet",
+=======
+        "size": 162,
+        "temperature": 12,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 657
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": -42,
+=======
+        "size": 126,
+        "temperature": -11,
+>>>>>>> origin/v0.1
         "type": "Helium planet",
         "position": 13,
         "tokenId": 658
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": -88,
+=======
+        "size": 127,
+        "temperature": -61,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 659
     },
     {
+<<<<<<< HEAD
         "size": 129,
         "temperature": -122,
         "type": "Ocean planet",
+=======
+        "size": 108,
+        "temperature": -118,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 660
     },
     {
+<<<<<<< HEAD
         "size": 107,
         "temperature": 257,
         "type": "Helium planet",
+=======
+        "size": 128,
+        "temperature": 241,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 661
     },
     {
+<<<<<<< HEAD
         "size": 141,
         "temperature": 177,
         "type": "Brown dwarf",
+=======
+        "size": 171,
+        "temperature": 187,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 662
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": 122,
         "type": "Brown dwarf",
+=======
+        "size": 178,
+        "temperature": 151,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 663
     },
     {
+<<<<<<< HEAD
         "size": 175,
         "temperature": 70,
         "type": "Brown dwarf",
+=======
+        "size": 187,
+        "temperature": 77,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 664
     },
     {
+<<<<<<< HEAD
         "size": 211,
         "temperature": 94,
         "type": "Brown dwarf",
+=======
+        "size": 181,
+        "temperature": 73,
+        "type": "Ammonia planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 665
     },
     {
+<<<<<<< HEAD
         "size": 154,
         "temperature": 89,
         "type": "Chthonian planet",
+=======
+        "size": 180,
+        "temperature": 80,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 666
     },
     {
+<<<<<<< HEAD
         "size": 198,
         "temperature": 74,
         "type": "Brown dwarf",
+=======
+        "size": 241,
+        "temperature": 72,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 667
     },
     {
+<<<<<<< HEAD
         "size": 177,
         "temperature": 36,
         "type": "Ammonia planet",
+=======
+        "size": 161,
+        "temperature": 55,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 668
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 41,
         "type": "Brown dwarf",
+=======
+        "size": 203,
+        "temperature": 23,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 669
     },
     {
+<<<<<<< HEAD
         "size": 157,
         "temperature": 12,
         "type": "Gas giant",
+=======
+        "size": 175,
+        "temperature": 28,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 670
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": 32,
         "type": "Chthonian planet",
+=======
+        "size": 182,
+        "temperature": 25,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 671
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 28,
         "type": "Ammonia planet",
+=======
+        "size": 177,
+        "temperature": -2,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 672
     },
     {
+<<<<<<< HEAD
         "size": 134,
         "temperature": -29,
         "type": "Brown dwarf",
+=======
+        "size": 148,
+        "temperature": -26,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 673
     },
     {
+<<<<<<< HEAD
         "size": 128,
         "temperature": -73,
+=======
+        "size": 167,
+        "temperature": -86,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 14,
         "tokenId": 674
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": -130,
+=======
+        "size": 90,
+        "temperature": -116,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 675
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": 220,
         "type": "Forest planet",
+=======
+        "size": 95,
+        "temperature": 226,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 676
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 171,
         "type": "Ammonia planet",
+=======
+        "size": 153,
+        "temperature": 177,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 677
     },
     {
+<<<<<<< HEAD
         "size": 155,
         "temperature": 150,
         "type": "Carbon planet",
+=======
+        "size": 170,
+        "temperature": 123,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 678
     },
     {
+<<<<<<< HEAD
         "size": 130,
         "temperature": 101,
+=======
+        "size": 136,
+        "temperature": 83,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 679
     },
     {
+<<<<<<< HEAD
         "size": 221,
         "temperature": 87,
         "type": "Chthonian planet",
+=======
+        "size": 138,
+        "temperature": 75,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 680
     },
     {
+<<<<<<< HEAD
         "size": 212,
         "temperature": 88,
         "type": "Eccentric Jupiter",
+=======
+        "size": 168,
+        "temperature": 85,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 681
     },
     {
+<<<<<<< HEAD
         "size": 201,
         "temperature": 58,
         "type": "Carbon planet",
+=======
+        "size": 236,
+        "temperature": 71,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 682
     },
     {
+<<<<<<< HEAD
         "size": 209,
         "temperature": 31,
+=======
+        "size": 157,
+        "temperature": 51,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 8,
         "tokenId": 683
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 48,
+=======
+        "size": 154,
+        "temperature": 39,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 9,
         "tokenId": 684
     },
     {
+<<<<<<< HEAD
         "size": 192,
         "temperature": 31,
         "type": "Chthonian planet",
+=======
+        "size": 144,
+        "temperature": 47,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 685
     },
     {
+<<<<<<< HEAD
         "size": 191,
         "temperature": 37,
         "type": "Eccentric Jupiter",
+=======
+        "size": 162,
+        "temperature": 15,
+        "type": "Carbon planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 686
     },
     {
+<<<<<<< HEAD
         "size": 180,
         "temperature": 23,
+=======
+        "size": 184,
+        "temperature": -5,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 12,
         "tokenId": 687
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": -37,
         "type": "Brown dwarf",
+=======
+        "size": 166,
+        "temperature": -31,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 688
     },
     {
+<<<<<<< HEAD
         "size": 159,
         "temperature": -75,
         "type": "Carbon planet",
+=======
+        "size": 135,
+        "temperature": -78,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 689
     },
     {
+<<<<<<< HEAD
         "size": 152,
         "temperature": -95,
         "type": "Brown dwarf",
+=======
+        "size": 161,
+        "temperature": -111,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 690
     },
     {
+<<<<<<< HEAD
         "size": 124,
         "temperature": 251,
+=======
+        "size": 118,
+        "temperature": 240,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 1,
         "tokenId": 691
     },
     {
+<<<<<<< HEAD
         "size": 162,
         "temperature": 185,
         "type": "Chthonian planet",
+=======
+        "size": 108,
+        "temperature": 178,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 692
     },
     {
+<<<<<<< HEAD
         "size": 163,
         "temperature": 150,
         "type": "Helium planet",
+=======
+        "size": 127,
+        "temperature": 154,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 693
     },
     {
+<<<<<<< HEAD
         "size": 133,
         "temperature": 103,
         "type": "Brown dwarf",
+=======
+        "size": 162,
+        "temperature": 90,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 694
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 99,
         "type": "Brown dwarf",
+=======
+        "size": 151,
+        "temperature": 81,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 695
     },
     {
+<<<<<<< HEAD
         "size": 182,
         "temperature": 74,
         "type": "Gas giant",
+=======
+        "size": 191,
+        "temperature": 73,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 696
     },
     {
+<<<<<<< HEAD
         "size": 214,
         "temperature": 42,
         "type": "Brown dwarf",
+=======
+        "size": 196,
+        "temperature": 69,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 697
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": 63,
+=======
+        "size": 193,
+        "temperature": 42,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 698
     },
     {
+<<<<<<< HEAD
         "size": 241,
         "temperature": 23,
+=======
+        "size": 212,
+        "temperature": 57,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 9,
         "tokenId": 699
     },
     {
+<<<<<<< HEAD
         "size": 185,
         "temperature": 40,
         "type": "Brown dwarf",
+=======
+        "size": 211,
+        "temperature": 13,
+        "type": "Earth analog",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 700
     },
     {
+<<<<<<< HEAD
         "size": 206,
         "temperature": 12,
         "type": "Eccentric Jupiter",
+=======
+        "size": 183,
+        "temperature": 27,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 701
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 0,
         "type": "Eccentric Jupiter",
+=======
+        "size": 145,
+        "temperature": -8,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 702
     },
     {
+<<<<<<< HEAD
         "size": 156,
         "temperature": -18,
+=======
+        "size": 143,
+        "temperature": -24,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 703
     },
     {
+<<<<<<< HEAD
         "size": 148,
         "temperature": -86,
         "type": "Brown dwarf",
+=======
+        "size": 124,
+        "temperature": -85,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 704
     },
     {
+<<<<<<< HEAD
         "size": 122,
         "temperature": -111,
         "type": "Helium planet",
+=======
+        "size": 125,
+        "temperature": -109,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 705
     },
     {
+<<<<<<< HEAD
         "size": 142,
         "temperature": 238,
         "type": "Eccentric Jupiter",
+=======
+        "size": 107,
+        "temperature": 252,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 1,
         "tokenId": 706
     },
     {
+<<<<<<< HEAD
         "size": 136,
         "temperature": 183,
         "type": "Chthonian planet",
+=======
+        "size": 137,
+        "temperature": 201,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 707
     },
     {
+<<<<<<< HEAD
         "size": 137,
         "temperature": 156,
         "type": "Chthonian planet",
+=======
+        "size": 177,
+        "temperature": 132,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 708
     },
     {
+<<<<<<< HEAD
         "size": 174,
         "temperature": 96,
+=======
+        "size": 176,
+        "temperature": 93,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 4,
         "tokenId": 709
     },
     {
+<<<<<<< HEAD
         "size": 195,
         "temperature": 64,
         "type": "Chthonian planet",
+=======
+        "size": 185,
+        "temperature": 98,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 710
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 72,
         "type": "Brown dwarf",
+=======
+        "size": 195,
+        "temperature": 73,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 711
     },
     {
+<<<<<<< HEAD
         "size": 190,
         "temperature": 42,
         "type": "Brown dwarf",
+=======
+        "size": 240,
+        "temperature": 40,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 712
     },
     {
+<<<<<<< HEAD
         "size": 237,
         "temperature": 43,
+=======
+        "size": 199,
+        "temperature": 59,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 8,
         "tokenId": 713
     },
     {
+<<<<<<< HEAD
         "size": 182,
         "temperature": 39,
         "type": "Chthonian planet",
+=======
+        "size": 172,
+        "temperature": 36,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 714
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 41,
+=======
+        "size": 202,
+        "temperature": 11,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 715
     },
     {
+<<<<<<< HEAD
         "size": 149,
         "temperature": 19,
+=======
+        "size": 190,
+        "temperature": 37,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 11,
         "tokenId": 716
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": 16,
         "type": "Brown dwarf",
+=======
+        "size": 159,
+        "temperature": 14,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 717
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": -13,
         "type": "Brown dwarf",
+=======
+        "size": 119,
+        "temperature": -28,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 718
     },
     {
+<<<<<<< HEAD
         "size": 147,
         "temperature": -86,
         "type": "Brown dwarf",
+=======
+        "size": 101,
+        "temperature": -63,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 719
     },
     {
+<<<<<<< HEAD
         "size": 105,
         "temperature": -116,
+=======
+        "size": 151,
+        "temperature": -109,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 15,
         "tokenId": 720
     },
     {
+<<<<<<< HEAD
         "size": 156,
         "temperature": 236,
+=======
+        "size": 146,
+        "temperature": 239,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 721
     },
     {
+<<<<<<< HEAD
         "size": 168,
         "temperature": 203,
         "type": "Brown dwarf",
+=======
+        "size": 152,
+        "temperature": 183,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 722
     },
     {
+<<<<<<< HEAD
         "size": 128,
         "temperature": 144,
         "type": "Brown dwarf",
+=======
+        "size": 160,
+        "temperature": 130,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 723
     },
     {
+<<<<<<< HEAD
         "size": 181,
         "temperature": 108,
         "type": "Brown dwarf",
+=======
+        "size": 173,
+        "temperature": 103,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 724
     },
     {
+<<<<<<< HEAD
         "size": 165,
         "temperature": 91,
         "type": "Helium planet",
+=======
+        "size": 204,
+        "temperature": 63,
+        "type": "Eccentric Jupiter",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 725
     },
     {
+<<<<<<< HEAD
         "size": 234,
         "temperature": 70,
+=======
+        "size": 164,
+        "temperature": 79,
+>>>>>>> origin/v0.1
         "type": "Chthonian planet",
         "position": 6,
         "tokenId": 726
     },
     {
+<<<<<<< HEAD
         "size": 247,
         "temperature": 56,
         "type": "Eccentric Jupiter",
+=======
+        "size": 203,
+        "temperature": 48,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 727
     },
     {
+<<<<<<< HEAD
         "size": 204,
         "temperature": 41,
         "type": "Gas giant",
+=======
+        "size": 213,
+        "temperature": 59,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 8,
         "tokenId": 728
     },
     {
+<<<<<<< HEAD
         "size": 232,
         "temperature": 23,
         "type": "Ammonia planet",
+=======
+        "size": 230,
+        "temperature": 42,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 729
     },
     {
+<<<<<<< HEAD
         "size": 231,
         "temperature": 25,
+=======
+        "size": 161,
+        "temperature": 22,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 10,
         "tokenId": 730
     },
     {
+<<<<<<< HEAD
         "size": 145,
         "temperature": 32,
         "type": "Brown dwarf",
+=======
+        "size": 148,
+        "temperature": 39,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 731
     },
     {
+<<<<<<< HEAD
         "size": 173,
         "temperature": 12,
         "type": "Carbon planet",
+=======
+        "size": 180,
+        "temperature": 10,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 12,
         "tokenId": 732
     },
     {
+<<<<<<< HEAD
         "size": 144,
         "temperature": -12,
+=======
+        "size": 147,
+        "temperature": -18,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 13,
         "tokenId": 733
     },
     {
+<<<<<<< HEAD
         "size": 166,
         "temperature": -81,
         "type": "Earth analog",
+=======
+        "size": 136,
+        "temperature": -73,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 734
     },
     {
+<<<<<<< HEAD
         "size": 161,
         "temperature": -121,
         "type": "Brown dwarf",
+=======
+        "size": 137,
+        "temperature": -109,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 735
     },
     {
+<<<<<<< HEAD
         "size": 138,
         "temperature": 236,
+=======
+        "size": 124,
+        "temperature": 251,
+>>>>>>> origin/v0.1
         "type": "Brown dwarf",
         "position": 1,
         "tokenId": 736
     },
     {
+<<<<<<< HEAD
         "size": 127,
         "temperature": 202,
         "type": "Gas giant",
+=======
+        "size": 165,
+        "temperature": 178,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 2,
         "tokenId": 737
     },
     {
+<<<<<<< HEAD
         "size": 116,
         "temperature": 148,
         "type": "Eccentric Jupiter",
+=======
+        "size": 150,
+        "temperature": 142,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 3,
         "tokenId": 738
     },
     {
+<<<<<<< HEAD
         "size": 199,
         "temperature": 107,
         "type": "Gas giant",
+=======
+        "size": 174,
+        "temperature": 74,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 4,
         "tokenId": 739
     },
     {
+<<<<<<< HEAD
         "size": 216,
         "temperature": 86,
         "type": "Chthonian planet",
+=======
+        "size": 159,
+        "temperature": 66,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 5,
         "tokenId": 740
     },
     {
+<<<<<<< HEAD
         "size": 194,
         "temperature": 73,
         "type": "Chthonian planet",
+=======
+        "size": 192,
+        "temperature": 85,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 6,
         "tokenId": 741
     },
     {
+<<<<<<< HEAD
         "size": 201,
         "temperature": 71,
         "type": "Gas giant",
+=======
+        "size": 205,
+        "temperature": 42,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 7,
         "tokenId": 742
     },
     {
+<<<<<<< HEAD
         "size": 228,
         "temperature": 48,
+=======
+        "size": 209,
+        "temperature": 62,
+>>>>>>> origin/v0.1
         "type": "Eccentric Jupiter",
         "position": 8,
         "tokenId": 743
     },
     {
+<<<<<<< HEAD
         "size": 171,
         "temperature": 39,
         "type": "Helium planet",
+=======
+        "size": 163,
+        "temperature": 52,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 9,
         "tokenId": 744
     },
     {
+<<<<<<< HEAD
         "size": 196,
         "temperature": 42,
         "type": "Eccentric Jupiter",
+=======
+        "size": 223,
+        "temperature": 44,
+        "type": "Chthonian planet",
+>>>>>>> origin/v0.1
         "position": 10,
         "tokenId": 745
     },
     {
+<<<<<<< HEAD
         "size": 143,
         "temperature": 13,
         "type": "Eccentric Jupiter",
+=======
+        "size": 181,
+        "temperature": 28,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 11,
         "tokenId": 746
     },
     {
+<<<<<<< HEAD
         "size": 129,
+=======
+        "size": 178,
+>>>>>>> origin/v0.1
         "temperature": 28,
         "type": "Helium planet",
         "position": 12,
         "tokenId": 747
     },
     {
+<<<<<<< HEAD
         "size": 125,
         "temperature": -32,
         "type": "Chthonian planet",
+=======
+        "size": 164,
+        "temperature": -32,
+        "type": "Brown dwarf",
+>>>>>>> origin/v0.1
         "position": 13,
         "tokenId": 748
     },
     {
+<<<<<<< HEAD
         "size": 139,
         "temperature": -75,
         "type": "Brown dwarf",
+=======
+        "size": 154,
+        "temperature": -62,
+        "type": "Helium planet",
+>>>>>>> origin/v0.1
         "position": 14,
         "tokenId": 749
     },
     {
+<<<<<<< HEAD
         "size": 120,
         "temperature": -126,
         "type": "Chthonian planet",
+=======
+        "size": 147,
+        "temperature": -107,
+        "type": "Gas giant",
+>>>>>>> origin/v0.1
         "position": 15,
         "tokenId": 750
     }

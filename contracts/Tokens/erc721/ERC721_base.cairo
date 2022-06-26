@@ -4,7 +4,9 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.math import assert_not_zero, assert_not_equal
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256, uint256_add, uint256_sub
 
@@ -38,6 +40,10 @@ end
 
 @storage_var
 func ERC721_operator_approvals(owner : felt, operator : felt) -> (res : felt):
+end
+
+@storage_var
+func owner_to_id(owner : felt) -> (tokenId : Uint256):
 end
 
 #
@@ -172,7 +178,7 @@ func ERC721_transferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range
     _from : felt, to : felt, token_id : Uint256
 ):
     alloc_locals
-
+    _single_ownership_check(to)
     let (caller) = get_caller_address()
     let (is_approved) = _is_approved_or_owner(caller, token_id)
     assert_not_zero(caller * is_approved)
@@ -190,7 +196,7 @@ func ERC721_safeTransferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, r
     _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*
 ):
     alloc_locals
-
+    _single_ownership_check(to)
     let (caller) = get_caller_address()
     let (is_approved) = _is_approved_or_owner(caller, token_id)
     assert_not_zero(caller * is_approved)
@@ -311,12 +317,13 @@ end
 func _transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _from : felt, to : felt, token_id : Uint256
 ):
+    alloc_locals
     # ownerOf ensures '_from' is not the zero address
     let (_ownerOf) = ERC721_ownerOf(token_id)
     assert _ownerOf = _from
 
     assert_not_zero(to)
-
+    _single_ownership_check(to)
     # Clear approvals
     _approve(_ownerOf, 0, token_id)
 
@@ -324,6 +331,7 @@ func _transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     let (owner_bal) = ERC721_balances.read(_from)
     let (new_balance) = uint256_sub(owner_bal, Uint256(1, 0))
     ERC721_balances.write(_from, new_balance)
+    owner_to_id.write(to, token_id)
 
     # Increase receiver balance
     let (receiver_bal) = ERC721_balances.read(to)
@@ -342,6 +350,7 @@ end
 func _safe_transfer{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     _from : felt, to : felt, token_id : Uint256, data_len : felt, data : felt*
 ):
+    _single_ownership_check(to)
     _transfer(_from, to, token_id)
 
     let (success) = _check_onERC721Received(_from, to, token_id, data_len, data)
@@ -364,4 +373,16 @@ func _check_onERC721Received{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
 
     # Cairo equivalent to 'return (true)'
     return (1)
+end
+
+func _single_ownership_check{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    caller : felt
+):
+    alloc_locals
+    let (balance) = ERC721_balances.read(caller)
+    with_attr error_message("ERC721: each account can only own 1 token"):
+        let (pass_condition) = is_le(balance.low, 0)
+        assert pass_condition = TRUE
+    end
+    return ()
 end

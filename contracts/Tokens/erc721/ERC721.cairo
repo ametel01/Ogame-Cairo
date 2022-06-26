@@ -23,6 +23,7 @@ from openzeppelin.token.erc721.library import (
     ERC721_transferFrom,
     ERC721_safeTransferFrom,
     ERC721_operator_approvals,
+    owner_to_id,
 )
 
 from contracts.Tokens.erc721.ERC721_Metadata_base import (
@@ -203,4 +204,12 @@ func transferOwnership{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     # Ownership check is handled by this function
     Ownable_transfer_ownership(new_owner)
     return (new_owner=new_owner)
+end
+
+@external
+func ownerToPlanet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    owner : felt
+) -> (tokenId : Uint256):
+    let (id) = owner_to_id.read(owner)
+    return (id)
 end

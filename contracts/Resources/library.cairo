@@ -57,14 +57,15 @@ func deuterium_address() -> (address : felt):
 end
 
 #########################################################################################
-#                                           STORAGES                                    #
+#                                           INTUERNALS                                  #
 #########################################################################################
 
 func _calculate_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
 ) -> (metal : felt, crystal : felt, deuterium : felt):
     alloc_locals
-    let (planet_id) = _planet_to_owner.read(caller)
+    let (erc721_address) = erc721_token_address.read()
+    let (planet_id) = IERC721.ownerToPlanet(erc721_address, caller)
     let (planet) = _planets.read(planet_id)
     let (time_start) = _resources_timer.read(planet_id)
     let metal_level = planet.mines.metal

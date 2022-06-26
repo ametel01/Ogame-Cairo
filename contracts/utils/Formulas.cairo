@@ -5,12 +5,19 @@ from starkware.starknet.common.syscalls import get_block_timestamp
 from starkware.cairo.common.math import unsigned_div_rem, assert_not_zero
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.pow import pow
+<<<<<<< HEAD
 from contracts.utils.constants import TRUE, FALSE
 from contracts.Ogame.storage import _players_spent_resources
+=======
+from starkware.cairo.common.bool import TRUE, FALSE
+from contracts.utils.library import _players_spent_resources
+>>>>>>> origin/v0.1
 
 ##############
 # Production #
 ##############
+
+const E18 = 10 ** 18
 
 # Prod per second = 30 * Level * 11**Level / 10**Level * 10000 / 3600 * 10000
 func formulas_metal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -20,7 +27,7 @@ func formulas_metal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     let (time_now) = get_block_timestamp()
     local time_elapsed = time_now - last_timestamp
     let (metal_hour) = _resources_production_formula(30, mine_level)
-    let (prod_second, _) = unsigned_div_rem(metal_hour * 1000, 3600)  # 91
+    let (prod_second, _) = unsigned_div_rem(metal_hour * 10000, 3600)  # 91
     let fact8 = prod_second * time_elapsed
     let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)  # 32
     return (metal_produced=prod_scaled)
@@ -33,7 +40,7 @@ func formulas_crystal_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     let (time_now) = get_block_timestamp()
     local time_elapsed = time_now - last_timestamp
     let (crystal_hour) = _resources_production_formula(20, mine_level)
-    let (fact7, _) = unsigned_div_rem(crystal_hour * 1000, 3600)
+    let (fact7, _) = unsigned_div_rem(crystal_hour * 10000, 3600)
     let fact8 = fact7 * time_elapsed
     let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)
     return (crystal_produced=prod_scaled)
@@ -46,7 +53,7 @@ func formulas_deuterium_mine{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, r
     let (time_now) = get_block_timestamp()
     local time_elapsed = time_now - last_timestamp
     let (deuterium_hour) = _resources_production_formula(10, mine_level)
-    let (fact7, _) = unsigned_div_rem(deuterium_hour * 1000, 3600)
+    let (fact7, _) = unsigned_div_rem(deuterium_hour * 10000, 3600)
     let fact8 = fact7 * time_elapsed
     let (prod_scaled, _) = unsigned_div_rem(fact8, 1000)
     return (deuterium_produced=prod_scaled)
@@ -242,13 +249,16 @@ func _production_limiter{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     return (production=res)
 end
 
+# 30 * M * 1.1 ** M
 func _resources_production_formula{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(mine_factor : felt, mine_level : felt) -> (production_hour):
     alloc_locals
+    let (local max_level) = is_le(25, mine_level)
     let fact1 = mine_factor * mine_level
     let (fact2) = pow(11, mine_level)
     local fact3 = fact1 * fact2
+<<<<<<< HEAD
     let (fact4) = pow(10, mine_level)
     let (level_in_bound) = is_le(mine_level, 25)
     if level_in_bound == TRUE:
@@ -259,6 +269,18 @@ func _resources_production_formula{
         let (fact6, _) = unsigned_div_rem(fact4, 1000)
         let (res, _) = unsigned_div_rem(fact5, fact6)
         return (res)
+=======
+    if max_level == TRUE:
+        let (local fact3a, _) = unsigned_div_rem(fact3, E18)
+        let (fact4) = pow(10, mine_level)
+        let (fact4a, _) = unsigned_div_rem(fact4, E18)
+        let (fact5, _) = unsigned_div_rem(fact3a, fact4a)
+        return (production_hour=fact5)
+    else:
+        let (fact4) = pow(10, mine_level)
+        let (fact5, _) = unsigned_div_rem(fact3, fact4)
+        return (production_hour=fact5)
+>>>>>>> origin/v0.1
     end
 end
 
@@ -284,6 +306,7 @@ end
 
 func formulas_buildings_production_time{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
+<<<<<<< HEAD
 }(metal_cost : felt, crystal_cost : felt, robot_level : felt, nanite_level : felt) -> (
     time_required : felt
 ):
@@ -306,6 +329,16 @@ func formulas_buildings_production_time{
         let fact6 = fact5 * 3600
         let (res, _) = unsigned_div_rem(fact6, 1000)
     end
+=======
+}(metal_cost : felt, crystal_cost : felt, robot_level : felt) -> (time_required : felt):
+    let fact1 = metal_cost + crystal_cost
+    let fact2 = fact1 * 1000
+    let fact3 = robot_level + 1
+    let fact4 = 2500 * fact3
+    let (fact5, _) = unsigned_div_rem(fact2, fact4)
+    let fact6 = fact5 * 3600
+    let (res, _) = unsigned_div_rem(fact6, 1000)
+>>>>>>> origin/v0.1
     return (time_required=res)
 end
 

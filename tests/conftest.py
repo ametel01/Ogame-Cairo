@@ -13,6 +13,7 @@ from starkware.starknet.compiler.compile import get_selector_from_name
 # The path to the contract source code.
 OGAME_FILE = os.path.join("contracts", "Ogame", "Ogame.cairo")
 ACCOUNT_FILE = os.path.join("contracts", "utils", "Account.cairo")
+<<<<<<< HEAD
 ERC721_FILE = os.path.join("contracts", "Tokens", "erc721", "ERC721.cairo")
 ERC20_FILE = os.path.join(
     "contracts", "Tokens", "erc20", "ERC20_Mintable.cairo"
@@ -21,6 +22,13 @@ MINTER_FILE = os.path.join("contracts", "Minter", "erc721_minter.cairo")
 LAB_FILE = os.path.join("contracts", "ResearchLab", "ResearchLab.cairo")
 SHIPYARD_FILE = os.path.join("contracts", "Shipyard", "Shipyard.cairo")
 FACILITIES_FILE = os.path.join("contracts", "Facilities", "Facilities.cairo")
+=======
+ERC721_FILE = os.path.join("contracts", "token", "erc721", "ERC721.cairo")
+ERC20_FILE = os.path.join(
+    "contracts", "token", "erc20", "ERC20_Mintable.cairo"
+)
+MINTER_FILE = os.path.join("contracts", "minter", "erc721_minter.cairo")
+>>>>>>> origin/v0.1
 TIME_ELAPS_ONE_HOUR = 3600
 TIME_ELAPS_SIX_HOURS = 21600
 MAX_UINT = 2**128 - 1
@@ -59,7 +67,11 @@ async def user_two(starknet):
 @pytest_asyncio.fixture
 async def game(starknet, erc721, admin):
     return await starknet.deploy(
+<<<<<<< HEAD
         source=OGAME_FILE,
+=======
+        source=CONTRACT_FILE,
+>>>>>>> origin/v0.1
         constructor_calldata=[erc721.contract_address, admin.contract_address],
     )
 
@@ -81,6 +93,25 @@ async def erc721(starknet, minter):
 
 
 @pytest_asyncio.fixture
+<<<<<<< HEAD
+=======
+async def erc721_2(starknet, admin):
+    return await starknet.deploy(
+        source=ERC721_FILE,
+        constructor_calldata=[
+            79717795807684,
+            79717795807684,
+            admin.contract_address,
+            3,
+            184555836509371486644298270517380613565396767415278678887948391494588501258,
+            184555836509371486644298270517380613565396767415278678887948391494588501258,
+            2511981064129509550770777692765514099620440566643524046090,
+        ],
+    )
+
+
+@pytest_asyncio.fixture
+>>>>>>> origin/v0.1
 async def metal(starknet, game):
     return await starknet.deploy(
         source=ERC20_FILE,
@@ -136,6 +167,7 @@ async def minter(starknet, admin):
 
 
 @pytest_asyncio.fixture
+<<<<<<< HEAD
 async def research_lab(starknet, game):
     return await starknet.deploy(
         source=LAB_FILE, constructor_calldata=[game.contract_address]
@@ -169,6 +201,10 @@ async def deploy_game_v2(
     facilities,
     research_lab,
     shipyard,
+=======
+async def deploy_game_v1(
+    minter, erc721, game, admin, user_one, metal, crystal, deuterium
+>>>>>>> origin/v0.1
 ):
 
     # Submit NFT contract address to minter.
@@ -195,7 +231,11 @@ async def deploy_game_v2(
     await owner.send_transaction(
         admin,
         game.contract_address,
+<<<<<<< HEAD
         "set_erc20_addresses",
+=======
+        "erc20_addresses",
+>>>>>>> origin/v0.1
         [
             metal.contract_address,
             crystal.contract_address,
@@ -203,6 +243,7 @@ async def deploy_game_v2(
         ],
     )
 
+<<<<<<< HEAD
     await owner.send_transaction(
         admin,
         game.contract_address,
@@ -229,3 +270,10 @@ async def deploy_game_v2(
         research_lab,
         shipyard,
     )
+=======
+    await user1.send_transaction(
+        user_one, game.contract_address, "generate_planet", []
+    )
+
+    return (minter, game, erc721, metal, crystal, deuterium, user_one)
+>>>>>>> origin/v0.1

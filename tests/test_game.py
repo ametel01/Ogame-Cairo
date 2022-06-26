@@ -36,7 +36,11 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [500 * 10**18, 0])
+=======
+    assert_equals(data.result.response, [500000000000000000000, 0])
+>>>>>>> origin/v0.1
 
     data = await user1.send_transaction(
         user_one,
@@ -44,7 +48,11 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [300 * 10**18, 0])
+=======
+    assert_equals(data.result.response, [300000000000000000000, 0])
+>>>>>>> origin/v0.1
 
     data = await user1.send_transaction(
         user_one,
@@ -52,13 +60,46 @@ async def test_account(deploy_game_v1):
         "balanceOf",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [100 * 10**18, 0])
+=======
+    assert_equals(data.result.response, [100000000000000000000, 0])
+>>>>>>> origin/v0.1
 
 
 @pytest.mark.asyncio
 async def test_collect_resources(starknet, deploy_game_v1):
     (_, ogame, _, metal, crystal, deuterium, user_one) = deploy_game_v1
 
+    # await user1.send_transaction(user_one,
+    #                              ogame.contract_address,
+    #                              'GOD_MODE',
+    #                              [])
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "solar_plant_upgrade_start", []
+    )
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR
+    )
+
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "solar_plant_upgrade_complete", []
+    )
+
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "metal_upgrade_start", []
+    )
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 2
+    )
+
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "metal_upgrade_complete", []
+    )
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR
+    )
     # Assert that the right amount of resources has accrued.
     data = await user1.send_transaction(
         user_one,
@@ -66,6 +107,7 @@ async def test_collect_resources(starknet, deploy_game_v1):
         "resources_available",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [500, 300, 100, 0])
 
     await user1.send_transaction(
@@ -79,12 +121,20 @@ async def test_collect_resources(starknet, deploy_game_v1):
     await user1.send_transaction(
         user_one, ogame.contract_address, "solar_plant_upgrade_complete", []
     )
+=======
+    assert_equals(data.result.response, [397, 255, 100, 11])
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 5
+    )
+
+>>>>>>> origin/v0.1
     data = await user1.send_transaction(
         user_one,
         ogame.contract_address,
         "resources_available",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [425, 270, 100, 22])
 
     response = await user1.send_transaction(
@@ -143,11 +193,16 @@ async def test_collect_resources(starknet, deploy_game_v1):
     )
     assert_equals(data.result.response, [254, 209, 100, 26])
 
+=======
+    assert_equals(data.result.response, [528, 255, 100, 11])
+
+>>>>>>> origin/v0.1
     # User collect resources.
     await user1.send_transaction(
         user_one, ogame.contract_address, "collect_resources", []
     )
 
+<<<<<<< HEAD
     await user1.send_transaction(
         user_one, ogame.contract_address, "deuterium_upgrade_start", []
     )
@@ -158,12 +213,15 @@ async def test_collect_resources(starknet, deploy_game_v1):
     await user1.send_transaction(
         user_one, ogame.contract_address, "deuterium_upgrade_complete", []
     )
+=======
+>>>>>>> origin/v0.1
     data = await user1.send_transaction(
         user_one,
         ogame.contract_address,
         "resources_available",
         [user_one.contract_address],
     )
+<<<<<<< HEAD
     assert_equals(data.result.response, [45, 144, 105, 4])
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 205
@@ -197,17 +255,30 @@ async def test_collect_resources(starknet, deploy_game_v1):
         [user_one.contract_address],
     )
     assert_equals(data.result.response, [960, 900, 343, 4])
+=======
+    assert_equals(data.result.response, [528, 255, 100, 11])
+>>>>>>> origin/v0.1
 
 
 @pytest.mark.asyncio
 async def test_structures_upgrades(starknet, deploy_game_v1):
     (_, ogame, _, _, _, _, user_one, research_lab) = deploy_game_v1
 
+<<<<<<< HEAD
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',
     #                                     [user_one.contract_address])
     # assert_equals(data.result.response, [0, 0, 0, 0, 0, 0])
+=======
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "get_structures_levels",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [0, 0, 0, 0, 0])
+>>>>>>> origin/v0.1
     await user1.send_transaction(
         user_one, ogame.contract_address, "solar_plant_upgrade_start", []
     )
@@ -248,17 +319,28 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     )
 
     # Assert metal mine level is increasead.
+<<<<<<< HEAD
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',
     #                                     [user_one.contract_address])
     # assert_equals(data.result.response, [0, 0, 0, 3, 0, 0])
+=======
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "get_structures_levels",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [0, 0, 0, 3, 0])
+>>>>>>> origin/v0.1
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 25
     )
     await user1.send_transaction(
         user_one, ogame.contract_address, "collect_resources", []
     )
+<<<<<<< HEAD
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'resources_available',
@@ -314,13 +396,86 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
 
     update_starknet_block(
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 109
+=======
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "resources_available",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [182, 173, 100, 79])
+    response = await user1.send_transaction(
+        user_one, ogame.contract_address, "metal_upgrade_start", []
+    )
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 26
+    )
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "metal_upgrade_complete", []
+    )
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 27
+    )
+    # Assert metal mine level is increasead.
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "get_structures_levels",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [1, 0, 0, 3, 0])
+
+    response = await user1.send_transaction(
+        user_one, ogame.contract_address, "crystal_upgrade_start", []
+    )
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 28
+    )
+
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "crystal_upgrade_complete", []
+    )
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "get_structures_levels",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [1, 1, 0, 3, 0])
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 128
+    )
+    await user1.send_transaction(
+        user_one, ogame.contract_address, "collect_resources", []
+    )
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "resources_available",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [3448, 2395, 100, 57])
+    response = await user1.send_transaction(
+        user_one, ogame.contract_address, "deuterium_upgrade_start", []
+    )
+
+    update_starknet_block(
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 129
+>>>>>>> origin/v0.1
     )
 
     await user1.send_transaction(
         user_one, ogame.contract_address, "deuterium_upgrade_complete", []
     )
     update_starknet_block(
+<<<<<<< HEAD
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 1150
+=======
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 130
+>>>>>>> origin/v0.1
     )
     await user1.send_transaction(
         user_one, ogame.contract_address, "collect_resources", []
@@ -331,12 +486,17 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     )
 
     update_starknet_block(
+<<<<<<< HEAD
         starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 1151
+=======
+        starknet=starknet, block_timestamp=TIME_ELAPS_ONE_HOUR * 131
+>>>>>>> origin/v0.1
     )
 
     await user1.send_transaction(
         user_one, ogame.contract_address, "robot_factory_upgrade_complete", []
     )
+<<<<<<< HEAD
     # data = await user1.send_transaction(user_one,
     #                                     ogame.contract_address,
     #                                     'get_structures_levels',
@@ -984,4 +1144,15 @@ async def test_structures_upgrades(starknet, deploy_game_v1):
     )
     assert_equals(
         data.result.response, [4, 8, 1, 10, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0]
+=======
+    data = await user1.send_transaction(
+        user_one,
+        ogame.contract_address,
+        "get_structures_levels",
+        [user_one.contract_address],
+    )
+    assert_equals(data.result.response, [1, 1, 1, 3, 1])
+    response = await user1.send_transaction(
+        user_one, ogame.contract_address, "deuterium_upgrade_start", []
+>>>>>>> origin/v0.1
     )

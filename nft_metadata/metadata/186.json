@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "image": "https://gateway.pinata.cloud/ipfs/QmcV5ZbVHnQGjMqY8V7UWxX9cs3FehU8jT32FmNQVMs3ns/6.webp",
     "tokenId": 186,
     "name": "NFT_OGM #186",
@@ -6,6 +7,15 @@
         {
             "trait_type": "size",
             "value": 206
+=======
+    "image": "/ipfs/QmZotmYro3hSNZaHLR8whwWpeo6nsRXfJJZr2rDGPRUQHz/6.png",
+    "tokenId": 186,
+    "name": "NoGame v0.1 #186",
+    "attributes": [
+        {
+            "trait_type": "size",
+            "value": 172
+>>>>>>> origin/v0.1
         },
         {
             "trait_type": "temperature",
@@ -13,7 +23,11 @@
         },
         {
             "trait_type": "type",
+<<<<<<< HEAD
             "value": "Gas giant"
+=======
+            "value": "Brown dwarf"
+>>>>>>> origin/v0.1
         },
         {
             "trait_type": "position",
