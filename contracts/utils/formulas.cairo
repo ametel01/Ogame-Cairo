@@ -162,7 +162,7 @@ namespace Formulas:
     func solar_plant_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         plant_level : felt
     ) -> (production : felt):
-        let (production) = _solar_production_formula(plant_level)
+        let (production) = solar_production(plant_level)
         return (production=production)
     end
 
@@ -271,9 +271,9 @@ namespace Formulas:
         end
     end
 
-    func _solar_production_formula{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(plant_level : felt) -> (production_hour):
+    func solar_production{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        plant_level : felt
+    ) -> (production_hour):
         alloc_locals
         let fact1 = 20 * plant_level
         let (local fact2) = pow(11, plant_level)
