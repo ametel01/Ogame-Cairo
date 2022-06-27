@@ -38,7 +38,7 @@ nile deploy erc721_minter --network goerli [owner.contract_address]
 2. Deploy ERC721:
 
 ```sh
-nile deploy --network goerli ERC721 0x4e6f47616d6520 0x4f474d302e31 [minter.contract_address] 54 105 112 102 115 58 47 47 81 109 98 87 78 103 117 89 106 85 115 53 101 50 102 55 88 119 113 65 106 54 121 72 69 119 111 74 109 104 89 78 121 72 78 78 90 122 105 102 56 78 109 56 53 68 47
+nile deploy --network goerli ERC721 0x4e6f47616d6520 0x4f474d302e31 [minter.contract_address] 54 105 112 102 115 58 47 47 81 109 82 116 120 119 116 50 68 115 82 97 119 99 117 81 76 68 74 77 76 72 65 121 113 104 90 66 103 107 72 120 117 112 78 103 117 119 83 107 80 76 97 65 109 50 47
 ```
 
 3. On minter contract invoke setNftAddress with ERC721 as parameter.

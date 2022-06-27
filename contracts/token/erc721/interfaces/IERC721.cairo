@@ -29,6 +29,9 @@ namespace IERC721:
     func setApprovalForAll(operator : felt, approved : felt):
     end
 
+    func setTokenURI(base_token_uri_len : felt, base_token_uri : felt*):
+    end
+
     func getApproved(tokenId : Uint256) -> (approved : felt):
     end
 
