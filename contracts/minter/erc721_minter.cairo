@@ -63,3 +63,14 @@ func mintAll{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     IERC721.mint(erc721, minter_address, token_id)
     return ()
 end
+
+@external
+func setTokenURI{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        base_uri_len : felt, base_uri : felt*):
+    alloc_locals
+    let (owner) = erc721_owner.read()
+    let (erc721) = erc721_address.read()
+    let (minter_address) = get_contract_address()
+    IERC721.setTokenURI(erc721, base_uri_len, base_uri)
+    return ()
+end

@@ -13,4 +13,7 @@ namespace Ierc721_minter:
 
     func mintAll(n : felt, token_id : Uint256):
     end
+
+    func setTokenURI(base_uri_len : felt, base_uri : felt*):
+    end
 end
