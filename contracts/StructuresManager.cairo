@@ -94,7 +94,7 @@ func _start_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
     let (metal_required, crystal_required) = Formulas.metal_building_cost(
         metal_mine_level=current_mine_level
     )
-    let (building_time) = Formulas.buildings_production_time(metal_required, crystal_required, 0)
+    let (building_time) = Formulas.buildings_production_time(metal_required, crystal_required, 0, 0)
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
     let (crystal_address) = erc20_crystal_address.read()
@@ -135,7 +135,7 @@ func _end_metal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
         assert waited_enough = TRUE
     end
     let current_mine_level = planet.mines.metal
-    let (metal_required, crystal_required) = formulas_metal_building(current_mine_level)
+    let (metal_required, crystal_required) = Formulas.metal_building_cost(current_mine_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal + 1,
         crystal=planet.mines.crystal,
@@ -162,9 +162,9 @@ func _start_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.crystal
     let robot_factory_level = planet.facilities.robot_factory
-    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
+    let (metal_required, crystal_required) = Formulas.crystal_building_cost(current_mine_level)
     let (building_time) = Formulas.buildings_production_time(
-        metal_required, crystal_required, robot_factory_level
+        metal_required, crystal_required, robot_factory_level, 0
     )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
@@ -206,7 +206,7 @@ func _end_crystal_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, rang
         assert waited_enough = TRUE
     end
     let current_mine_level = planet.mines.crystal
-    let (metal_required, crystal_required) = formulas_crystal_building(current_mine_level)
+    let (metal_required, crystal_required) = Formulas.crystal_building_cost(current_mine_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal + 1,
@@ -233,9 +233,9 @@ func _start_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (local planet) = _get_planet()
     let current_mine_level = planet.mines.deuterium
     let robot_factory_level = planet.facilities.robot_factory
-    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
+    let (metal_required, crystal_required) = Formulas.deuterium_building_cost(current_mine_level)
     let (building_time) = Formulas.buildings_production_time(
-        metal_required, crystal_required, robot_factory_level
+        metal_required, crystal_required, robot_factory_level, 0
     )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
@@ -277,7 +277,7 @@ func _end_deuterium_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
         assert waited_enough = TRUE
     end
     let current_mine_level = planet.mines.deuterium
-    let (metal_required, crystal_required) = formulas_deuterium_building(current_mine_level)
+    let (metal_required, crystal_required) = Formulas.deuterium_building_cost(current_mine_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
@@ -305,9 +305,9 @@ func _start_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (local planet) = _get_planet()
     let current_plant_level = planet.energy.solar_plant
     let robot_factory_level = planet.facilities.robot_factory
-    let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
+    let (metal_required, crystal_required) = Formulas.solar_plant_building_cost(current_plant_level)
     let (building_time) = Formulas.buildings_production_time(
-        metal_required, crystal_required, robot_factory_level
+        metal_required, crystal_required, robot_factory_level, 0
     )
     let (metal_address) = erc20_metal_address.read()
     let (metal_available) = IERC20.balanceOf(metal_address, address)
@@ -349,7 +349,7 @@ func _end_solar_plant_upgrade{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
         assert waited_enough = TRUE
     end
     let current_plant_level = planet.energy.solar_plant
-    let (metal_required, crystal_required) = formulas_solar_plant_building(current_plant_level)
+    let (metal_required, crystal_required) = Formulas.solar_plant_building_cost(current_plant_level)
     let new_planet = Planet(
         MineLevels(metal=planet.mines.metal,
         crystal=planet.mines.crystal,
@@ -382,11 +382,13 @@ func get_upgrades_cost{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     let deuterium_level = planet.mines.deuterium
     let solar_plant_level = planet.energy.solar_plant
     let (_robot_factory_level) = robot_factory_level.read(planet_id)
-    let (m_metal, m_crystal) = formulas_metal_building(metal_level)
-    let (c_metal, c_crystal) = formulas_crystal_building(crystal_level)
-    let (d_metal, d_crystal) = formulas_deuterium_building(deuterium_level)
-    let (s_metal, s_crystal) = formulas_solar_plant_building(solar_plant_level)
-    let (r_metal, r_crystal, r_deuterium) = formulas_robot_factory_building(_robot_factory_level)
+    let (m_metal, m_crystal) = Formulas.metal_building_cost(metal_level)
+    let (c_metal, c_crystal) = Formulas.crystal_building_cost(crystal_level)
+    let (d_metal, d_crystal) = Formulas.deuterium_building_cost(deuterium_level)
+    let (s_metal, s_crystal) = Formulas.solar_plant_building_cost(solar_plant_level)
+    let (r_metal, r_crystal, r_deuterium) = Formulas.robot_factory_building_cost(
+        _robot_factory_level
+    )
     return (
         Cost(m_metal, m_crystal, 0),
         Cost(c_metal, c_crystal, 0),

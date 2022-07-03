@@ -6,9 +6,8 @@ from starkware.cairo.common.math import assert_not_zero
 from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.bool import TRUE
 from contracts.utils.formulas import Formulas
-from contracts.Facilities.library import Facilities
+from contracts.Facilities.library import Facilities, _ogame_address
 from contracts.Ogame.IOgame import IOgame
-from contracts.Facilities.library import _ogame_address
 
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

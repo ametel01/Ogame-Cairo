@@ -206,9 +206,9 @@ namespace Facilities:
         return ()
     end
 
-    func check_building_que_not_busy{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(caller : felt):
+    func check_que_not_busy{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        caller : felt
+    ):
         let (que_status) = facilities_timelock.read(caller)
         let current_timelock = que_status.lock_end
         with_attr error_message("FACILITIES::QUE IS BUSY!!!"):

@@ -6,6 +6,7 @@ from starkware.starknet.common.syscalls import get_caller_address, get_block_tim
 from starkware.cairo.common.uint256 import Uint256
 from contracts.utils.Ownable import Ownable_initializer, Ownable_only_owner
 from contracts.utils.constants import TRUE, RESEARCH_LAB_BUILDING_ID
+from contracts.Resources.IResources import IResources
 from contracts.ResearchLab.IResearchLab import IResearchLab
 from contracts.Shipyard.IShipyard import IShipyard
 from contracts.Facilities.IFacilities import IFacilities
@@ -23,19 +24,14 @@ from contracts.StructuresManager import (
     _end_solar_plant_upgrade,
     _get_planet,
 )
+from contracts.Resources.library import Resources
 from contracts.ResourcesManager import (
     _collect_resources,
     _get_net_energy,
     _calculate_available_resources,
-    _pay_resources_erc20,
 )
 
-from contracts.utils.Formulas import (
-    formulas_metal_building,
-    formulas_crystal_building,
-    formulas_deuterium_building,
-    formulas_calculate_player_points,
-)
+from contracts.utils.formulas import Formulas
 from contracts.Ogame.storage import (
     _number_of_planets,
     _planets,
@@ -45,6 +41,7 @@ from contracts.Ogame.storage import (
     erc20_metal_address,
     erc20_crystal_address,
     erc20_deuterium_address,
+    resources_address,
     facilities_address,
     research_lab_address,
     shipyard_address,
@@ -197,7 +194,7 @@ func get_structures_levels{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         robot_factory=robot_factory,
         research_lab=research_lab,
         shipyard=shipyard,
-        nanite_factory = nanite
+        nanite_factory=nanite,
     )
 end
 
@@ -263,7 +260,7 @@ end
 func player_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     caller : felt
 ) -> (points : felt):
-    let (points) = formulas_calculate_player_points(caller)
+    let (points) = Formulas.calculate_player_points(caller)
     return (points)
 end
 
@@ -284,9 +281,11 @@ end
 
 @external
 func set_modules_addresses{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _facilities_address : felt, _lab_address : felt, _shipyard_address : felt
+    _resources_address, _facilities_address : felt, _lab_address : felt, _shipyard_address : felt
 ):
     Ownable_only_owner()
+
+    resources_address.write(_resources_address)
     facilities_address.write(_facilities_address)
     research_lab_address.write(_lab_address)
     shipyard_address.write(_shipyard_address)
@@ -315,13 +314,27 @@ end
 
 @external
 func metal_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _start_metal_upgrade()
+    let (caller) = get_caller_address()
+    let (_resources_address) = resources_address.read()
+    let (
+        metal_spent, crystal_spent, deuterium_spent, time_unlocked
+    ) = IResources.metal_upgrade_start(resources_address, caller)
+    Resources._pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    let (spent_so_far) = _players_spent_resources.read(caller)
+    let new_total_spent = spent_so_far + metal_spent + crystal_spent
+    _players_spent_resources.write(caller, new_total_spent)
     return ()
 end
 
 @external
 func metal_upgrade_complete{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
-    _end_metal_upgrade()
+    let (caller) = get_caller_address()
+    let (planet_id) = _planet_to_owner.read(caller)
+    let (_facilities_address) = facilities_address.read()
+    let (success) = IFacilities._robot_factory_upgrade_complete(_facilities_address, caller)
+    assert success = TRUE
+    let (current_robot_factory_level) = robot_factory_level.read(planet_id)
+    robot_factory_level.write(planet_id, current_robot_factory_level + 1)
     return ()
 end
 
@@ -376,7 +389,7 @@ func robot_factory_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (
         metal_spent, crystal_spent, deuterium_spent, time_unlocked
     ) = IFacilities._robot_factory_upgrade_start(_facilities_address, caller)
-    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    Resources._pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
@@ -404,7 +417,7 @@ func shipyard_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (
         metal_spent, crystal_spent, deuterium_spent, time_unlocked
     ) = IFacilities._shipyard_upgrade_start(_facilities_address, caller)
-    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    Resources._pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
@@ -431,7 +444,7 @@ func research_lab_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (
         metal_spent, crystal_spent, deuterium_spent, time_unlocked
     ) = IFacilities._research_lab_upgrade_start(_facilities_address, caller)
-    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    Resources._pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
@@ -461,7 +474,7 @@ func nanite_factory_upgrade_start{
     let (
         metal_spent, crystal_spent, deuterium_spent, time_unlocked
     ) = IFacilities._nanite_factory_upgrade_start(_facilities_address, caller)
-    _pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
+    Resources._pay_resources_erc20(caller, metal_spent, crystal_spent, deuterium_spent)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal_spent + crystal_spent
     _players_spent_resources.write(caller, new_total_spent)
@@ -494,7 +507,7 @@ func energy_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (metal, crystal, deuterium) = IResearchLab._energy_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -525,7 +538,7 @@ func computer_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (metal, crystal, deuterium) = IResearchLab._computer_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -555,7 +568,7 @@ func laser_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     let (metal, crystal, deuterium) = IResearchLab._laser_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -584,7 +597,7 @@ func armour_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (metal, crystal, deuterium) = IResearchLab._armour_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -614,7 +627,7 @@ func ion_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (metal, crystal, deuterium) = IResearchLab._ion_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -644,7 +657,7 @@ func espionage_tech_upgrade_start{
     let (metal, crystal, deuterium) = IResearchLab._espionage_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -674,7 +687,7 @@ func plasma_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (metal, crystal, deuterium) = IResearchLab._plasma_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -705,7 +718,7 @@ func weapons_tech_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (metal, crystal, deuterium) = IResearchLab._weapons_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -737,7 +750,7 @@ func shielding_tech_upgrade_start{
     let (metal, crystal, deuterium) = IResearchLab._shielding_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -769,7 +782,7 @@ func hyperspace_tech_upgrade_start{
     let (metal, crystal, deuterium) = IResearchLab._hyperspace_tech_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -800,7 +813,7 @@ func astrophysics_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*
     let (metal, crystal, deuterium) = IResearchLab._astrophysics_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -832,7 +845,7 @@ func combustion_drive_upgrade_start{
     let (metal, crystal, deuterium) = IResearchLab._combustion_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -864,7 +877,7 @@ func hyperspace_drive_upgrade_start{
     let (metal, crystal, deuterium) = IResearchLab._hyperspace_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -895,7 +908,7 @@ func impulse_drive_upgrade_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (metal, crystal, deuterium) = IResearchLab._impulse_drive_upgrade_start(
         lab_address, caller, current_tech_level
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -956,7 +969,7 @@ func cargo_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
     let (metal, crystal, deuterium) = IShipyard._cargo_ship_build_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -985,7 +998,7 @@ func recycler_ship_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (metal, crystal, deuterium) = IShipyard._build_recycler_ship_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -1018,7 +1031,7 @@ func espionage_probe_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (metal, crystal, deuterium) = IShipyard._build_espionage_probe_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -1051,7 +1064,7 @@ func solar_satellite_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin
     let (metal, crystal, deuterium) = IShipyard._build_solar_satellite_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -1084,7 +1097,7 @@ func light_fighter_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*,
     let (metal, crystal, deuterium) = IShipyard._build_light_fighter_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
@@ -1117,7 +1130,7 @@ func cruiser_build_start{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
     let (metal, crystal, deuterium) = IShipyard._build_cruiser_start(
         _shipyard_address, caller, number_of_units
     )
-    _pay_resources_erc20(caller, metal, crystal, deuterium)
+    Resources._pay_resources_erc20(caller, metal, crystal, deuterium)
     let (spent_so_far) = _players_spent_resources.read(caller)
     let new_total_spent = spent_so_far + metal + crystal
     _players_spent_resources.write(caller, new_total_spent)
