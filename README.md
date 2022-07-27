@@ -1,5 +1,6 @@
 # Ogame-Cairo
-### NOTICE: THIS REPO IS DISCONTINUED, NEW REPO HERE https://github.com/ametel01/No-Game
+### :warning: WARNING
+THIS REPO IS DISCONTINUED, NEW REPO HERE https://github.com/ametel01/No-Game
 _Ogame logic implementation written in Cairo for Starknet._
 
 ## What is ogame
